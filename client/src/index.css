@@ -121,18 +121,59 @@
   --sidebar-ring: oklch(0.488 0.243 264.376);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+@layer base { 
+  * { 
+    @apply border-border outline-ring/50; 
+  } 
+  body { 
+    @apply bg-background text-foreground; 
+    font-family: var(--font-system); 
+    background:
+      radial-gradient(circle at 18% 22%, rgba(0, 210, 255, 0.18) 0%, transparent 34%),
+      radial-gradient(circle at 82% 18%, rgba(255, 92, 160, 0.16) 0%, transparent 32%),
+      radial-gradient(circle at 70% 76%, rgba(140, 120, 255, 0.12) 0%, transparent 38%),
+      radial-gradient(ellipse at 50% 60%, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.04) 55%, rgba(255,255,255,0) 72%),
+      linear-gradient(135deg, #f5f9ff 0%, #eef3ff 30%, #f8fbff 65%, #ffffff 100%);
+    position: relative;
+    overflow-x: hidden;
+  } 
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(0deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+      radial-gradient(circle at 32% 38%, rgba(0, 210, 255, 0.14) 0, transparent 36%),
+      radial-gradient(circle at 78% 66%, rgba(255, 140, 90, 0.12) 0, transparent 40%),
+      radial-gradient(circle at 54% -12%, rgba(0, 0, 0, 0.12) 0, transparent 46%);
+    background-size: 22px 22px, 22px 22px, 520px 520px, 520px 520px, 700px 700px;
+    mix-blend-mode: screen;
+    opacity: 1;
+    z-index: -1;
+    animation: drift-before 9s ease-in-out infinite alternate; 
   }
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-system);
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -10%;
+    pointer-events: none;
+    background:
+      linear-gradient(120deg, rgba(0, 255, 200, 0.08), rgba(255, 140, 200, 0.05) 35%, rgba(0, 130, 255, 0.08)),
+      repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 14px);
+    filter: drop-shadow(0 0 30px rgba(0,0,0,0.12));
+    mix-blend-mode: screen;
+    opacity: 0.8;
+    z-index: -2;
+    animation: drift-after 12s ease-in-out infinite alternate; 
   }
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
+
+  button:not(:disabled), 
+  [role="button"]:not([aria-disabled="true"]), 
+  [type="button"]:not(:disabled), 
+  [type="submit"]:not(:disabled), 
   [type="reset"]:not(:disabled),
   a[href],
   select:not(:disabled),
@@ -179,14 +220,26 @@
     }
   }
 
-  /* Portfolio-specific styles */
-  .section-padding {
-    @apply py-16 sm:py-20 lg:py-24;
+  /* Portfolio-specific styles */ 
+  .section-padding { 
+    @apply py-16 sm:py-20 lg:py-24; 
+  } 
+
+  .hero-frame {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 25px 80px rgba(0, 0, 0, 0.10),
+      0 8px 24px rgba(0, 0, 0, 0.06),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px) saturate(1.05);
+    border-radius: 22px;
+    overflow: hidden;
   }
 
-  .divider {
-    @apply border-t border-border;
-  }
+  .divider { 
+    @apply border-t border-border; 
+  } 
 
   .nav-link {
     @apply text-foreground no-underline hover:text-muted-foreground transition-colors;
@@ -205,14 +258,44 @@
   }
 }
 
-@layer utilities {
-  /* Lemon Milk font utility */
-  .font-lemon {
-    font-family: var(--font-lemon);
+@layer utilities { 
+  /* Lemon Milk font utility */ 
+  .font-lemon { 
+    font-family: var(--font-lemon); 
+  } 
+  .font-system { font-family: var(--font-system); } 
+  .font-inter { font-family: var(--font-inter); } 
+  .font-jakarta { font-family: var(--font-jakarta); } 
+  .font-sora { font-family: var(--font-sora); } 
+  .font-space { font-family: var(--font-space); } 
+}
+
+@keyframes drift-before {
+  0% {
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
   }
-  .font-system { font-family: var(--font-system); }
-  .font-inter { font-family: var(--font-inter); }
-  .font-jakarta { font-family: var(--font-jakarta); }
-  .font-sora { font-family: var(--font-sora); }
-  .font-space { font-family: var(--font-space); }
+  100% {
+    background-position:
+      60px 40px,
+      -50px 60px,
+      -140px -100px,
+      120px 140px,
+      -90px 120px;
+  }
+}
+
+@keyframes drift-after {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    transform: translate3d(60px, -40px, 0) scale(1.04) rotate(-1deg);
+    background-position: -160px 120px, 80px -90px;
+  }
 }

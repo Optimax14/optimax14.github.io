@@ -16,6 +16,10 @@ import ScrollProgress from "./components/ScrollProgress";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import FetchDemo from "./pages/FetchDemo";
+import UpdateAurora from "./pages/UpdateAurora";
+import UpdateZephyr from "./pages/UpdateZephyr";
+import UpdateSolstice from "./pages/UpdateSolstice";
+import UpdateNova from "./pages/UpdateNova";
 
 function Router() {
   return (
@@ -28,6 +32,10 @@ function Router() {
       <Route path={"/fonts"} component={Fonts} />
       <Route path={"/model"} component={Model} />
       <Route path={"/fetch"} component={FetchDemo} />
+      <Route path={"/updates/aurora"} component={UpdateAurora} />
+      <Route path={"/updates/zephyr"} component={UpdateZephyr} />
+      <Route path={"/updates/solstice"} component={UpdateSolstice} />
+      <Route path={"/updates/nova"} component={UpdateNova} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -49,7 +57,7 @@ function App() {
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
-          <div className="min-h-screen flex flex-col bg-background text-foreground">
+          <div className="min-h-screen flex flex-col text-foreground">
             <ScrollProgress />
             <Navigation />
             <main className="flex-1">
