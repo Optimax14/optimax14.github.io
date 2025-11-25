@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import GLBViewer from "@/components/GLBViewer";
-import { ModelErrorBoundary } from "@/components/ModelErrorBoundary";
+import FetchHeroViewer from "@/components/FetchHeroViewer";
 
 interface MediaItem {
   type: "image" | "video" | "gif";
@@ -184,48 +183,78 @@ function TechGridBackground() {
 }
 
 export default function Home() {
-  const modelSrc = (import.meta as any).env?.VITE_ROBOT_MODEL || `${import.meta.env.BASE_URL}Robot_new.glb`;
+  const [compact, setCompact] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+  const startWaveRef = useRef<(() => void) | null>(null);
+
+  // Sequence: 5s loader -> full-screen viewer for 5s -> play wave -> shrink when wave done
+  const handleLoaded = () => {
+    setTimeout(() => {
+      setShowLoader(false);
+      // viewer stays full screen; start wave after 5s
+      setTimeout(() => {
+        startWaveRef.current?.();
+      }, 5000);
+    }, 5000);
+  };
+
+  const handleStartReady = (fn: () => void) => {
+    startWaveRef.current = fn;
+  };
+
+  const handleWaveComplete = () => {
+    setCompact(true);
+  };
   return (
     <div className="min-h-screen flex flex-col">
+      {showLoader && (
+        <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+          <div className="text-lg font-semibold text-foreground">Loading experience…</div>
+        </div>
+      )}
       {/* Hero Section with Photo */}
       <section className="section-padding">
         <div className="container">
           <motion.div
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             {/* Left: Interactive Robot Model */}
             <div className="relative flex justify-center lg:justify-end">
-              <div className="w-full max-w-md hover:scale-[1.02] transition-transform duration-300">
-                <ModelErrorBoundary>
-                  <GLBViewer src={modelSrc} height="26rem" autoRotate exposure={1.05} />
-                </ModelErrorBoundary>
-              </div>
+              <motion.div
+                className="w-full"
+                initial={{ scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40 }}
+                animate={
+                  compact
+                    ? { scale: 1, width: "100%", height: "26rem", position: "relative", top: 0, left: 0, zIndex: 1 }
+                    : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40 }
+                }
+                transition={{ type: "spring", stiffness: 50, damping: 18 }}
+              >
+                <FetchHeroViewer onLoaded={handleLoaded} onStartReady={handleStartReady} onWaveComplete={handleWaveComplete} />
+              </motion.div>
               <TechGridBackground />
             </div>
 
             {/* Right: Text Content */}
             <div className="space-y-6">
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.45 }}>
+              <div>
                 <h1 className="text-5xl sm:text-6xl font-bold mb-4">Itay Kadosh</h1>
                 <p className="text-2xl text-muted-foreground font-light">Robotics Researcher & Graduate School Applicant</p>
-              </motion.div>
+              </div>
 
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.45 }}>
+              <div>
                 <p className="text-lg text-foreground leading-relaxed">
                   Passionate about advancing robotics through research and innovation. Exploring autonomous systems, manipulation, and human-robot interaction.
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.45 }}>
+              <div>
                 <p className="text-lg text-foreground leading-relaxed">
                   Welcome to my portfolio. Here you'll find my research, publications, experience, and academic background. I'm seeking opportunities to pursue graduate studies in robotics and contribute to cutting-edge work.
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div className="flex flex-wrap gap-4 pt-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.45 }}>
+              <div className="flex flex-wrap gap-4 pt-4">
                 <Link href="/about">
                   <Button variant="default" className="bg-foreground text-background hover:bg-muted-foreground transform hover:scale-105 transition-all duration-300">
                     Learn More About Me
@@ -236,7 +265,7 @@ export default function Home() {
                     View My Work
                   </Button>
                 </Link>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>
