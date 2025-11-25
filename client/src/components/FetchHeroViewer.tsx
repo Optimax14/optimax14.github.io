@@ -13,6 +13,28 @@ const baseUrl = (() => {
 })();
 const resolvePublic = (p: string) => `${baseUrl}${p.replace(/^\/+/, "")}`;
 
+let fetchPreload: Promise<THREE.Object3D | null> | null = null;
+
+function ensureFetchPreload(assetsBase: string, urdfUrl: string) {
+  if (fetchPreload) return fetchPreload;
+  fetchPreload = new Promise((resolve) => {
+    const manager = new THREE.LoadingManager();
+    const loader = new URDFLoader(manager);
+    (loader as any).packages = { fetch: assetsBase, fetch_description: assetsBase };
+    loader.workingPath = assetsBase;
+    loader.fetchOptions = { credentials: "same-origin", mode: "cors" };
+    loader.load(
+      urdfUrl,
+      (robot: any) => {
+        resolve(robot);
+      },
+      undefined,
+      () => resolve(null)
+    );
+  });
+  return fetchPreload;
+}
+
 function FetchRobot({
   urdfUrl,
   assetsBase,
@@ -31,15 +53,9 @@ function FetchRobot({
   const { scene, camera } = useThree();
 
   useEffect(() => {
-    const manager = new THREE.LoadingManager();
-    const loader = new URDFLoader(manager);
-    (loader as any).packages = { fetch: assetsBase, fetch_description: assetsBase };
-    loader.workingPath = assetsBase;
-    loader.fetchOptions = { credentials: "same-origin", mode: "cors" };
-
-    loader.load(
-      urdfUrl,
-      (robot: any) => {
+    ensureFetchPreload(assetsBase, urdfUrl).then((preloaded) => {
+      if (!preloaded) return;
+      const robot = preloaded.clone(true);
         robot.rotation.set(-Math.PI / 2, 0, 0);
         scene.add(robot);
         robotRef.current = robot;
@@ -80,10 +96,7 @@ function FetchRobot({
           .filter(([, j]: any) => (j.jointType || "").toLowerCase() !== "fixed")
           .map(([name]) => name);
         onReady?.(joints);
-      },
-      undefined,
-      (err) => console.error("URDF load error", err)
-    );
+    });
 
     return () => {
       if (robotRef.current) scene.remove(robotRef.current);
@@ -97,13 +110,24 @@ function ClipRunner({
   robotRef,
   jointMapRef,
   clipRef,
+  introAnimRef,
 }: {
   robotRef: React.MutableRefObject<THREE.Object3D | null>;
   jointMapRef: React.MutableRefObject<Record<string, any>>;
   clipRef: React.MutableRefObject<{ clip: Clip; start: number } | null>;
+  introAnimRef: React.MutableRefObject<{
+    start: number;
+    duration: number;
+    startPos: THREE.Vector3;
+    endPos: THREE.Vector3;
+    center: THREE.Vector3;
+    active: boolean;
+  }>;
 }) {
   const nowSec = () => performance.now() / 1000;
-  useFrame(() => {
+  useFrame(({ camera }) => {
+    // No intro animation; keep camera as is
+
     if (!robotRef.current || !jointMapRef.current || !clipRef.current) return;
     const { clip, start } = clipRef.current;
     const elapsed = nowSec() - start;
@@ -156,6 +180,14 @@ export default function FetchHeroViewer({
   const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
   const robotRef = useRef<THREE.Object3D | null>(null);
   const jointMapRef = useRef<Record<string, any>>({});
+  const introAnimRef = useRef<{
+    start: number;
+    duration: number;
+    startPos: THREE.Vector3;
+    endPos: THREE.Vector3;
+    center: THREE.Vector3;
+    active: boolean;
+  }>({ start: 0, duration: 0, startPos: new THREE.Vector3(), endPos: new THREE.Vector3(), center: new THREE.Vector3(), active: false });
   const nowSec = () => performance.now() / 1000;
   const waveClip = useMemo<Clip>(
     () => ({
@@ -205,16 +237,10 @@ export default function FetchHeroViewer({
           jointMapRef={jointMapRef}
           onReady={() => {
             onLoaded?.();
-            const startWave = () => {
-              playWaveRef.current?.(waveClip);
-              const durationMs = waveClip.frames[waveClip.frames.length - 1].time * 1000;
-              setTimeout(() => onWaveComplete?.(), durationMs);
-            };
-            onStartReady?.(startWave);
           }}
         />
         <OrbitControls enableDamping dampingFactor={0.1} maxPolarAngle={Math.PI * 0.48} enablePan />
-        <ClipRunner robotRef={robotRef} jointMapRef={jointMapRef} clipRef={clipRef} />
+        <ClipRunner robotRef={robotRef} jointMapRef={jointMapRef} clipRef={clipRef} introAnimRef={introAnimRef} />
       </Canvas>
     </div>
   );

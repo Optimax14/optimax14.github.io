@@ -166,7 +166,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 
 function TechGridBackground() {
   return (
-    <motion.div
+    <div
       aria-hidden
       className="pointer-events-none absolute inset-[-16px] -z-10 rounded-xl"
       style={{
@@ -175,26 +175,29 @@ function TechGridBackground() {
         backgroundSize: "20px 20px",
         mask: "radial-gradient(closest-side, #000 60%, transparent)",
       }}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0, backgroundPositionX: [0, -40], backgroundPositionY: [0, -40] }}
-      transition={{ duration: 1, ease: "easeOut", backgroundPositionX: { duration: 20, repeat: Infinity, ease: "linear" }, backgroundPositionY: { duration: 28, repeat: Infinity, ease: "linear" } }}
     />
   );
 }
 
 export default function Home() {
-  const [compact, setCompact] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
+  const [firstVisit, setFirstVisit] = useState(() => !sessionStorage.getItem("heroSeen"));
+  const [compact, setCompact] = useState(() => !firstVisit ? true : false);
+  const [showLoader, setShowLoader] = useState(() => firstVisit);
+  const [contentVisible, setContentVisible] = useState(() => !firstVisit);
   const startWaveRef = useRef<(() => void) | null>(null);
 
-  // Sequence: 5s loader -> full-screen viewer for 5s -> play wave -> shrink when wave done
+  // First visit: loader -> full screen -> wave -> shrink -> show content
   const handleLoaded = () => {
+    if (!firstVisit) {
+      setShowLoader(false);
+      setCompact(true);
+      setContentVisible(true);
+      return;
+    }
     setTimeout(() => {
       setShowLoader(false);
-      // viewer stays full screen; start wave after 5s
-      setTimeout(() => {
-        startWaveRef.current?.();
-      }, 5000);
+      // start wave once ready
+      startWaveRef.current?.();
     }, 5000);
   };
 
@@ -204,6 +207,9 @@ export default function Home() {
 
   const handleWaveComplete = () => {
     setCompact(true);
+    setContentVisible(true);
+    setFirstVisit(false);
+    sessionStorage.setItem("heroSeen", "1");
   };
   return (
     <div className="min-h-screen flex flex-col">
@@ -217,26 +223,39 @@ export default function Home() {
         <div className="container">
           <motion.div
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
             {/* Left: Interactive Robot Model */}
-            <div className="relative flex justify-center lg:justify-end">
+            <motion.div
+              className="relative flex justify-center lg:justify-end"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }}
+            >
               <motion.div
                 className="w-full"
-                initial={{ scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40 }}
+                initial={{ scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 }}
                 animate={
                   compact
-                    ? { scale: 1, width: "100%", height: "26rem", position: "relative", top: 0, left: 0, zIndex: 1 }
-                    : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40 }
+                    ? { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
+                    : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, marginTop: "0rem", opacity: 1, y: 0 }
                 }
-                transition={{ type: "spring", stiffness: 50, damping: 18 }}
+                transition={{ type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } }}
               >
                 <FetchHeroViewer onLoaded={handleLoaded} onStartReady={handleStartReady} onWaveComplete={handleWaveComplete} />
               </motion.div>
               <TechGridBackground />
-            </div>
+            </motion.div>
 
-            {/* Right: Text Content */}
-            <div className="space-y-6">
+            {/* Right: Text Content (always rendered) */}
+            <motion.div
+              className="space-y-6"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+            >
               <div>
                 <h1 className="text-5xl sm:text-6xl font-bold mb-4">Itay Kadosh</h1>
                 <p className="text-2xl text-muted-foreground font-light">Robotics Researcher & Graduate School Applicant</p>
@@ -266,110 +285,112 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Recent Updates Section */}
-      <section className="section-padding bg-card">
-        <div className="container max-w-5xl">
-          <h2 className="text-3xl font-bold mb-8 animate-fadeInUp" style={{ animationDelay: '1000ms' }}>
-            Recent Updates
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeInUp" style={{ animationDelay: '1200ms' }}>
-            {/* Latest Publication */}
-            <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
-              <div className="aspect-[4/3] w-full">
-                <MediaCarousel 
-                  media={[
-                    {
-                      type: "image",
-                      src: "/about-photo-1.jpg",
-                      alt: "Path planning visualization",
-                    },
-                    {
-                      type: "gif",
-                      src: "/Wow.gif",
-                      alt: "Robot navigation animation",
-                    },
-                  ]} 
-                />
+      {/* Recent Updates Section - only after compact */}
+      {compact && (
+        <section className="section-padding bg-card">
+          <div className="container max-w-5xl">
+            <h2 className="text-3xl font-bold mb-8">
+              Recent Updates
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Latest Publication */}
+              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
+                <div className="aspect-[4/3] w-full">
+                  <MediaCarousel 
+                    media={[
+                      {
+                        type: "image",
+                        src: "/about-photo-1.jpg",
+                        alt: "Path planning visualization",
+                      },
+                      {
+                        type: "gif",
+                        src: "/Wow.gif",
+                        alt: "Robot navigation animation",
+                      },
+                    ]} 
+                  />
+                </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <span className="text-sm font-medium text-muted-foreground">October 2025</span>
+                  <h3 className="text-lg font-semibold mt-1 mb-2">New Publication at ICRA</h3>
+                  <p className="text-sm text-muted-foreground mb-4 flex-1">
+                    Our paper on efficient path planning for mobile robots has been accepted at ICRA 2026.
+                  </p>
+                  <Link href="/publications" className="self-start">
+                    <Button variant="outline" size="sm">Read More</Button>
+                  </Link>
+                </div>
               </div>
-              <div className="p-4 flex flex-col flex-1">
-                <span className="text-sm font-medium text-muted-foreground">October 2025</span>
-                <h3 className="text-lg font-semibold mt-1 mb-2">New Publication at ICRA</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-1">
-                  Our paper on efficient path planning for mobile robots has been accepted at ICRA 2026.
-                </p>
-                <Link href="/publications" className="self-start">
-                  <Button variant="outline" size="sm">Read More</Button>
-                </Link>
-              </div>
-            </div>
 
-            {/* Research Progress */}
-            <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
-              <div className="aspect-[4/3] w-full">
-                <MediaCarousel 
-                  media={[
-                    {
-                      type: "image",
-                      src: "/about-photo-1.jpg",
-                      alt: "Research progress",
-                    },
-                    {
-                      type: "gif",
-                      src: "/Wow.gif",
-                      alt: "Robot demonstration",
-                    },
-                  ]} 
-                />
+              {/* Research Progress */}
+              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
+                <div className="aspect-[4/3] w-full">
+                  <MediaCarousel 
+                    media={[
+                      {
+                        type: "image",
+                        src: "/about-photo-1.jpg",
+                        alt: "Research progress",
+                      },
+                      {
+                        type: "gif",
+                        src: "/Wow.gif",
+                        alt: "Robot demonstration",
+                      },
+                    ]} 
+                  />
+                </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <span className="text-sm font-medium text-muted-foreground">September 2025</span>
+                  <h3 className="text-lg font-semibold mt-1 mb-2">Human-Robot Collaboration</h3>
+                  <p className="text-sm text-muted-foreground mb-4 flex-1">
+                    Achieved significant milestones in adaptive control strategies for robot-human interaction.
+                  </p>
+                  <Link href="/experience" className="self-start">
+                    <Button variant="outline" size="sm">Learn More</Button>
+                  </Link>
+                </div>
               </div>
-              <div className="p-4 flex flex-col flex-1">
-                <span className="text-sm font-medium text-muted-foreground">September 2025</span>
-                <h3 className="text-lg font-semibold mt-1 mb-2">Human-Robot Collaboration</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-1">
-                  Achieved significant milestones in adaptive control strategies for robot-human interaction.
-                </p>
-                <Link href="/experience" className="self-start">
-                  <Button variant="outline" size="sm">Learn More</Button>
-                </Link>
-              </div>
-            </div>
 
-            {/* Professional Update */}
-            <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
-              <div className="aspect-[4/3] w-full">
-                <MediaCarousel 
-                  media={[
-                    {
-                      type: "image",
-                      src: "/about-photo-1.jpg",
-                      alt: "Graduate research",
-                    },
-                    {
-                      type: "gif",
-                      src: "/Wow.gif",
-                      alt: "Research presentation",
-                    },
-                  ]} 
-                />
-              </div>
-              <div className="p-4 flex flex-col flex-1">
-                <span className="text-sm font-medium text-muted-foreground">August 2025</span>
-                <h3 className="text-lg font-semibold mt-1 mb-2">Graduate Applications</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-1">
-                  Preparing applications for top robotics programs, focusing on autonomous systems research.
-                </p>
-                <Link href="/about" className="self-start">
-                  <Button variant="outline" size="sm">View Details</Button>
-                </Link>
+              {/* Professional Update */}
+              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
+                <div className="aspect-[4/3] w-full">
+                  <MediaCarousel 
+                    media={[
+                      {
+                        type: "image",
+                        src: "/about-photo-1.jpg",
+                        alt: "Graduate research",
+                      },
+                      {
+                        type: "gif",
+                        src: "/Wow.gif",
+                        alt: "Research presentation",
+                      },
+                    ]} 
+                  />
+                </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <span className="text-sm font-medium text-muted-foreground">August 2025</span>
+                  <h3 className="text-lg font-semibold mt-1 mb-2">Graduate Applications</h3>
+                  <p className="text-sm text-muted-foreground mb-4 flex-1">
+                    Preparing applications for top robotics programs, focusing on autonomous systems research.
+                  </p>
+                  <Link href="/about" className="self-start">
+                    <Button variant="outline" size="sm">View Details</Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }
