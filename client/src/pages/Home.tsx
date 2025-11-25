@@ -181,7 +181,7 @@ function TechGridBackground() {
 
 export default function Home() {
   const [firstVisit, setFirstVisit] = useState(() => !sessionStorage.getItem("heroSeen"));
-  const [compact, setCompact] = useState(() => !firstVisit ? true : false);
+  const [compact, setCompact] = useState(() => (!firstVisit ? true : false));
   const [showLoader, setShowLoader] = useState(() => firstVisit);
   const [contentVisible, setContentVisible] = useState(() => !firstVisit);
   const startWaveRef = useRef<(() => void) | null>(null);
@@ -236,7 +236,11 @@ export default function Home() {
             >
               <motion.div
                 className="w-full"
-                initial={{ scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 }}
+                initial={
+                  firstVisit
+                    ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 }
+                    : { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
+                }
                 animate={
                   compact
                     ? { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }

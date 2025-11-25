@@ -237,6 +237,12 @@ export default function FetchHeroViewer({
           jointMapRef={jointMapRef}
           onReady={() => {
             onLoaded?.();
+            const startWave = () => {
+              playWaveRef.current?.(waveClip);
+              const durationMs = waveClip.frames[waveClip.frames.length - 1].time * 1000;
+              setTimeout(() => onWaveComplete?.(), durationMs);
+            };
+            onStartReady?.(startWave);
           }}
         />
         <OrbitControls enableDamping dampingFactor={0.1} maxPolarAngle={Math.PI * 0.48} enablePan />
