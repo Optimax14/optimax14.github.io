@@ -11,7 +11,7 @@ export default function Model() {
         <div className="container max-w-6xl">
           <h1 className="text-3xl font-bold mb-4">Interactive 3D Model</h1>
           <p className="text-muted-foreground mb-6">
-            Drag to rotate, scroll to zoom, right-drag to pan.
+            Drag to rotate. Scroll to zoom. Right-drag to pan.
           </p>
 
           <div className="space-y-6">
@@ -20,9 +20,7 @@ export default function Model() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>Left-click and drag to rotate the view</li>
                 <li>Right-click and drag to pan</li>
-                <li>Click on joints to animate them</li>
                 <li>Scroll to zoom in/out</li>
-                <li>Hover over parts to see their names</li>
               </ul>
             </div>
 

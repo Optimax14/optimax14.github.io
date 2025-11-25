@@ -1,9 +1,6 @@
-import { PageTransition } from "@/components/PageTransition";
-
 export default function About() {
   return (
-    <PageTransition>
-      <section className="section-padding">
+    <section className="section-padding">
         <div className="container max-w-5xl">
           <h1 className="text-4xl font-bold mb-12 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
             About Me
@@ -125,7 +122,5 @@ export default function About() {
           </div>
         </div>
       </section>
-    </PageTransition>
   );
 }
-

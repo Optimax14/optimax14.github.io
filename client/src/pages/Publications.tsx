@@ -1,5 +1,4 @@
-import React, { Suspense, useEffect, useState, lazy } from "react";
-import { PageTransition } from "@/components/PageTransition";
+import React, { useEffect, useState } from "react";
 
 interface MediaItem {
   type: "image" | "video" | "gif";
@@ -188,7 +187,6 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 }
 
 export default function Publications() {
-  const STLViewer = lazy(() => import("@/components/ThreeSTLViewer"));
   const publications: Publication[] = [
     {
       title: "Efficient Path Planning for Mobile Robots in Dynamic Environments",
@@ -317,7 +315,6 @@ export default function Publications() {
   ];
 
   return (
-    <PageTransition>
       <section className="section-padding">
         <div className="container max-w-5xl">
           <h1 className="text-4xl font-bold mb-12 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
@@ -333,21 +330,6 @@ export default function Publications() {
               >
                 {/* Media Section */}
                 <div className="p-6 bg-card">
-                  {idx === 0 && (
-                    <div className="mb-4">
-                      <Suspense
-                        fallback={
-                          <div className="w-full h-[40vh] flex items-center justify-center bg-card border border-border rounded-lg">
-                            <div className="text-sm text-muted-foreground bg-white/90 border border-border rounded px-3 py-2 shadow">
-                              Loading interactive 3D model...
-                            </div>
-                          </div>
-                        }
-                      >
-                        <STLViewer height="40vh" src={`${import.meta.env.BASE_URL}Robot_new.stl`} />
-                      </Suspense>
-                    </div>
-                  )}
                   <MediaCarousel media={pub.media} />
                 </div>
 
@@ -424,6 +406,5 @@ export default function Publications() {
           </div>
         </div>
       </section>
-    </PageTransition>
   );
 }

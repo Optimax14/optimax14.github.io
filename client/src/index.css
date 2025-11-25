@@ -4,6 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Fonts */
+  --font-lemon: "LEMON MILK", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  --font-sora: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  --font-space: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -119,6 +127,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-system);
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -194,4 +203,16 @@
   .experience-item {
     @apply border-l-2 border-muted pl-6 py-4;
   }
+}
+
+@layer utilities {
+  /* Lemon Milk font utility */
+  .font-lemon {
+    font-family: var(--font-lemon);
+  }
+  .font-system { font-family: var(--font-system); }
+  .font-inter { font-family: var(--font-inter); }
+  .font-jakarta { font-family: var(--font-jakarta); }
+  .font-sora { font-family: var(--font-sora); }
+  .font-space { font-family: var(--font-space); }
 }

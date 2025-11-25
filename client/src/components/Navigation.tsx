@@ -52,10 +52,15 @@ export default function Navigation() {
             >
               3D Model
             </Link>
+            <Link
+              href="/fetch"
+              className={`nav-link ${isActive("/fetch") ? "active" : ""}`}
+            >
+              Fetch Demo
+            </Link>
           </div>
         </div>
       </div>
     </nav>
   );
 }
-

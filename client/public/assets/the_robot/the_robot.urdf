@@ -1,0 +1,679 @@
+<robot name="the_robot">
+  <link name="base_part">
+    <inertial>
+      <origin xyz="-6.33176e-06 0.00622873 0.0408229" rpy="0 0 0"/>
+      <mass value="0.757129"/>
+      <inertia ixx="0.00510652" ixy="4.49606e-07" ixz="2.93832e-08" iyy="0.0052627" iyz="2.95284e-06" izz="0.00874066"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/top.stl"/>
+      </geometry>
+      <material name="top_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/top.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="2.35827e-19 0.0379222 -3.00314e-16" rpy="1.5708 9.46633e-30 -1.47911e-31"/>
+      <geometry>
+        <mesh filename="package://assets/base.stl"/>
+      </geometry>
+      <material name="base_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="2.35827e-19 0.0379222 -3.00314e-16" rpy="1.5708 9.46633e-30 -1.47911e-31"/>
+      <geometry>
+        <mesh filename="package://assets/base.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part servo_double_sided -->
+    <visual>
+      <origin xyz="9.94325e-05 2.02954e-05 -0.00054497" rpy="-0.00872665 -8.32667e-17 -2.67704e-30"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+      <material name="servo_double_sided_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="9.94325e-05 2.02954e-05 -0.00054497" rpy="-0.00872665 -8.32667e-17 -2.67704e-30"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part base_part -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/base_part.stl"/>
+      </geometry>
+      <material name="base_part_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/base_part.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part base_motor_holder -->
+    <visual>
+      <origin xyz="5.6753e-07 0.0379222 -3.33067e-16" rpy="1.5708 -1.28218e-15 2.2708e-15"/>
+      <geometry>
+        <mesh filename="package://assets/base_motor_holder.stl"/>
+      </geometry>
+      <material name="base_motor_holder_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="5.6753e-07 0.0379222 -3.33067e-16" rpy="1.5708 -1.28218e-15 2.2708e-15"/>
+      <geometry>
+        <mesh filename="package://assets/base_motor_holder.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wheel_2 -->
+  <link name="wheel_2">
+    <inertial>
+      <origin xyz="3.28676e-07 -4.28078e-07 0.0253116" rpy="0 0 0"/>
+      <mass value="0.112864"/>
+      <inertia ixx="0.000101019" ixy="-3.71944e-10" ixz="-5.05649e-11" iyy="0.000101015" iyz="4.23314e-11" izz="0.000185918"/>
+    </inertial>
+    <!-- Part high_strength_free_spinning_gear_insert__276_3881 -->
+    <visual>
+      <origin xyz="0 -2.77556e-17 0.01683" rpy="1.2326e-32 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+      <material name="high_strength_free_spinning_gear_insert__276_3881_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -2.77556e-17 0.01683" rpy="1.2326e-32 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part nut -->
+    <visual>
+      <origin xyz="0 -2.77556e-17 0.0459143" rpy="-3.69779e-32 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/nut.stl"/>
+      </geometry>
+      <material name="nut_material">
+        <color rgba="0.701961 0.701961 0.701961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -2.77556e-17 0.0459143" rpy="-3.69779e-32 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/nut.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part omniwheel -->
+    <visual>
+      <origin xyz="7.01809e-07 3.11828e-07 0.0321" rpy="1.5708 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/omniwheel.stl"/>
+      </geometry>
+      <material name="omniwheel_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="7.01809e-07 3.11828e-07 0.0321" rpy="1.5708 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/omniwheel.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part high_strength_free_spinning_gear_insert__276_3881_2 -->
+    <visual>
+      <origin xyz="9.24069e-08 -9.27165e-08 0.03337" rpy="-3.14159 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+      <material name="high_strength_free_spinning_gear_insert__276_3881_2_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="9.24069e-08 -9.27165e-08 0.03337" rpy="-3.14159 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part screw_2in -->
+    <visual>
+      <origin xyz="0 0 0" rpy="3.14159 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/screw_2in.stl"/>
+      </geometry>
+      <material name="screw_2in_material">
+        <color rgba="0.701961 0.701961 0.701961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="3.14159 -0 0"/>
+      <geometry>
+        <mesh filename="package://assets/screw_2in.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from base_part to wheel_2 -->
+  <joint name="1_wheel" type="continuous">
+    <origin xyz="0 0.150324 0.033" rpy="1.5708 -0 0"/>
+    <parent link="base_part"/>
+    <child link="wheel_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Link wheel_2_2 -->
+  <link name="wheel_2_2">
+    <inertial>
+      <origin xyz="3.28676e-07 -4.28078e-07 0.0253116" rpy="0 0 0"/>
+      <mass value="0.112864"/>
+      <inertia ixx="0.000101019" ixy="-3.71944e-10" ixz="-5.05649e-11" iyy="0.000101015" iyz="4.23314e-11" izz="0.000185918"/>
+    </inertial>
+    <!-- Part high_strength_free_spinning_gear_insert__276_3881_3 -->
+    <visual>
+      <origin xyz="1.74113e-17 -2.77556e-17 0.01683" rpy="1.2326e-32 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+      <material name="high_strength_free_spinning_gear_insert__276_3881_3_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.74113e-17 -2.77556e-17 0.01683" rpy="1.2326e-32 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part nut_2 -->
+    <visual>
+      <origin xyz="-7.05831e-20 -2.77556e-17 0.0459143" rpy="-3.69779e-32 3.71854e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/nut.stl"/>
+      </geometry>
+      <material name="nut_2_material">
+        <color rgba="0.701961 0.701961 0.701961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-7.05831e-20 -2.77556e-17 0.0459143" rpy="-3.69779e-32 3.71854e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/nut.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part omniwheel_2 -->
+    <visual>
+      <origin xyz="7.01809e-07 3.11828e-07 0.0321" rpy="1.5708 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/omniwheel.stl"/>
+      </geometry>
+      <material name="omniwheel_2_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="7.01809e-07 3.11828e-07 0.0321" rpy="1.5708 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/omniwheel.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part high_strength_free_spinning_gear_insert__276_3881_4 -->
+    <visual>
+      <origin xyz="9.24069e-08 -9.27165e-08 0.03337" rpy="-3.14159 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+      <material name="high_strength_free_spinning_gear_insert__276_3881_4_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="9.24069e-08 -9.27165e-08 0.03337" rpy="-3.14159 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part screw_2in_2 -->
+    <visual>
+      <origin xyz="3.54749e-18 0 0" rpy="3.14159 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/screw_2in.stl"/>
+      </geometry>
+      <material name="screw_2in_2_material">
+        <color rgba="0.701961 0.701961 0.701961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="3.54749e-18 0 0" rpy="3.14159 -1.83257e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/screw_2in.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from base_part to wheel_2_2 -->
+  <joint name="2_wheel" type="continuous">
+    <origin xyz="-0.130184 -0.075162 0.033" rpy="-1.5708 -0 -1.0472"/>
+    <parent link="base_part"/>
+    <child link="wheel_2_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Link wheel_2_3 -->
+  <link name="wheel_2_3">
+    <inertial>
+      <origin xyz="3.28676e-07 -4.28078e-07 0.0253116" rpy="0 0 0"/>
+      <mass value="0.112864"/>
+      <inertia ixx="0.000101019" ixy="-3.71944e-10" ixz="-5.05649e-11" iyy="0.000101015" iyz="4.23314e-11" izz="0.000185918"/>
+    </inertial>
+    <!-- Part high_strength_free_spinning_gear_insert__276_3881_5 -->
+    <visual>
+      <origin xyz="1.22854e-17 -2.77556e-17 0.01683" rpy="1.2326e-32 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+      <material name="high_strength_free_spinning_gear_insert__276_3881_5_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.22854e-17 -2.77556e-17 0.01683" rpy="1.2326e-32 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part nut_3 -->
+    <visual>
+      <origin xyz="1.1046e-17 -2.77556e-17 0.0459143" rpy="-3.69779e-32 -5.15256e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/nut.stl"/>
+      </geometry>
+      <material name="nut_3_material">
+        <color rgba="0.701961 0.701961 0.701961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.1046e-17 -2.77556e-17 0.0459143" rpy="-3.69779e-32 -5.15256e-17 0"/>
+      <geometry>
+        <mesh filename="package://assets/nut.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part omniwheel_3 -->
+    <visual>
+      <origin xyz="7.01809e-07 3.11828e-07 0.0321" rpy="1.5708 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/omniwheel.stl"/>
+      </geometry>
+      <material name="omniwheel_3_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="7.01809e-07 3.11828e-07 0.0321" rpy="1.5708 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/omniwheel.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part high_strength_free_spinning_gear_insert__276_3881_6 -->
+    <visual>
+      <origin xyz="9.24069e-08 -9.27165e-08 0.03337" rpy="-3.14159 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+      <material name="high_strength_free_spinning_gear_insert__276_3881_6_material">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="9.24069e-08 -9.27165e-08 0.03337" rpy="-3.14159 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/high_strength_free_spinning_gear_insert__276_3881.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part screw_2in_3 -->
+    <visual>
+      <origin xyz="6.77418e-18 0 0" rpy="3.14159 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/screw_2in.stl"/>
+      </geometry>
+      <material name="screw_2in_3_material">
+        <color rgba="0.701961 0.701961 0.701961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="6.77418e-18 0 0" rpy="3.14159 3.98552e-18 0"/>
+      <geometry>
+        <mesh filename="package://assets/screw_2in.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from base_part to wheel_2_3 -->
+  <joint name="3_wheel" type="continuous">
+    <origin xyz="0.130184 -0.075162 0.033" rpy="-1.5708 -0 1.0472"/>
+    <parent link="base_part"/>
+    <child link="wheel_2_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10"/>
+  </joint>
+  <!-- Link rotation_pitch -->
+  <link name="rotation_pitch">
+    <inertial>
+      <origin xyz="-0.0314598 -0.000402737 -0.00299987" rpy="0 0 0"/>
+      <mass value="0.042"/>
+      <inertia ixx="3.2829e-05" ixy="9.19097e-08" ixz="-1.96773e-06" iyy="3.2548e-05" iyz="-3.67467e-07" izz="1.58361e-05"/>
+    </inertial>
+    <!-- Part rotation_pitch -->
+    <visual>
+      <origin xyz="0.012 -2.38524e-18 0.0464" rpy="-1.5708 1.78762e-32 2.5348e-18"/>
+      <geometry>
+        <mesh filename="package://assets/rotation_pitch.stl"/>
+      </geometry>
+      <material name="rotation_pitch_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.012 -2.38524e-18 0.0464" rpy="-1.5708 1.78762e-32 2.5348e-18"/>
+      <geometry>
+        <mesh filename="package://assets/rotation_pitch.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_holder_base -->
+    <visual>
+      <origin xyz="-0.0678 -7.01479e-17 0.0158499" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://assets/motor_holder_base.stl"/>
+      </geometry>
+      <material name="motor_holder_base_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0678 -7.01479e-17 0.0158499" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://assets/motor_holder_base.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part servo_double_sided_2 -->
+    <visual>
+      <origin xyz="-0.0305006 0.047045 -0.0471519" rpy="1.56207 -3.13757e-30 -5.29764e-17"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+      <material name="servo_double_sided_2_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0305006 0.047045 -0.0471519" rpy="1.56207 -3.13757e-30 -5.29764e-17"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link upper_arm -->
+  <link name="upper_arm">
+    <inertial>
+      <origin xyz="-0.0605597 0.000403835 0.0181976" rpy="0 0 0"/>
+      <mass value="0.045"/>
+      <inertia ixx="1.96355e-05" ixy="7.81589e-07" ixz="-5.35014e-07" iyy="7.06647e-05" iyz="-2.58275e-08" izz="5.52188e-05"/>
+    </inertial>
+    <!-- Part servo_double_sided_3 -->
+    <visual>
+      <origin xyz="-0.112669 -0.0209519 0.065345" rpy="3.13287 -6.47992e-18 3.14159"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+      <material name="servo_double_sided_3_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.112669 -0.0209519 0.065345" rpy="3.13287 -6.47992e-18 3.14159"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part upper_arm -->
+    <visual>
+      <origin xyz="-0.065085 0.012 0.0182" rpy="3.14159 1.448e-17 3.46432e-17"/>
+      <geometry>
+        <mesh filename="package://assets/upper_arm.stl"/>
+      </geometry>
+      <material name="upper_arm_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.065085 0.012 0.0182" rpy="3.14159 1.448e-17 3.46432e-17"/>
+      <geometry>
+        <mesh filename="package://assets/upper_arm.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link under_arm -->
+  <link name="under_arm">
+    <inertial>
+      <origin xyz="-0.067773 0.000777202 0.0179654" rpy="0 0 0"/>
+      <mass value="0.046"/>
+      <inertia ixx="2.01279e-05" ixy="1.24762e-06" ixz="5.45493e-07" iyy="6.91298e-05" iyz="1.75955e-08" izz="5.65224e-05"/>
+    </inertial>
+    <!-- Part servo_double_sided_4 -->
+    <visual>
+      <origin xyz="-0.127852 0.00529943 0.065345" rpy="3.13287 -2.30003e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+      <material name="servo_double_sided_4_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.127852 0.00529943 0.065345" rpy="3.13287 -2.30003e-16 1.5708"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part under_arm -->
+    <visual>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="-3.14159 2.82353e-18 -2.5303e-18"/>
+      <geometry>
+        <mesh filename="package://assets/under_arm.stl"/>
+      </geometry>
+      <material name="under_arm_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="-3.14159 2.82353e-18 -2.5303e-18"/>
+      <geometry>
+        <mesh filename="package://assets/under_arm.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_holder_wrist -->
+    <visual>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="3.14159 -7.9621e-16 -1.10501e-15"/>
+      <geometry>
+        <mesh filename="package://assets/motor_holder_wrist.stl"/>
+      </geometry>
+      <material name="motor_holder_wrist_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="3.14159 -7.9621e-16 -1.10501e-15"/>
+      <geometry>
+        <mesh filename="package://assets/motor_holder_wrist.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrist_roll_pitch -->
+  <link name="wrist_roll_pitch">
+    <inertial>
+      <origin xyz="-0.00038865 -0.027081 0.0198681" rpy="0 0 0"/>
+      <mass value="0.021"/>
+      <inertia ixx="1.62854e-05" ixy="-7.62373e-08" ixz="1.45e-08" iyy="1.08934e-05" iyz="1.23422e-06" izz="9.24691e-06"/>
+    </inertial>
+    <!-- Part wrist_roll_pitch -->
+    <visual>
+      <origin xyz="-1.38778e-17 -0.028 0.0181" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://assets/wrist_roll_pitch.stl"/>
+      </geometry>
+      <material name="wrist_roll_pitch_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.38778e-17 -0.028 0.0181" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://assets/wrist_roll_pitch.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part servo_one_sided -->
+    <visual>
+      <origin xyz="9.94325e-05 0.00424497 0.0250981" rpy="1.56207 -2.83564e-16 -1.04473e-15"/>
+      <geometry>
+        <mesh filename="package://assets/servo_one_sided.stl"/>
+      </geometry>
+      <material name="servo_one_sided_material">
+        <color rgba="0.231373 0.380392 0.705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="9.94325e-05 0.00424497 0.0250981" rpy="1.56207 -2.83564e-16 -1.04473e-15"/>
+      <geometry>
+        <mesh filename="package://assets/servo_one_sided.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrist_roll_follower -->
+  <link name="wrist_roll_follower">
+    <inertial>
+      <origin xyz="-0.0141572 0.000281286 -0.0287609" rpy="0 0 0"/>
+      <mass value="0.029"/>
+      <inertia ixx="1.88487e-05" ixy="-2.44227e-07" ixz="-3.50103e-06" iyy="2.12725e-05" iyz="-5.74043e-08" izz="1.05301e-05"/>
+    </inertial>
+    <!-- Part servo_double_sided_5 -->
+    <visual>
+      <origin xyz="0.0132019 -0.046645 -0.0234994" rpy="-1.57952 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+      <material name="servo_double_sided_5_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0132019 -0.046645 -0.0234994" rpy="-1.57952 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://assets/servo_double_sided.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrist_roll_follower -->
+    <visual>
+      <origin xyz="7.63278e-17 -0.000218214 0.000949706" rpy="3.14159 -5.89669e-17 -1.84304e-17"/>
+      <geometry>
+        <mesh filename="package://assets/wrist_roll_follower.stl"/>
+      </geometry>
+      <material name="wrist_roll_follower_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="7.63278e-17 -0.000218214 0.000949706" rpy="3.14159 -5.89669e-17 -1.84304e-17"/>
+      <geometry>
+        <mesh filename="package://assets/wrist_roll_follower.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link moving_jaw -->
+  <link name="moving_jaw">
+    <inertial>
+      <origin xyz="-0.00157495 -0.0300244 0.0192755" rpy="0 0 0"/>
+      <mass value="0.012"/>
+      <inertia ixx="6.61427e-06" ixy="-3.19807e-07" ixz="-5.90717e-09" iyy="1.89032e-06" iyz="-1.09945e-07" izz="5.28738e-06"/>
+    </inertial>
+    <!-- Part moving_jaw -->
+    <visual>
+      <origin xyz="1.38778e-17 0 0.0189" rpy="1.03234e-16 5.76524e-17 2.705e-17"/>
+      <geometry>
+        <mesh filename="package://assets/moving_jaw.stl"/>
+      </geometry>
+      <material name="moving_jaw_material">
+        <color rgba="0.188235 0.188235 0.188235 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.38778e-17 0 0.0189" rpy="1.03234e-16 5.76524e-17 2.705e-17"/>
+      <geometry>
+        <mesh filename="package://assets/moving_jaw.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from wrist_roll_follower to moving_jaw -->
+  <joint name="gripper1" type="revolute">
+    <origin xyz="0.0202037 0.018775 -0.0234" rpy="1.5708 -0.177411 -6.08343e-15"/>
+    <parent link="wrist_roll_follower"/>
+    <child link="moving_jaw"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.369397" upper="1.39339"/>
+  </joint>
+  <!-- Joint from wrist_roll_pitch to wrist_roll_follower -->
+  <joint name="wrist2" type="revolute">
+    <origin xyz="-6.52256e-16 -0.061175 0.0180963" rpy="-1.5708 1.19345 -1.15229e-14"/>
+    <parent link="wrist_roll_pitch"/>
+    <child link="wrist_roll_follower"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.19345" upper="5.08974"/>
+  </joint>
+  <!-- Joint from under_arm to wrist_roll_pitch -->
+  <joint name="wrist1" type="revolute">
+    <origin xyz="-0.134854 0.0052 2.49838e-05" rpy="1.33992e-15 -3.40611e-16 -1.64409"/>
+    <parent link="under_arm"/>
+    <child link="wrist_roll_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.4975" upper="1.64409"/>
+  </joint>
+  <!-- Joint from upper_arm to under_arm -->
+  <joint name="elbow1" type="revolute">
+    <origin xyz="-0.11257 -0.0279537 -7.50162e-05" rpy="1.16198e-15 5.47139e-15 0.282695"/>
+    <parent link="upper_arm"/>
+    <child link="under_arm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.282695" upper="2.8589"/>
+  </joint>
+  <!-- Joint from rotation_pitch to upper_arm -->
+  <joint name="shoulder1" type="revolute">
+    <origin xyz="-0.0306 -0.018375 -0.0541537" rpy="-1.5708 -0.244614 3.14268e-15"/>
+    <parent link="rotation_pitch"/>
+    <child link="upper_arm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-2.89698" upper="0.244614"/>
+  </joint>
+  <!-- Joint from base_part to rotation_pitch -->
+  <joint name="body1" type="revolute">
+    <origin xyz="-2.88615e-16 -0.00698156 0.064875" rpy="-3.14159 5.24597e-16 1.47211"/>
+    <parent link="base_part"/>
+    <child link="rotation_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.84402" upper="1.64664"/>
+  </joint>
+</robot>

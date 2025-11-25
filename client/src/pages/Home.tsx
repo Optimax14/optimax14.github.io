@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import GLBViewer from "@/components/GLBViewer";
+import { ModelErrorBoundary } from "@/components/ModelErrorBoundary";
 
 interface MediaItem {
   type: "image" | "video" | "gif";
@@ -19,6 +21,10 @@ interface Update {
   };
   media: MediaItem[];
 }
+
+//
+// Robot hero uses <GLBViewer/>. Provide env override via VITE_ROBOT_MODEL.
+//
 
 function MediaCarousel({ media }: { media: MediaItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -159,46 +165,26 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
   );
 }
 
-function RoboticsIdle() {
+function TechGridBackground() {
   return (
-    <motion.svg
-      width="140"
-      height="140"
-      viewBox="0 0 140 140"
-      className="absolute -top-6 -left-6 opacity-40 text-foreground/40 pointer-events-none"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: "easeOut" }}
-    >
-      <defs>
-        <linearGradient id="scan" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0.6" />
-        </linearGradient>
-      </defs>
-      <g transform="translate(70,70)">
-        <motion.g
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
-        >
-          <path d="M0 -58 A58 58 0 0 1 50 -29" stroke="url(#scan)" strokeWidth="2" fill="none" />
-          <path d="M0 -42 A42 42 0 0 1 36 -21" stroke="url(#scan)" strokeWidth="2" fill="none" />
-          <path d="M0 -26 A26 26 0 0 1 22 -12" stroke="url(#scan)" strokeWidth="2" fill="none" />
-          <motion.circle
-            r="3"
-            cx="50"
-            cy="-29"
-            fill="currentColor"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-          />
-        </motion.g>
-      </g>
-    </motion.svg>
+    <motion.div
+      aria-hidden
+      className="pointer-events-none absolute inset-[-16px] -z-10 rounded-xl"
+      style={{
+        backgroundImage:
+          "repeating-linear-gradient(0deg, color-mix(in oklab, var(--foreground) 10%, transparent) 0 1px, transparent 1px 20px), repeating-linear-gradient(90deg, color-mix(in oklab, var(--foreground) 10%, transparent) 0 1px, transparent 1px 20px)",
+        backgroundSize: "20px 20px",
+        mask: "radial-gradient(closest-side, #000 60%, transparent)",
+      }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0, backgroundPositionX: [0, -40], backgroundPositionY: [0, -40] }}
+      transition={{ duration: 1, ease: "easeOut", backgroundPositionX: { duration: 20, repeat: Infinity, ease: "linear" }, backgroundPositionY: { duration: 28, repeat: Infinity, ease: "linear" } }}
+    />
   );
 }
 
 export default function Home() {
+  const modelSrc = (import.meta as any).env?.VITE_ROBOT_MODEL || `${import.meta.env.BASE_URL}Robot_new.glb`;
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section with Photo */}
@@ -210,16 +196,14 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {/* Left: Photo */}
+            {/* Left: Interactive Robot Model */}
             <div className="relative flex justify-center lg:justify-end">
-              <div className="w-full max-w-md aspect-square bg-muted rounded-lg overflow-hidden border border-border shadow-sm hover:scale-[1.02] transition-transform duration-300">
-                <img
-                  src={import.meta.env.BASE_URL + "about-photo-1.jpg"}
-                  alt="Itay Kadosh"
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-full max-w-md hover:scale-[1.02] transition-transform duration-300">
+                <ModelErrorBoundary>
+                  <GLBViewer src={modelSrc} height="26rem" autoRotate exposure={1.05} />
+                </ModelErrorBoundary>
               </div>
-              <RoboticsIdle />
+              <TechGridBackground />
             </div>
 
             {/* Right: Text Content */}
