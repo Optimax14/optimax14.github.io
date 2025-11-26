@@ -15,11 +15,12 @@ import Model from "./pages/Model";
 import ScrollProgress from "./components/ScrollProgress";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import FetchDemo from "./pages/FetchDemo";
-import UpdateAurora from "./pages/UpdateAurora";
-import UpdateZephyr from "./pages/UpdateZephyr";
-import UpdateSolstice from "./pages/UpdateSolstice";
-import UpdateNova from "./pages/UpdateNova";
+import FetchDemo from "./pages/FetchDemo"; 
+import UpdateAurora from "./pages/UpdateAurora"; 
+import UpdateZephyr from "./pages/UpdateZephyr"; 
+import UpdateSolstice from "./pages/UpdateSolstice"; 
+import UpdateNova from "./pages/UpdateNova"; 
+import PoseLab from "./pages/PoseLab";
 
 function Router() {
   return (
@@ -33,10 +34,10 @@ function Router() {
       <Route path={"/model"} component={Model} />
       <Route path={"/fetch"} component={FetchDemo} />
       <Route path={"/updates/aurora"} component={UpdateAurora} />
-      <Route path={"/updates/zephyr"} component={UpdateZephyr} />
-      <Route path={"/updates/solstice"} component={UpdateSolstice} />
-      <Route path={"/updates/nova"} component={UpdateNova} />
-      <Route path={"/404"} component={NotFound} />
+      <Route path={"/updates/zephyr"} component={UpdateZephyr} /> 
+      <Route path={"/updates/solstice"} component={UpdateSolstice} /> 
+      <Route path={"/updates/nova"} component={UpdateNova} /> 
+      <Route path={"/404"} component={NotFound} /> 
       {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>

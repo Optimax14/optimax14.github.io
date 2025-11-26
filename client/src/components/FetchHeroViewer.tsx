@@ -35,7 +35,7 @@ function ensureFetchPreload(assetsBase: string, urdfUrl: string) {
   return fetchPreload;
 }
 
-function FetchRobot({
+function FetchRobot({ 
   urdfUrl, 
   assetsBase, 
   onReady, 
@@ -43,7 +43,7 @@ function FetchRobot({
   robotRef, 
   jointMapRef, 
   floorPosRef, 
-  headTargetRef,
+  headTargetRef, 
 }: { 
   urdfUrl: string; 
   assetsBase: string; 
@@ -116,36 +116,61 @@ function FetchRobot({
   return null;
 }
 
-function ClipRunner({ 
-  robotRef, 
-  jointMapRef,  
-  clipRef,  
-  introAnimRef,  
-  headTargetRef, 
-}: { 
-  robotRef: React.MutableRefObject<THREE.Object3D | null>; 
-  jointMapRef: React.MutableRefObject<Record<string, any>>; 
-  clipRef: React.MutableRefObject<{ clip: Clip; start: number } | null>; 
-  introAnimRef: React.MutableRefObject<{ 
-    start: number; 
-    duration: number; 
+function ClipRunner({  
+  robotRef,  
+  jointMapRef,    
+  clipRef,    
+  introAnimRef,    
+  headTargetRef,   
+  defaultTargetRef,  
+  defaultCamPosRef,  
+  enableInteraction,  
+  introCamAnimRef, 
+}: {    
+  robotRef: React.MutableRefObject<THREE.Object3D | null>;    
+  jointMapRef: React.MutableRefObject<Record<string, any>>;    
+  clipRef: React.MutableRefObject<{ clip: Clip; start: number } | null>;    
+  introAnimRef: React.MutableRefObject<{   
+    start: number;  
+    duration: number;  
     startPos: THREE.Vector3; 
     endPos: THREE.Vector3; 
     center: THREE.Vector3; 
     active: boolean; 
+  }>;   
+  headTargetRef: React.MutableRefObject<{ x: number; y: number; active: boolean }>;    
+  defaultTargetRef: React.MutableRefObject<THREE.Vector3>;  
+  defaultCamPosRef: React.MutableRefObject<THREE.Vector3 | null>;  
+  enableInteraction: boolean;  
+  introCamAnimRef: React.MutableRefObject<{ 
+    active: boolean; 
+    start: number; 
+    duration: number; 
+    from: THREE.Vector3; 
+    to: THREE.Vector3; 
+    target: THREE.Vector3; 
   }>; 
-  headTargetRef: React.MutableRefObject<{ x: number; y: number; active: boolean }>; 
-}) {  
-  const nowSec = () => performance.now() / 1000;  
-  useFrame(({ camera }) => {  
-    // No intro animation; keep camera as is  
+}) {    
+  const nowSec = () => performance.now() / 1000;    
+  useFrame(({ camera }) => {   
+    // Intro camera drift while interaction is disabled
+    if (!enableInteraction && introCamAnimRef.current.active) {
+      const t = Math.min(1, (performance.now() - introCamAnimRef.current.start) / introCamAnimRef.current.duration);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      camera.position.lerpVectors(introCamAnimRef.current.from, introCamAnimRef.current.to, eased);
+      (camera as THREE.PerspectiveCamera).updateProjectionMatrix();
+      if (introCamAnimRef.current.target) {
+        camera.lookAt(introCamAnimRef.current.target);
+      }
+      if (t >= 1) introCamAnimRef.current.active = false;
+    }
 
-    if (robotRef.current && jointMapRef.current && clipRef.current) {
-      const { clip, start } = clipRef.current;
-      const elapsed = nowSec() - start;
-      const duration = clip.frames[clip.frames.length - 1].time;
-      const t = clip.loop ? elapsed % duration : Math.min(elapsed, duration);
-      if (!clip.loop && elapsed >= duration) {
+    if (robotRef.current && jointMapRef.current && clipRef.current) {  
+      const { clip, start } = clipRef.current;  
+      const elapsed = nowSec() - start;  
+      const duration = clip.frames[clip.frames.length - 1].time;  
+      const t = clip.loop ? elapsed % duration : Math.min(elapsed, duration);  
+      if (!clip.loop && elapsed >= duration) {  
         clipRef.current = null;
       } else {
         let f1 = clip.frames[0];
@@ -172,22 +197,30 @@ function ClipRunner({
       }
     }
 
+    // Ensure defaults captured for reset
+    if (!defaultCamPosRef.current) {
+      defaultCamPosRef.current = (camera as THREE.PerspectiveCamera).position.clone();
+    }
+    if (defaultTargetRef.current.lengthSq() === 0) {
+      defaultTargetRef.current.set(0, 1, 0);
+    }
+
     // Head/eye follow
-    if (jointMapRef.current) {
+    if (enableInteraction && jointMapRef.current) {
       const headPan = jointMapRef.current["head_pan_joint"];
       const headTilt = jointMapRef.current["head_tilt_joint"];
       if (headPan && typeof headPan.setJointValue === "function") {
         const targetX = THREE.MathUtils.clamp(headTargetRef.current.active ? headTargetRef.current.x : 0, -1, 1);
         const desiredPan = THREE.MathUtils.degToRad(targetX * 50); // wider pan range
         const currentPan = headPan.jointValue ?? 0;
-        headPan.setJointValue(THREE.MathUtils.lerp(currentPan, desiredPan, 0.25));
+        headPan.setJointValue(THREE.MathUtils.lerp(currentPan, desiredPan, 0.12));
       }
       if (headTilt && typeof headTilt.setJointValue === "function") {
         const targetY = THREE.MathUtils.clamp(headTargetRef.current.active ? headTargetRef.current.y : 0, -1, 1);
         // tilt in the same direction as cursor movement (up cursor => head up)
         const desiredTilt = THREE.MathUtils.degToRad(targetY * 30);
         const currentTilt = headTilt.jointValue ?? 0;
-        headTilt.setJointValue(THREE.MathUtils.lerp(currentTilt, desiredTilt, 0.25));
+        headTilt.setJointValue(THREE.MathUtils.lerp(currentTilt, desiredTilt, 0.12));
       }
     }
 
@@ -200,73 +233,77 @@ export default function FetchHeroViewer({
   onLoaded, 
   onStartReady, 
   onWaveComplete, 
+  enableInteraction = true,
 }: { 
-  onLoaded?: () => void;
-  onStartReady?: (startWave: () => void) => void;
-  onWaveComplete?: () => void;
-}) {
+  onLoaded?: () => void; 
+  onStartReady?: (startWave: () => void) => void; 
+  onWaveComplete?: () => void; 
+  enableInteraction?: boolean;
+}) { 
   const assetsBase = resolvePublic("assets/fetch/");
   const urdfUrl = resolvePublic("assets/fetch/fetch.urdf");
 
-  // Simple wave clip
-  const playWaveRef = useRef<(clip: Clip) => void>();  
-  const clipRef = useRef<{ clip: Clip; start: number } | null>(null);  
+const clipRef = useRef<{ clip: Clip; start: number } | null>(null);   
   const robotRef = useRef<THREE.Object3D | null>(null);  
   const jointMapRef = useRef<Record<string, any>>({});  
   const floorPosRef = useRef<THREE.Vector3>(new THREE.Vector3(0, -0.02, 0));  
   const headTargetRef = useRef<{ x: number; y: number; active: boolean }>({ x: 0, y: 0, active: false });
-  const introAnimRef = useRef<{ 
+  const defaultTargetRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 1, 0));
+  const defaultCamPosRef = useRef<THREE.Vector3 | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const controlsRef = useRef<any>(null);
+  const resetAnimRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const introCamAnimRef = useRef<{ 
+    active: boolean; 
     start: number; 
     duration: number; 
-    startPos: THREE.Vector3; 
-    endPos: THREE.Vector3;
-    center: THREE.Vector3;
-    active: boolean;
-  }>({ start: 0, duration: 0, startPos: new THREE.Vector3(), endPos: new THREE.Vector3(), center: new THREE.Vector3(), active: false });
-  const nowSec = () => performance.now() / 1000;
-  const waveClip = useMemo<Clip>( 
-    () => ({
-      name: "wave",
-      frames: [
-        { time: 0, joints: { shoulder_lift_joint: -0.5, shoulder_pan_joint: 0.6, elbow_flex_joint: -1.2, wrist_flex_joint: 0.7, wrist_roll_joint: 0 } },
-        { time: 0.6, joints: { shoulder_lift_joint: -0.5, shoulder_pan_joint: 0.9, elbow_flex_joint: -1.2, wrist_flex_joint: 0.7, wrist_roll_joint: 1.2 } },
-        { time: 1.2, joints: { shoulder_lift_joint: -0.5, shoulder_pan_joint: 0.3, elbow_flex_joint: -1.2, wrist_flex_joint: 0.7, wrist_roll_joint: -1.2 } },
-        { time: 1.8, joints: { shoulder_lift_joint: -0.5, shoulder_pan_joint: 0.9, elbow_flex_joint: -1.2, wrist_flex_joint: 0.7, wrist_roll_joint: 1.2 } },
-        { time: 2.4, joints: { shoulder_lift_joint: -0.3, shoulder_pan_joint: 0, elbow_flex_joint: -0.5, wrist_flex_joint: 0, wrist_roll_joint: 0 } },
-      ],
-    }),
-    []
+    from: THREE.Vector3; 
+    to: THREE.Vector3; 
+    target: THREE.Vector3; 
+  }>({ 
+    active: false, 
+    start: 0, 
+    duration: 0, 
+    from: new THREE.Vector3(), 
+    to: new THREE.Vector3(), 
+    target: new THREE.Vector3(), 
+  }); 
+  const introAnimRef = useRef<{   
+    start: number;   
+    duration: number;   
+    startPos: THREE.Vector3;   
+    endPos: THREE.Vector3;  
+    center: THREE.Vector3;  
+    active: boolean;  
+  }>({ start: 0, duration: 0, startPos: new THREE.Vector3(), endPos: new THREE.Vector3(), center: new THREE.Vector3(), active: false });  
+  const introCamStart = useMemo(() => new THREE.Vector3(0.5, 1, 0), []);  
+  const introCamEnd = useMemo(() => new THREE.Vector3(2, 1, 0), []);   
+  const introCamTarget = useMemo(() => new THREE.Vector3(0, 1, 0), []);   
+  const introCamDuration = 3500;   
+  const introPoseClip = useMemo<Clip>( 
+    () => ({ 
+      name: "intro-pose", 
+      frames: [ 
+        { time: 0, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 2, elbow_flex_joint: 1.71, wrist_flex_joint: 1.5, wrist_roll_joint: 0.05, torso_lift_joint: 0.03, upperarm_roll_joint:0.12 } }, 
+        { time: 0.8, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 2, elbow_flex_joint: 1.71, wrist_flex_joint: 1.5, wrist_roll_joint: 0.05, torso_lift_joint: 0.1, upperarm_roll_joint:-3.07 } }, 
+        { time: 5.0, joints: { shoulder_pan_joint: -0.3, shoulder_lift_joint: -0.7, elbow_flex_joint: -0.9, wrist_flex_joint: 0.4, wrist_roll_joint: -0.6, torso_lift_joint: 0.05 } }, 
+      ], 
+    }), 
+    [] 
   ); 
-
-  const danceClip = useMemo<Clip>(
-    () => ({
-      name: "dance-idle",
-      loop: true,
-      frames: [
-        { time: 0, joints: { shoulder_pan_joint: 0.35, shoulder_lift_joint: -0.4, elbow_flex_joint: -0.85, wrist_flex_joint: 0.5, wrist_roll_joint: 0.2, torso_lift_joint: 0.04 } },
-        { time: 1.5, joints: { shoulder_pan_joint: -0.25, shoulder_lift_joint: -0.6, elbow_flex_joint: -1.05, wrist_flex_joint: 0.55, wrist_roll_joint: 1.0, torso_lift_joint: 0.06 } },
-        { time: 3.0, joints: { shoulder_pan_joint: 0.55, shoulder_lift_joint: -0.35, elbow_flex_joint: -0.75, wrist_flex_joint: 0.45, wrist_roll_joint: -1.0, torso_lift_joint: 0.02 } },
-        { time: 4.5, joints: { shoulder_pan_joint: 0.15, shoulder_lift_joint: -0.5, elbow_flex_joint: -0.9, wrist_flex_joint: 0.6, wrist_roll_joint: 0.35, torso_lift_joint: 0.05 } },
-      ],
-    }),
-    []
-  );
-
-  const playClip = (clip: Clip) => {
-    clipRef.current = { clip, start: nowSec() };
-  };
-
-  const startDance = () => playClip(danceClip); 
+  const nowSec = () => performance.now() / 1000;
+const playClip = (clip: Clip) => {  
+  clipRef.current = { clip, start: nowSec() };  
+};  
  
-  // Expose play function  
-  useEffect(() => {  
-    playWaveRef.current = (clip: Clip) => {  
-      clipRef.current = { clip, start: nowSec() };  
-    };  
-
-    // Start idle dance once loaded (will be overridden by wave when triggered) 
-    startDance(); 
-  }, []);  
+// Clear any clips when interaction disabled; nothing auto-plays now
+useEffect(() => {
+  if (!enableInteraction) {
+    clipRef.current = null;
+    headTargetRef.current = { x: 0, y: 0, active: false };
+  }
+}, [enableInteraction]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -274,6 +311,7 @@ export default function FetchHeroViewer({
       const h = window.innerHeight || 1;
       const nx = (e.clientX / w) * 2 - 1; // -1 to 1 across viewport
       const ny = (e.clientY / h) * 2 - 1;
+      if (!enableInteraction) return;
       headTargetRef.current = { x: THREE.MathUtils.clamp(nx, -1, 1), y: THREE.MathUtils.clamp(ny, -1, 1), active: true };
     };
     const handleLeave = () => {
@@ -289,20 +327,77 @@ export default function FetchHeroViewer({
     };
   }, []);
 
-  return (
-    <div className="w-full h-full relative"> 
+  // Inactivity reset: return camera to default after timeout
+  useEffect(() => {
+    if (!enableInteraction) return;
+    let timeout: number | undefined;
+    const smoothReset = () => {
+      if (!defaultCamPosRef.current || !cameraRef.current || !controlsRef.current) return;
+      if (resetAnimRef.current) cancelAnimationFrame(resetAnimRef.current);
+      const startPos = cameraRef.current.position.clone();
+      const endPos = defaultCamPosRef.current.clone();
+      const startTarget = controlsRef.current.target.clone();
+      const endTarget = defaultTargetRef.current.clone();
+      const duration = 1200;
+      const start = performance.now();
+      const animate = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        cameraRef.current!.position.lerpVectors(startPos, endPos, eased);
+        controlsRef.current.target.lerpVectors(startTarget, endTarget, eased);
+        controlsRef.current.update();
+        if (t < 1) {
+          resetAnimRef.current = requestAnimationFrame(animate);
+        } else {
+          resetAnimRef.current = null;
+        }
+      };
+      resetAnimRef.current = requestAnimationFrame(animate);
+    };
+    const resetView = () => {
+      smoothReset();
+    };
+    const resetTimer = () => {
+      if (timeout) window.clearTimeout(timeout);
+      timeout = window.setTimeout(resetView, 2000);
+    };
+
+    const node = containerRef.current;
+    if (!node) return;
+    const handleMove = () => resetTimer();
+    resetTimer();
+    node.addEventListener("pointermove", handleMove);
+    node.addEventListener("wheel", handleMove, { passive: true });
+    node.addEventListener("touchstart", handleMove, { passive: true });
+    node.addEventListener("pointerdown", handleMove);
+    node.addEventListener("pointerenter", handleMove);
+    return () => {
+      if (timeout) window.clearTimeout(timeout);
+      node.removeEventListener("pointermove", handleMove);
+      node.removeEventListener("wheel", handleMove);
+      node.removeEventListener("touchstart", handleMove);
+      node.removeEventListener("pointerdown", handleMove);
+      node.removeEventListener("pointerenter", handleMove);
+    };
+  }, []);
+
+  return ( 
+    <div className="w-full h-full relative" ref={containerRef}> 
       <Canvas 
         shadows 
         camera={{ position: [2.5, 1.5, 2.5], fov: 45, near: 0.01, far: 100 }} 
-        gl={{
-          antialias: true,
-          alpha: true,
+        gl={{ 
+          antialias: true, 
+          alpha: true, 
           outputColorSpace: THREE.SRGBColorSpace,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.0,
-          shadowMap: { enabled: true, type: THREE.PCFSoftShadowMap },
-        } as any}
-      >
+          toneMapping: THREE.ACESFilmicToneMapping, 
+          toneMappingExposure: 1.0, 
+          shadowMap: { enabled: true, type: THREE.PCFSoftShadowMap }, 
+        } as any} 
+        onCreated={({ camera }) => { 
+          cameraRef.current = camera as THREE.PerspectiveCamera; 
+        }} 
+      > 
         <color attach="background" args={["#ffffff"]} />
         <ambientLight intensity={0.35} color={0xffffff} />
         <directionalLight position={[6, 10, 6]} intensity={1.1} color={0xffffff} castShadow shadow-mapSize={[2048, 2048] as any} />
@@ -334,19 +429,57 @@ export default function FetchHeroViewer({
           jointMapRef={jointMapRef}  
           floorPosRef={floorPosRef} 
           headTargetRef={headTargetRef}
+          onIntroCamera={() => {
+            // Set custom intro camera path
+            if (cameraRef.current) {
+              cameraRef.current.position.copy(introCamStart);
+              cameraRef.current.lookAt(introCamTarget);
+              cameraRef.current.updateProjectionMatrix();
+            }
+            if (controlsRef.current) {
+              controlsRef.current.target.copy(introCamTarget);
+              controlsRef.current.update();
+            }
+            defaultTargetRef.current.copy(introCamTarget);
+            defaultCamPosRef.current = introCamEnd.clone();
+            introCamAnimRef.current = {
+              active: true,
+              start: performance.now(),
+              duration: introCamDuration,
+              from: introCamStart.clone(),
+              to: introCamEnd.clone(),
+              target: introCamTarget.clone(),
+            };
+          }}
           onReady={() => {  
             onLoaded?.();  
-            const startWave = () => {  
-              playWaveRef.current?.(waveClip);  
-              const durationMs = waveClip.frames[waveClip.frames.length - 1].time * 1000;  
-              setTimeout(() => onWaveComplete?.(), durationMs); 
-              setTimeout(startDance, durationMs + 150); 
-            }; 
-            onStartReady?.(startWave); 
-          }} 
+            // Play intro pose only; no wave/dance
+            playClip(introPoseClip);
+            const introMs = introPoseClip.frames[introPoseClip.frames.length - 1].time * 1000;
+            setTimeout(() => {
+              onWaveComplete?.();
+            }, introMs + 1000); // small buffer to keep full-screen a bit longer
+          }}  
         />  
-        <OrbitControls enableDamping dampingFactor={0.1} maxPolarAngle={Math.PI * 0.48} enablePan /> 
-        <ClipRunner robotRef={robotRef} jointMapRef={jointMapRef} clipRef={clipRef} introAnimRef={introAnimRef} headTargetRef={headTargetRef} /> 
+        <OrbitControls
+          ref={controlsRef}
+          enableDamping
+          dampingFactor={0.1}
+          maxPolarAngle={Math.PI * 0.48}
+          enablePan
+          enabled={enableInteraction}
+        /> 
+        <ClipRunner
+          robotRef={robotRef}
+          jointMapRef={jointMapRef}
+      clipRef={clipRef}
+      introAnimRef={introAnimRef}
+      headTargetRef={headTargetRef}
+      defaultTargetRef={defaultTargetRef}
+      defaultCamPosRef={defaultCamPosRef}
+      enableInteraction={enableInteraction}
+      introCamAnimRef={introCamAnimRef}
+    /> 
       </Canvas> 
     </div> 
   ); 

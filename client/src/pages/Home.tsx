@@ -164,17 +164,18 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
   );
 }
 
-export default function Home() {
-  const [firstVisit, setFirstVisit] = useState(() => !sessionStorage.getItem("heroSeen"));
-  const [compact, setCompact] = useState(() => (!firstVisit ? true : false));
-  const [showLoader, setShowLoader] = useState(() => firstVisit);
-  const [contentVisible, setContentVisible] = useState(() => !firstVisit);
-  const startWaveRef = useRef<(() => void) | null>(null);
+export default function Home() { 
+  const [firstVisit, setFirstVisit] = useState(() => !sessionStorage.getItem("heroSeen")); 
+  const [compact, setCompact] = useState(() => (!firstVisit ? true : false)); 
+  const [showLoader, setShowLoader] = useState(() => firstVisit); 
+  const [contentVisible, setContentVisible] = useState(() => !firstVisit); 
+  const startWaveRef = useRef<(() => void) | null>(null); 
+  const SHRINK_DELAY_MS = 3000; // extra time to keep viewport full-screen after intro
 
-  // First visit: loader -> full screen -> wave -> shrink -> show content
-  const handleLoaded = () => {
-    if (!firstVisit) {
-      setShowLoader(false);
+  // First visit: loader -> full screen -> wave -> shrink -> show content 
+  const handleLoaded = () => { 
+    if (!firstVisit) { 
+      setShowLoader(false); 
       setCompact(true);
       setContentVisible(true);
       return;
@@ -187,15 +188,17 @@ export default function Home() {
   };
 
   const handleStartReady = (fn: () => void) => {
-    startWaveRef.current = fn;
-  };
+    startWaveRef.current = fn; 
+  }; 
 
-  const handleWaveComplete = () => {
-    setCompact(true);
-    setContentVisible(true);
-    setFirstVisit(false);
-    sessionStorage.setItem("heroSeen", "1");
-  };
+  const handleWaveComplete = () => { 
+    setTimeout(() => { 
+      setCompact(true); 
+      setContentVisible(true); 
+      setFirstVisit(false); 
+      sessionStorage.setItem("heroSeen", "1"); 
+    }, SHRINK_DELAY_MS); 
+  }; 
   return (
     <div className="min-h-screen flex flex-col">
       {showLoader && (
@@ -219,11 +222,11 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }} 
             > 
-              <motion.div 
-                className="w-full hero-frame" 
-                initial={
-                  firstVisit
-                    ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 }
+              <motion.div  
+                className="w-full hero-frame"  
+                initial={ 
+                  firstVisit 
+                    ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 } 
                     : { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
                 }
                 animate={
@@ -231,11 +234,16 @@ export default function Home() {
                     ? { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
                     : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, marginTop: "0rem", opacity: 1, y: 0 }
                 }
-                transition={{ type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } }}
-              >
-                <FetchHeroViewer onLoaded={handleLoaded} onStartReady={handleStartReady} onWaveComplete={handleWaveComplete} />
-              </motion.div>
-            </motion.div>
+                transition={{ type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } }} 
+              > 
+                <FetchHeroViewer 
+                  onLoaded={handleLoaded} 
+                  onStartReady={handleStartReady} 
+                  onWaveComplete={handleWaveComplete} 
+                  enableInteraction={!firstVisit ? true : compact} 
+                /> 
+              </motion.div> 
+            </motion.div> 
 
             {/* Right: Text Content (first visit shows after shrink) */}
             {contentVisible && (

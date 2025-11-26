@@ -127,7 +127,7 @@
   } 
   body {    
     @apply bg-background text-foreground;    
-    font-family: var(--font-system);    
+    font-family: var(--font-sora);    
     background:   
       radial-gradient(circle at 18% 22%, rgba(0, 220, 255, 0.24) 0%, transparent 36%), 
       radial-gradient(circle at 82% 18%, rgba(255, 110, 180, 0.4) 0%, transparent 34%), 
@@ -160,14 +160,18 @@
     inset: -10%;    
     pointer-events: none;    
     background:    
+      radial-gradient(130% 150% at 12% 16%, rgba(0, 190, 255, 0.16), transparent 55%),    
+      radial-gradient(150% 130% at 82% 18%, rgba(255, 140, 200, 0.18), transparent 58%),    
+      radial-gradient(120% 130% at 66% 78%, rgba(120, 140, 255, 0.12), transparent 56%),    
       linear-gradient(125deg, rgba(0, 255, 220, 0.08), rgba(255, 160, 220, 0.06) 35%, rgba(0, 130, 255, 0.08)),    
       repeating-linear-gradient(135deg, rgba(0, 0, 0, 0) 0 2px, transparent 2px 14px), 
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");    
+    background-size: 140% 140%, 150% 150%, 130% 130%, auto, auto, auto;
     filter: drop-shadow(0 0 22px rgba(0,0,0,0.08));    
-    mix-blend-mode: multiply;    
-    opacity: 0.85;    
+    mix-blend-mode: soft-light;    
+    opacity: 0.72;    
     z-index: -2;    
-    animation: drift-after 10s ease-in-out infinite alternate;    
+    animation: auroraFlow 24s ease-in-out infinite alternate;    
   }   
 
   button:not(:disabled), 
@@ -289,13 +293,17 @@
   }
 }
 
-@keyframes drift-after {
+@keyframes auroraFlow {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
-    background-position: 0 0, 0 0;
+    background-position: 6% 12%, 78% 8%, 54% 76%, 0 0, 0 0, 0 0;
+  }
+  50% {
+    transform: translate3d(10px, -10px, 0) scale(1.01);
+    background-position: 14% 18%, 70% 16%, 48% 68%, -22px 12px, 12px -14px, 0 0;
   }
   100% {
-    transform: translate3d(6px, -6px, 0) scale(1.01);
-    background-position: -40px 30px, 18px -20px;
+    transform: translate3d(-8px, -16px, 0) scale(1.015);
+    background-position: 24% 6%, 62% 24%, 64% 62%, -32px 24px, 20px -18px, 0 0;
   }
 }
