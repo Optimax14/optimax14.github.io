@@ -15,10 +15,14 @@ const resolvePublic = (p: string) => `${baseUrl}${p.replace(/^\/+/, "")}`;
 
 let fetchPreload: Promise<THREE.Object3D | null> | null = null;
 
-function ensureFetchPreload(assetsBase: string, urdfUrl: string) {
+function ensureFetchPreload(assetsBase: string, urdfUrl: string, onProgress?: (progress: number) => void) {
   if (fetchPreload) return fetchPreload;
   fetchPreload = new Promise((resolve) => {
     const manager = new THREE.LoadingManager();
+    manager.onProgress = (_url, loaded, total) => {
+      if (total > 0) onProgress?.(loaded / total);
+    };
+    manager.onLoad = () => onProgress?.(1);
     const loader = new URDFLoader(manager);
     (loader as any).packages = { fetch: assetsBase, fetch_description: assetsBase };
     loader.workingPath = assetsBase;
@@ -44,6 +48,7 @@ function FetchRobot({
   jointMapRef, 
   floorPosRef, 
   headTargetRef, 
+  onProgress,
 }: { 
   urdfUrl: string; 
   assetsBase: string; 
@@ -53,11 +58,12 @@ function FetchRobot({
   jointMapRef: React.MutableRefObject<Record<string, any>>; 
   floorPosRef: React.MutableRefObject<THREE.Vector3>; 
   headTargetRef: React.MutableRefObject<{ x: number; y: number; active: boolean }>; 
+  onProgress?: (progress: number) => void;
 }) { 
   const { scene, camera } = useThree(); 
 
   useEffect(() => {
-    ensureFetchPreload(assetsBase, urdfUrl).then((preloaded) => {
+    ensureFetchPreload(assetsBase, urdfUrl, onProgress).then((preloaded) => {
       if (!preloaded) return;
       const robot = preloaded.clone(true);
         robot.rotation.set(-Math.PI / 2, 0, 0);
@@ -111,7 +117,7 @@ function FetchRobot({
     return () => {
       if (robotRef.current) scene.remove(robotRef.current);
     };
-  }, [urdfUrl, assetsBase, scene, camera, onIntroCamera, onReady]);
+  }, [urdfUrl, assetsBase, scene, camera, onIntroCamera, onReady, onProgress]);
 
   return null;
 }
@@ -153,8 +159,8 @@ function ClipRunner({
 }) {    
   const nowSec = () => performance.now() / 1000;    
   useFrame(({ camera }) => {   
-    // Intro camera drift while interaction is disabled
-    if (!enableInteraction && introCamAnimRef.current.active) {
+    // Intro camera drift always runs while active
+    if (introCamAnimRef.current.active) {
       const t = Math.min(1, (performance.now() - introCamAnimRef.current.start) / introCamAnimRef.current.duration);
       const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
       camera.position.lerpVectors(introCamAnimRef.current.from, introCamAnimRef.current.to, eased);
@@ -229,16 +235,35 @@ function ClipRunner({
   return null; 
 } 
 
+function ControlLocker({ controlsRef, introCamAnimRef, enableInteraction }: { controlsRef: React.MutableRefObject<any>; introCamAnimRef: React.MutableRefObject<{ active: boolean }>; enableInteraction: boolean; }) {
+  useFrame(() => {
+    if (controlsRef.current) {
+      controlsRef.current.enabled = enableInteraction && !introCamAnimRef.current.active;
+    }
+  });
+  return null;
+}
+
 export default function FetchHeroViewer({ 
   onLoaded, 
   onStartReady, 
   onWaveComplete, 
   enableInteraction = true,
+  onProgress,
+  introCamStart: introCamStartOverride,
+  introCamEnd: introCamEndOverride,
+  introCamTarget: introCamTargetOverride,
+  enableIntroAnimation = true,
 }: { 
   onLoaded?: () => void; 
   onStartReady?: (startWave: () => void) => void; 
   onWaveComplete?: () => void; 
   enableInteraction?: boolean;
+  onProgress?: (progress: number) => void;
+  introCamStart?: [number, number, number];
+  introCamEnd?: [number, number, number];
+  introCamTarget?: [number, number, number];
+  enableIntroAnimation?: boolean;
 }) { 
   const assetsBase = resolvePublic("assets/fetch/");
   const urdfUrl = resolvePublic("assets/fetch/fetch.urdf");
@@ -277,17 +302,25 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
     center: THREE.Vector3;  
     active: boolean;  
   }>({ start: 0, duration: 0, startPos: new THREE.Vector3(), endPos: new THREE.Vector3(), center: new THREE.Vector3(), active: false });  
-  const introCamStart = useMemo(() => new THREE.Vector3(0.5, 1, 0), []);  
-  const introCamEnd = useMemo(() => new THREE.Vector3(2, 1, 0), []);   
-  const introCamTarget = useMemo(() => new THREE.Vector3(0, 1, 0), []);   
-  const introCamDuration = 3500;   
+  const introCamDuration = 3200;   
   const introPoseClip = useMemo<Clip>( 
     () => ({ 
       name: "intro-pose", 
       frames: [ 
-        { time: 0, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 2, elbow_flex_joint: 1.71, wrist_flex_joint: 1.5, wrist_roll_joint: 0.05, torso_lift_joint: 0.03, upperarm_roll_joint:0.12 } }, 
-        { time: 0.8, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 2, elbow_flex_joint: 1.71, wrist_flex_joint: 1.5, wrist_roll_joint: 0.05, torso_lift_joint: 0.1, upperarm_roll_joint:-3.07 } }, 
-        { time: 5.0, joints: { shoulder_pan_joint: -0.3, shoulder_lift_joint: -0.7, elbow_flex_joint: -0.9, wrist_flex_joint: 0.4, wrist_roll_joint: -0.6, torso_lift_joint: 0.05 } }, 
+        // Start in the existing relaxed pose
+        { time: 0.0, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 2.0, elbow_flex_joint: 1.71, wrist_flex_joint: 1.5, wrist_roll_joint: 0.05, torso_lift_joint: 0.03, upperarm_roll_joint: 0.12 } },
+        // Roll arm out to prep for a wave
+        { time: 0.9, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 1.8, elbow_flex_joint: 1.5, wrist_flex_joint: 1.2, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
+        // Wave up
+        { time: 1.4, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 0.6, elbow_flex_joint: 0.3, wrist_flex_joint: 0.9, wrist_roll_joint: -0.5, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
+        // Wave down
+        { time: 1.9, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 1.0, elbow_flex_joint: 0.8, wrist_flex_joint: 0.6, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
+        // Wave up
+        { time: 2.4, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 0.6, elbow_flex_joint: 0.3, wrist_flex_joint: 0.9, wrist_roll_joint: -0.5, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
+        // Wave down
+        { time: 2.9, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 1.0, elbow_flex_joint: 0.8, wrist_flex_joint: 0.6, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
+        // Settle slightly more neutral
+        { time: 3.6, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.4, elbow_flex_joint: 1.0, wrist_flex_joint: 0.4, wrist_roll_joint: -0.1, torso_lift_joint: 0.05, upperarm_roll_joint: -2.0 } },
       ], 
     }), 
     [] 
@@ -296,6 +329,15 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
 const playClip = (clip: Clip) => {  
   clipRef.current = { clip, start: nowSec() };  
 };  
+  const startIntroClip = useMemo(() => {
+    return () => {
+      playClip(introPoseClip);
+      const introMs = introPoseClip.frames[introPoseClip.frames.length - 1].time * 1000;
+      setTimeout(() => {
+        onWaveComplete?.();
+      }, introMs + 1000);
+    };
+  }, [introPoseClip, onWaveComplete]);
  
 // Clear any clips when interaction disabled; nothing auto-plays now
 useEffect(() => {
@@ -429,36 +471,45 @@ useEffect(() => {
           jointMapRef={jointMapRef}  
           floorPosRef={floorPosRef} 
           headTargetRef={headTargetRef}
-          onIntroCamera={() => {
-            // Set custom intro camera path
+          onProgress={onProgress}
+          onIntroCamera={(center, startPosInput) => {
+            // Allow manual overrides; otherwise force a front-facing intro using loader radius
+            const radius = Math.max(0.1, startPosInput.distanceTo(center));
+            const defaultStart = center.clone().add(new THREE.Vector3(0, 0.15, radius * 1.0));
+            const defaultEnd = center.clone().add(new THREE.Vector3(0, 0.05, radius * 2.0));
+
+            const frontStart = introCamStartOverride ? new THREE.Vector3(...introCamStartOverride) : defaultStart;
+            const frontEnd = introCamEndOverride ? new THREE.Vector3(...introCamEndOverride) : defaultEnd;
+            const target = introCamTargetOverride ? new THREE.Vector3(...introCamTargetOverride) : center.clone();
             if (cameraRef.current) {
-              cameraRef.current.position.copy(introCamStart);
-              cameraRef.current.lookAt(introCamTarget);
+              cameraRef.current.position.copy(enableIntroAnimation ? frontStart : frontEnd);
+              cameraRef.current.lookAt(target);
               cameraRef.current.updateProjectionMatrix();
             }
             if (controlsRef.current) {
-              controlsRef.current.target.copy(introCamTarget);
+              controlsRef.current.target.copy(target);
               controlsRef.current.update();
             }
-            defaultTargetRef.current.copy(introCamTarget);
-            defaultCamPosRef.current = introCamEnd.clone();
-            introCamAnimRef.current = {
-              active: true,
-              start: performance.now(),
-              duration: introCamDuration,
-              from: introCamStart.clone(),
-              to: introCamEnd.clone(),
-              target: introCamTarget.clone(),
-            };
+            defaultTargetRef.current.copy(target);
+            defaultCamPosRef.current = frontEnd.clone();
+            introCamAnimRef.current = enableIntroAnimation
+              ? {
+                  active: true,
+                  start: performance.now(),
+                  duration: introCamDuration,
+                  from: frontStart.clone(),
+                  to: frontEnd.clone(),
+                  target: target.clone(),
+                }
+              : { active: false, start: 0, duration: 0, from: frontEnd.clone(), to: frontEnd.clone(), target: target.clone() };
           }}
           onReady={() => {  
             onLoaded?.();  
-            // Play intro pose only; no wave/dance
-            playClip(introPoseClip);
-            const introMs = introPoseClip.frames[introPoseClip.frames.length - 1].time * 1000;
-            setTimeout(() => {
+            if (enableIntroAnimation) {
+              onStartReady?.(startIntroClip);
+            } else {
               onWaveComplete?.();
-            }, introMs + 1000); // small buffer to keep full-screen a bit longer
+            }
           }}  
         />  
         <OrbitControls
@@ -469,6 +520,11 @@ useEffect(() => {
           enablePan
           enabled={enableInteraction}
         /> 
+        <ControlLocker
+          controlsRef={controlsRef}
+          introCamAnimRef={introCamAnimRef}
+          enableInteraction={enableInteraction}
+        />
         <ClipRunner
           robotRef={robotRef}
           jointMapRef={jointMapRef}

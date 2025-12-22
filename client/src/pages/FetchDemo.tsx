@@ -159,7 +159,7 @@ export default function FetchDemo() {
       <div className="space-y-6 max-w-none">
         <div className="space-y-2">
           <p className="text-sm uppercase tracking-wide text-muted-foreground">Static GitHub Pages</p>
-          <h1 className="text-3xl font-bold">Fetch Robot — Joint Tweaks</h1>
+          <h1 className="text-3xl font-bold">Fetch Robot - Joint Tweaks</h1>
           <p className="text-muted-foreground max-w-3xl">
             Move sliders to set joint angles in real time. No extra animations or auto camera moves.
           </p>
@@ -168,7 +168,7 @@ export default function FetchDemo() {
         <div className="relative w-full h-[540px]">
           {loading && (
             <div className="absolute inset-0 bg-black/25 flex items-center justify-center z-10">
-              <div className="bg-white px-4 py-2 rounded shadow text-sm">Loading Fetch URDF…</div>
+              <div className="bg-white px-4 py-2 rounded shadow text-sm">Loading Fetch URDF...</div>
             </div>
           )}
           {error && (
@@ -216,7 +216,7 @@ export default function FetchDemo() {
 
         <div className="border border-border rounded-lg p-4 bg-card/50">
           <h2 className="text-lg font-semibold mb-2">Live Joint Tweaks</h2>
-          {jointNames.length === 0 && <p className="text-sm text-muted-foreground">Loading joints…</p>}
+          {jointNames.length === 0 && <p className="text-sm text-muted-foreground">Loading joints...</p>}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {jointNames.map((name) => (
               <div key={name} className="space-y-1">

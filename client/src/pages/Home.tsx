@@ -165,15 +165,25 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 }
 
 export default function Home() { 
-  const [firstVisit, setFirstVisit] = useState(() => !sessionStorage.getItem("heroSeen")); 
-  const [compact, setCompact] = useState(() => (!firstVisit ? true : false)); 
-  const [showLoader, setShowLoader] = useState(() => firstVisit); 
-  const [contentVisible, setContentVisible] = useState(() => !firstVisit); 
+  const ANIMATION_ENABLED = false; // toggle to re-enable hero animation in dev
+  const initialFirstVisit = ANIMATION_ENABLED ? !sessionStorage.getItem("heroSeen") : false;
+  const [firstVisit, setFirstVisit] = useState(initialFirstVisit); 
+  const [compact, setCompact] = useState(() => (ANIMATION_ENABLED ? (!initialFirstVisit ? true : false) : true)); 
+  const [showLoader, setShowLoader] = useState(true); 
+  const [contentVisible, setContentVisible] = useState(() => (ANIMATION_ENABLED ? !initialFirstVisit : true)); 
   const startWaveRef = useRef<(() => void) | null>(null); 
   const SHRINK_DELAY_MS = 3000; // extra time to keep viewport full-screen after intro
 
   // First visit: loader -> full screen -> wave -> shrink -> show content 
   const handleLoaded = () => { 
+    if (!ANIMATION_ENABLED) {
+      setShowLoader(false);
+      setCompact(true);
+      setContentVisible(true);
+      setFirstVisit(false);
+      sessionStorage.setItem("heroSeen", "1");
+      return;
+    }
     if (!firstVisit) { 
       setShowLoader(false); 
       setCompact(true);
@@ -184,7 +194,7 @@ export default function Home() {
       setShowLoader(false);
       // start wave once ready
       startWaveRef.current?.();
-    }, 5000);
+    }, 1000);
   };
 
   const handleStartReady = (fn: () => void) => {
@@ -192,6 +202,13 @@ export default function Home() {
   }; 
 
   const handleWaveComplete = () => { 
+    if (!ANIMATION_ENABLED) {
+      setCompact(true);
+      setContentVisible(true);
+      setFirstVisit(false);
+      sessionStorage.setItem("heroSeen", "1");
+      return;
+    }
     setTimeout(() => { 
       setCompact(true); 
       setContentVisible(true); 
@@ -203,7 +220,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {showLoader && (
         <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
-          <div className="text-lg font-semibold text-foreground">Loading experience…</div>
+          <div className="text-lg font-semibold text-foreground">Loading experience...</div>
         </div>
       )}
       {/* Hero Section with Photo */}
@@ -241,6 +258,7 @@ export default function Home() {
                   onStartReady={handleStartReady} 
                   onWaveComplete={handleWaveComplete} 
                   enableInteraction={!firstVisit ? true : compact} 
+                  enableIntroAnimation={ANIMATION_ENABLED}
                 /> 
               </motion.div> 
             </motion.div> 
@@ -255,7 +273,7 @@ export default function Home() {
               >
                 <div>
                   <h1 className="text-5xl sm:text-6xl font-bold mb-4">Itay Kadosh</h1>
-                  <p className="text-2xl text-muted-foreground font-light">Robotics Researcher & Graduate School Applicant</p>
+                  <p className="text-2xl text-muted-foreground font-light">Robotics Researcher - CS & Math at UTD</p>
                 </div>
 
                 <div>
@@ -266,7 +284,11 @@ export default function Home() {
 
                 <div>
                   <p className="text-lg text-foreground leading-relaxed">
-                    Welcome to my portfolio. Here you'll find my research, publications, experience, and academic background. I'm seeking opportunities to pursue graduate studies in robotics and contribute to cutting-edge work.
+                    Welcome to my portfolio. Here you'll find my research, publications, experience, academic background, general updates, and fun things I wanted to share.
+                    
+                    <br /><br />
+                    Currently a senior at the University of Texas at Dallas, pursuing a double degree in Computer Science and Mathematics.
+                    I'm seeking opportunities to join a lab as a PhD student at the moment, for all inquires please email <a href="mailto:ixk230032@utdallas.edu" className="text-blue-500 hover:underline">ixk230032@utdallas.edu</a>
                   </p>
                 </div>
 

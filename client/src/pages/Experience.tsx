@@ -1,4 +1,89 @@
+import React, { useState } from "react";
+
+type MediaItem = {
+  type: "image" | "video" | "gif";
+  src: string;
+  alt: string;
+};
+
+function MediaCarousel({ media }: { media: MediaItem[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isSliding, setIsSliding] = useState(false);
+  if (!media || media.length === 0) return null;
+  const base = import.meta.env.BASE_URL || "/";
+  const current = media[currentIndex];
+
+  const goToPreviousSlide = () => {
+    if (isSliding) return;
+    setIsSliding(true);
+    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
+    setTimeout(() => setIsSliding(false), 600);
+  };
+
+  const goToNextSlide = () => {
+    if (isSliding) return;
+    setIsSliding(true);
+    setCurrentIndex((prev) => (prev + 1) % media.length);
+    setTimeout(() => setIsSliding(false), 600);
+  };
+
+  return (
+    <div className="space-y-3 w-full">
+      <div className="relative w-full rounded-lg overflow-hidden shadow-sm h-[320px] sm:h-[420px] bg-transparent">
+        <div className="absolute inset-0 flex items-center justify-between p-3 z-10">
+          <button
+            onClick={goToPreviousSlide}
+            className="bg-background/80 hover:bg-background text-foreground rounded-full p-2 shadow transition"
+            aria-label="Previous slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button
+            onClick={goToNextSlide}
+            className="bg-background/80 hover:bg-background text-foreground rounded-full p-2 shadow transition"
+            aria-label="Next slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+        <div className="w-full h-full flex items-center justify-center">
+          {(() => {
+            const srcUrl = current.src?.startsWith("/") ? base + current.src.slice(1) : current.src;
+            if (current.type === "image" || current.type === "gif") {
+              return <img src={srcUrl} alt={current.alt} className="w-full h-auto max-h-full object-contain" loading="lazy" />;
+            }
+            if (current.type === "video") {
+              return <video src={srcUrl} className="w-full h-auto max-h-full object-contain" playsInline muted loop controls />;
+            }
+            return null;
+          })()}
+        </div>
+      </div>
+      {media.length > 1 && (
+        <div className="flex gap-2 justify-center">
+          {media.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-2 rounded-full transition-all ${idx === currentIndex ? "bg-foreground w-8" : "bg-border w-2 hover:bg-muted-foreground"}`}
+              aria-label={`Go to media ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Experience() {
+  const utdMainMedia: MediaItem[] = [
+    { type: "image", src: "/personal_1.jpg", alt: "UTD lab work 1" },
+    { type: "image", src: "/personal_2.jpg", alt: "UTD lab work 2" },
+  ];
+  const utdSecondaryMedia: MediaItem[] = [
+    { type: "image", src: "/hobbies_1.jpg", alt: "UTD project landscape 1" },
+    { type: "image", src: "/hobbies_2.jpg", alt: "UTD project landscape 2" },
+  ];
   return (
     <div className="min-h-screen">
       <section className="section-padding">
@@ -12,12 +97,8 @@ export default function Experience() {
             {/* Photo Left, Text Right */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-12">
               <div className="flex justify-center">
-                <div className="w-full max-w-md bg-muted rounded-lg overflow-hidden border border-border shadow-sm">
-                  <img
-                    src="/about-photo-1.jpg"
-                    alt="UTD Robotics Lab"
-                    className="w-full h-auto object-cover"
-                  />
+                <div className="w-full max-w-2xl">
+                  <MediaCarousel media={utdMainMedia} />
                 </div>
               </div>
 
@@ -82,12 +163,8 @@ export default function Experience() {
               </div>
 
               <div className="flex justify-center order-1 lg:order-2">
-                <div className="w-full max-w-md bg-muted rounded-lg overflow-hidden border border-border shadow-sm">
-                  <img
-                    src="/about-photo-1.jpg"
-                    alt="UTD Research Work"
-                    className="w-full h-auto object-cover"
-                  />
+                <div className="w-full max-w-2xl">
+                  <MediaCarousel media={utdSecondaryMedia} />
                 </div>
               </div>
             </div>

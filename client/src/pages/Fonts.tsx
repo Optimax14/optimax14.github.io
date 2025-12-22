@@ -12,9 +12,9 @@ const FONTS: FontOption[] = [
   { id: "system", name: "System UI (SF on Apple)", className: "font-system", varName: "--font-system", blurb: "Native platform sans-serif: SF Pro on macOS/iOS, Segoe UI on Windows, Roboto on Android." },
   { id: "inter", name: "Inter", className: "font-inter", varName: "--font-inter", blurb: "Neutral, legible UI font. Great for body and product UIs." },
   { id: "jakarta", name: "Plus Jakarta Sans", className: "font-jakarta", varName: "--font-jakarta", blurb: "Modern, friendly sans with a bit more personality for headings." },
-  { id: "sora", name: "Sora", className: "font-sora", varName: "--font-sora", blurb: "Sharp, technical feel – nice for tech branding and headings." },
+  { id: "sora", name: "Sora", className: "font-sora", varName: "--font-sora", blurb: "Sharp, technical feel; nice for tech branding and headings." },
   { id: "space", name: "Space Grotesk", className: "font-space", varName: "--font-space", blurb: "Geometric grotesk with distinctive look; great for hero text." },
-  { id: "lemon", name: "LEMON MILK (Display)", className: "font-lemon", varName: "--font-lemon", blurb: "Bold display font – use sparingly for large headings." },
+  { id: "lemon", name: "LEMON MILK (Display)", className: "font-lemon", varName: "--font-lemon", blurb: "Bold display font; use sparingly for large headings." },
 ];
 
 export default function Fonts() {
@@ -37,6 +37,10 @@ export default function Fonts() {
     const body = document.body;
     FONTS.forEach((f) => body.classList.remove(f.className));
     // Do not add any class initially; body CSS already uses system font.
+    return () => {
+      // Clean up on unmount so other pages are not stuck with a preview font
+      FONTS.forEach((f) => body.classList.remove(f.className));
+    };
   }, []);
 
   return (
@@ -69,7 +73,7 @@ export default function Fonts() {
 
               <div className={`p-4 rounded-md border border-border bg-background ${font.className}`}>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold">Itay Kadosh — Robotics</div>
+                  <div className="text-3xl font-bold">Itay Kadosh - Robotics</div>
                   <div className="text-lg text-muted-foreground">Robotics Researcher & Graduate School Applicant</div>
                   <p className="text-base leading-relaxed">
                     Passionate about autonomous systems, manipulation, and human-robot interaction. Exploring research that bridges theory and real-world impact.
@@ -96,4 +100,3 @@ export default function Fonts() {
     </section>
   );
 }
-
