@@ -211,8 +211,8 @@ function ClipRunner({
       defaultTargetRef.current.set(0, 1, 0);
     }
 
-    // Head/eye follow
-    if (enableInteraction && jointMapRef.current) {
+    // Head/eye follow (after intro completes)
+    if (!introCamAnimRef.current.active && jointMapRef.current) {
       const headPan = jointMapRef.current["head_pan_joint"];
       const headTilt = jointMapRef.current["head_tilt_joint"];
       if (headPan && typeof headPan.setJointValue === "function") {
@@ -353,7 +353,7 @@ useEffect(() => {
       const h = window.innerHeight || 1;
       const nx = (e.clientX / w) * 2 - 1; // -1 to 1 across viewport
       const ny = (e.clientY / h) * 2 - 1;
-      if (!enableInteraction) return;
+      if (!enableInteraction || introCamAnimRef.current.active) return;
       headTargetRef.current = { x: THREE.MathUtils.clamp(nx, -1, 1), y: THREE.MathUtils.clamp(ny, -1, 1), active: true };
     };
     const handleLeave = () => {
@@ -367,6 +367,16 @@ useEffect(() => {
       window.removeEventListener("mouseleave", handleLeave);
       window.removeEventListener("blur", handleLeave);
     };
+  }, []);
+
+  // Unlock camera after intro or resize
+  useEffect(() => {
+    const unlock = () => {
+      introCamAnimRef.current.active = false;
+      if (controlsRef.current) controlsRef.current.enabled = true;
+    };
+    window.addEventListener("resize", unlock);
+    return () => window.removeEventListener("resize", unlock);
   }, []);
 
   // Inactivity reset: return camera to default after timeout

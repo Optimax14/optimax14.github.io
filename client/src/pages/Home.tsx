@@ -165,25 +165,17 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 }
 
 export default function Home() { 
-  const ANIMATION_ENABLED = false; // toggle to re-enable hero animation in dev
-  const initialFirstVisit = ANIMATION_ENABLED ? !sessionStorage.getItem("heroSeen") : false;
+  const ANIMATION_ENABLED = true; // toggle to re-enable hero animation in dev
+  const initialFirstVisit = !sessionStorage.getItem("heroSeen");
   const [firstVisit, setFirstVisit] = useState(initialFirstVisit); 
-  const [compact, setCompact] = useState(() => (ANIMATION_ENABLED ? (!initialFirstVisit ? true : false) : true)); 
-  const [showLoader, setShowLoader] = useState(true); 
-  const [contentVisible, setContentVisible] = useState(() => (ANIMATION_ENABLED ? !initialFirstVisit : true)); 
+  const [compact, setCompact] = useState(() => (!initialFirstVisit ? true : false)); 
+  const [showLoader, setShowLoader] = useState(() => initialFirstVisit); 
+  const [contentVisible, setContentVisible] = useState(() => !initialFirstVisit); 
   const startWaveRef = useRef<(() => void) | null>(null); 
   const SHRINK_DELAY_MS = 3000; // extra time to keep viewport full-screen after intro
 
   // First visit: loader -> full screen -> wave -> shrink -> show content 
   const handleLoaded = () => { 
-    if (!ANIMATION_ENABLED) {
-      setShowLoader(false);
-      setCompact(true);
-      setContentVisible(true);
-      setFirstVisit(false);
-      sessionStorage.setItem("heroSeen", "1");
-      return;
-    }
     if (!firstVisit) { 
       setShowLoader(false); 
       setCompact(true);
@@ -202,13 +194,6 @@ export default function Home() {
   }; 
 
   const handleWaveComplete = () => { 
-    if (!ANIMATION_ENABLED) {
-      setCompact(true);
-      setContentVisible(true);
-      setFirstVisit(false);
-      sessionStorage.setItem("heroSeen", "1");
-      return;
-    }
     setTimeout(() => { 
       setCompact(true); 
       setContentVisible(true); 
@@ -284,7 +269,7 @@ export default function Home() {
 
                 <div>
                   <p className="text-lg text-foreground leading-relaxed">
-                    Welcome to my portfolio. Here you'll find my research, publications, experience, academic background, general updates, and fun things I wanted to share.
+                    Welcome to my personal website. Here you'll find my research, publications, experience, academic background, general updates, and fun things I wanted to share.
                     
                     <br /><br />
                     Currently a senior at the University of Texas at Dallas, pursuing a double degree in Computer Science and Mathematics.
