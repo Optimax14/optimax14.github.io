@@ -173,6 +173,64 @@ export default function Home() {
   const [contentVisible, setContentVisible] = useState(() => !initialFirstVisit); 
   const startWaveRef = useRef<(() => void) | null>(null); 
   const SHRINK_DELAY_MS = 3000; // extra time to keep viewport full-screen after intro
+  const updatesByYear: Record<string, Update[]> = {
+    "2026": [
+      {
+        date: "November 2026",
+        title: "Perception + Planning Demo",
+        description: "A focused showcase page for the latest on-device perception and planning demo.",
+        link: { text: "Read More", href: "/updates/nova" },
+        media: [
+          { type: "image", src: "/about-photo-1.jpg", alt: "Perception and planning" },
+          { type: "gif", src: "/Wow.gif", alt: "Demo clip" },
+        ],
+      },
+    ],
+    "2025": [
+      {
+        date: "October 2025",
+        title: "New Publication at ICRA",
+        description: "Our paper on efficient path planning for mobile robots has been accepted at ICRA 2026.",
+        link: { text: "Read More", href: "/publications" },
+        media: [
+          { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
+          { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
+        ],
+      },
+      {
+        date: "September 2025",
+        title: "Human-Robot Collaboration",
+        description: "Achieved significant milestones in adaptive control strategies for robot-human interaction.",
+        link: { text: "Read More", href: "/experience" },
+        media: [
+          { type: "image", src: "/about-photo-1.jpg", alt: "Research progress" },
+          { type: "gif", src: "/Wow.gif", alt: "Robot demonstration" },
+        ],
+      },
+      {
+        date: "August 2025",
+        title: "Graduate Applications",
+        description: "Preparing applications for top robotics programs, focusing on autonomous systems research.",
+        link: { text: "Read More", href: "/about" },
+        media: [
+          { type: "image", src: "/about-photo-1.jpg", alt: "Graduate research" },
+          { type: "gif", src: "/Wow.gif", alt: "Research presentation" },
+        ],
+      },
+    ],
+    "2024": [
+      {
+        date: "November 2024",
+        title: "Perception + Planning Demo",
+        description: "A focused showcase page for the latest on-device perception and planning demo.",
+        link: { text: "Read More", href: "/updates/nova" },
+        media: [
+          { type: "image", src: "/about-photo-1.jpg", alt: "Perception and planning" },
+          { type: "gif", src: "/Wow.gif", alt: "Demo clip" },
+        ],
+      },
+    ],
+  };
 
   // First visit: loader -> full screen -> wave -> shrink -> show content 
   const handleLoaded = () => { 
@@ -295,137 +353,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Recent Updates Section - only after compact */}
+             {/* Recent Updates Section - grouped by year */}
       {contentVisible && (
         <section className="section-padding bg-card">
           <div className="container max-w-5xl">
-            <h2 className="text-3xl font-bold mb-8">
-              Recent Updates
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Latest Publication */}
-              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col">
-                <div className="aspect-[4/3] w-full">
-                  <MediaCarousel 
-                    media={[
-                      {
-                        type: "image",
-                        src: "/about-photo-1.jpg",
-                        alt: "Path planning visualization",
-                      },
-                      {
-                        type: "gif",
-                        src: "/Wow.gif",
-                        alt: "Robot navigation animation",
-                      },
-                    ]} 
-                  />
-                </div>
-                <div className="p-4 flex flex-col flex-1"> 
-                  <span className="text-sm font-medium text-muted-foreground">October 2025</span> 
-                  <h3 className="text-lg font-semibold mt-1 mb-2">New Publication at ICRA</h3> 
-                  <p className="text-sm text-muted-foreground mb-4 flex-1"> 
-                    Our paper on efficient path planning for mobile robots has been accepted at ICRA 2026. 
-                  </p> 
-                  <Link href="/publications" className="self-start"> 
-                    <Button variant="outline" size="sm">Read More</Button> 
-                  </Link> 
-                </div> 
-              </div> 
+            <h2 className="text-3xl font-bold mb-8">Recent Updates</h2>
+            <div className="space-y-10">
+              {Object.entries(updatesByYear)
+                .sort(([a], [b]) => Number(b) - Number(a))
+                .map(([year, items]) => (
+                  <div key={year} className="space-y-4">
+                    <h3 className="text-2xl font-semibold">{year}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {items.map((update, idx) => (
+                        <div
+                          key={`${year}-${idx}`}
+                          className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"
+                        >
+                          <div className="aspect-[4/3] w-full">
+                            <MediaCarousel media={update.media} />
+                          </div>
+                          <div className="p-4 flex flex-col flex-1">
+                            <span className="text-sm font-medium text-muted-foreground">{update.date}</span>
+                            <h4 className="text-lg font-semibold mt-1 mb-2">{update.title}</h4>
+                            <p className="text-sm text-muted-foreground mb-4 flex-1">{update.description}</p>
+                            <Link href={update.link.href} className="self-start">
+                              <Button variant="outline" size="sm">{update.link.text}</Button>
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-              {/* Research Progress */} 
-              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"> 
-                <div className="aspect-[4/3] w-full">
-                  <MediaCarousel 
-                    media={[
-                      {
-                        type: "image",
-                        src: "/about-photo-1.jpg",
-                        alt: "Research progress",
-                      },
-                      {
-                        type: "gif",
-                        src: "/Wow.gif",
-                        alt: "Robot demonstration",
-                      },
-                    ]} 
-                  />
-                </div>
-                <div className="p-4 flex flex-col flex-1">
-                  <span className="text-sm font-medium text-muted-foreground">September 2025</span> 
-                  <h3 className="text-lg font-semibold mt-1 mb-2">Human-Robot Collaboration</h3> 
-                  <p className="text-sm text-muted-foreground mb-4 flex-1"> 
-                    Achieved significant milestones in adaptive control strategies for robot-human interaction. 
-                  </p> 
-                  <Link href="/experience" className="self-start"> 
-                    <Button variant="outline" size="sm">Read More</Button> 
-                  </Link> 
-                </div> 
-              </div> 
-
-              {/* Professional Update */} 
-              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"> 
-                <div className="aspect-[4/3] w-full"> 
-                  <MediaCarousel 
-                    media={[
-                      {
-                        type: "image",
-                        src: "/about-photo-1.jpg",
-                        alt: "Graduate research",
-                      },
-                      {
-                        type: "gif",
-                        src: "/Wow.gif",
-                        alt: "Research presentation",
-                      },
-                    ]} 
-                  />
-                </div>
-                <div className="p-4 flex flex-col flex-1">
-                  <span className="text-sm font-medium text-muted-foreground">August 2025</span> 
-                  <h3 className="text-lg font-semibold mt-1 mb-2">Graduate Applications</h3> 
-                  <p className="text-sm text-muted-foreground mb-4 flex-1"> 
-                    Preparing applications for top robotics programs, focusing on autonomous systems research. 
-                  </p> 
-                  <Link href="/about" className="self-start"> 
-                    <Button variant="outline" size="sm">Read More</Button> 
-                  </Link> 
-                </div> 
-              </div> 
-
-              {/* New Dedicated Update */} 
-              <div className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"> 
-                <div className="aspect-[4/3] w-full"> 
-                  <MediaCarousel 
-                    media={[
-                      {
-                        type: "image",
-                        src: "/about-photo-1.jpg",
-                        alt: "Perception and planning",
-                      },
-                      {
-                        type: "gif",
-                        src: "/Wow.gif",
-                        alt: "Demo clip",
-                      },
-                    ]} 
-                  /> 
-                </div> 
-                <div className="p-4 flex flex-col flex-1"> 
-                  <span className="text-sm font-medium text-muted-foreground">November 2025</span> 
-                  <h3 className="text-lg font-semibold mt-1 mb-2">Perception + Planning Demo</h3> 
-                  <p className="text-sm text-muted-foreground mb-4 flex-1"> 
-                    A focused showcase page for the latest on-device perception and planning demo. 
-                  </p> 
-                  <Link href="/updates/nova" className="self-start"> 
-                    <Button variant="outline" size="sm">Read More</Button> 
-                  </Link> 
-                </div> 
-              </div> 
-            </div> 
-          </div> 
-        </section> 
-      )} 
     </div>
   );
 }

@@ -90,7 +90,7 @@ function FetchRobot({
         const box = new THREE.Box3().setFromObject(robot); 
         const size = box.getSize(new THREE.Vector3()); 
         const rawCenter = box.getCenter(new THREE.Vector3()); 
-        const center = rawCenter.clone().add(new THREE.Vector3(0, 1, 0)); 
+        const center = rawCenter.clone().add(new THREE.Vector3(0, 0.55, 0)); 
         floorPosRef.current.set(rawCenter.x, box.min.y - 0.015, rawCenter.z); 
         // Keep head pointing forward on load
         headTargetRef.current = { x: 0, y: 0, active: false }; 
@@ -126,24 +126,16 @@ function ClipRunner({
   robotRef,  
   jointMapRef,    
   clipRef,    
-  introAnimRef,    
   headTargetRef,   
   defaultTargetRef,  
   defaultCamPosRef,  
   enableInteraction,  
   introCamAnimRef, 
+  restPose,
 }: {    
   robotRef: React.MutableRefObject<THREE.Object3D | null>;    
   jointMapRef: React.MutableRefObject<Record<string, any>>;    
   clipRef: React.MutableRefObject<{ clip: Clip; start: number } | null>;    
-  introAnimRef: React.MutableRefObject<{   
-    start: number;  
-    duration: number;  
-    startPos: THREE.Vector3; 
-    endPos: THREE.Vector3; 
-    center: THREE.Vector3; 
-    active: boolean; 
-  }>;   
   headTargetRef: React.MutableRefObject<{ x: number; y: number; active: boolean }>;    
   defaultTargetRef: React.MutableRefObject<THREE.Vector3>;  
   defaultCamPosRef: React.MutableRefObject<THREE.Vector3 | null>;  
@@ -156,6 +148,7 @@ function ClipRunner({
     to: THREE.Vector3; 
     target: THREE.Vector3; 
   }>; 
+  restPose: Record<string, number>;
 }) {    
   const nowSec = () => performance.now() / 1000;    
   useFrame(({ camera }) => {   
@@ -171,35 +164,49 @@ function ClipRunner({
       if (t >= 1) introCamAnimRef.current.active = false;
     }
 
-    if (robotRef.current && jointMapRef.current && clipRef.current) {  
-      const { clip, start } = clipRef.current;  
-      const elapsed = nowSec() - start;  
-      const duration = clip.frames[clip.frames.length - 1].time;  
-      const t = clip.loop ? elapsed % duration : Math.min(elapsed, duration);  
-      if (!clip.loop && elapsed >= duration) {  
-        clipRef.current = null;
-      } else {
-        let f1 = clip.frames[0];
-        let f2 = clip.frames[clip.frames.length - 1];
-        for (let i = 0; i < clip.frames.length - 1; i++) {
-          const a = clip.frames[i];
-          const b = clip.frames[i + 1];
-          if (t >= a.time && t <= b.time) {
-            f1 = a;
-            f2 = b;
-            break;
+    const applyPose = (pose: Record<string, number>) => {
+      Object.entries(pose).forEach(([name, value]) => {
+        const j = jointMapRef.current?.[name];
+        if (!j || typeof j.setJointValue !== "function") return;
+        j.setJointValue(value);
+      });
+    };
+
+    if (robotRef.current && jointMapRef.current) {  
+      if (clipRef.current) {
+        const { clip, start } = clipRef.current;  
+        const elapsed = nowSec() - start;  
+        const duration = clip.frames[clip.frames.length - 1].time;  
+        const t = clip.loop ? elapsed % duration : Math.min(elapsed, duration);  
+        if (!clip.loop && elapsed >= duration) {  
+          clipRef.current = null;
+        } else {
+          let f1 = clip.frames[0];
+          let f2 = clip.frames[clip.frames.length - 1];
+          for (let i = 0; i < clip.frames.length - 1; i++) {
+            const a = clip.frames[i];
+            const b = clip.frames[i + 1];
+            if (t >= a.time && t <= b.time) {
+              f1 = a;
+              f2 = b;
+              break;
+            }
           }
+          const span = Math.max(0.001, f2.time - f1.time);
+          const alpha = Math.min(1, Math.max(0, (t - f1.time) / span));
+          const jointNames = new Set([...Object.keys(f1.joints), ...Object.keys(f2.joints)]);
+          jointNames.forEach((name) => {
+            const j = jointMapRef.current[name];
+            if (!j || typeof j.setJointValue !== "function") return;
+            const v1 = f1.joints[name] ?? 0;
+            const v2 = f2.joints[name] ?? 0;
+            j.setJointValue(THREE.MathUtils.lerp(v1, v2, alpha));
+          });
         }
-        const span = Math.max(0.001, f2.time - f1.time);
-        const alpha = Math.min(1, Math.max(0, (t - f1.time) / span));
-        const jointNames = new Set([...Object.keys(f1.joints), ...Object.keys(f2.joints)]);
-        jointNames.forEach((name) => {
-          const j = jointMapRef.current[name];
-          if (!j || typeof j.setJointValue !== "function") return;
-          const v1 = f1.joints[name] ?? 0;
-          const v2 = f2.joints[name] ?? 0;
-          j.setJointValue(THREE.MathUtils.lerp(v1, v2, alpha));
-        });
+      }
+      // When no clip is playing, hold the rest/default pose
+      if (!clipRef.current) {
+        applyPose(restPose);
       }
     }
 
@@ -273,7 +280,7 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
   const jointMapRef = useRef<Record<string, any>>({});  
   const floorPosRef = useRef<THREE.Vector3>(new THREE.Vector3(0, -0.02, 0));  
   const headTargetRef = useRef<{ x: number; y: number; active: boolean }>({ x: 0, y: 0, active: false });
-  const defaultTargetRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 1, 0));
+  const defaultTargetRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.8, 0));
   const defaultCamPosRef = useRef<THREE.Vector3 | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const controlsRef = useRef<any>(null);
@@ -294,21 +301,25 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
     to: new THREE.Vector3(), 
     target: new THREE.Vector3(), 
   }); 
-  const introAnimRef = useRef<{   
-    start: number;   
-    duration: number;   
-    startPos: THREE.Vector3;   
-    endPos: THREE.Vector3;  
-    center: THREE.Vector3;  
-    active: boolean;  
-  }>({ start: 0, duration: 0, startPos: new THREE.Vector3(), endPos: new THREE.Vector3(), center: new THREE.Vector3(), active: false });  
-  const introCamDuration = 3200;   
+  const restPose = useMemo<Record<string, number>>(
+    () => ({
+      shoulder_pan_joint: 1.81,
+      shoulder_lift_joint: 2.0,
+      elbow_flex_joint: 1.71,
+      wrist_flex_joint: 1.5,
+      wrist_roll_joint: 0.05,
+      torso_lift_joint: 0.03,
+      upperarm_roll_joint: 0.12,
+    }),
+    []
+  );
+  const introCamDuration = 4500;   
   const introPoseClip = useMemo<Clip>( 
     () => ({ 
       name: "intro-pose", 
       frames: [ 
         // Start in the existing relaxed pose
-        { time: 0.0, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 2.0, elbow_flex_joint: 1.71, wrist_flex_joint: 1.5, wrist_roll_joint: 0.05, torso_lift_joint: 0.03, upperarm_roll_joint: 0.12 } },
+        { time: 0.0, joints: { ...restPose } },
         // Roll arm out to prep for a wave
         { time: 0.9, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 1.8, elbow_flex_joint: 1.5, wrist_flex_joint: 1.2, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
         // Wave up
@@ -323,7 +334,7 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
         { time: 3.6, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.4, elbow_flex_joint: 1.0, wrist_flex_joint: 0.4, wrist_roll_joint: -0.1, torso_lift_joint: 0.05, upperarm_roll_joint: -2.0 } },
       ], 
     }), 
-    [] 
+    [restPose] 
   ); 
   const nowSec = () => performance.now() / 1000;
 const playClip = (clip: Clip) => {  
@@ -482,11 +493,10 @@ useEffect(() => {
           floorPosRef={floorPosRef} 
           headTargetRef={headTargetRef}
           onProgress={onProgress}
-          onIntroCamera={(center, startPosInput) => {
-            // Allow manual overrides; otherwise force a front-facing intro using loader radius
-            const radius = Math.max(0.1, startPosInput.distanceTo(center));
-            const defaultStart = center.clone().add(new THREE.Vector3(0, 0.15, radius * 1.0));
-            const defaultEnd = center.clone().add(new THREE.Vector3(0, 0.05, radius * 2.0));
+          onIntroCamera={(center, _startPosInput, _endPosInput) => {
+            // Manual camera control: use overrides when provided, otherwise a simple front-facing default.
+            const defaultStart = center.clone().add(new THREE.Vector3(0, 0, 0));
+            const defaultEnd = center.clone().add(new THREE.Vector3(2, 0, 0));
 
             const frontStart = introCamStartOverride ? new THREE.Vector3(...introCamStartOverride) : defaultStart;
             const frontEnd = introCamEndOverride ? new THREE.Vector3(...introCamEndOverride) : defaultEnd;
@@ -516,7 +526,13 @@ useEffect(() => {
           onReady={() => {  
             onLoaded?.();  
             if (enableIntroAnimation) {
-              onStartReady?.(startIntroClip);
+              // Only kick off the wave after the intro camera move finishes
+              const startAfterCamera = () => {
+                setTimeout(() => {
+                  startIntroClip();
+                }, introCamDuration);
+              };
+              onStartReady?.(startAfterCamera);
             } else {
               onWaveComplete?.();
             }
@@ -538,14 +554,14 @@ useEffect(() => {
         <ClipRunner
           robotRef={robotRef}
           jointMapRef={jointMapRef}
-      clipRef={clipRef}
-      introAnimRef={introAnimRef}
-      headTargetRef={headTargetRef}
-      defaultTargetRef={defaultTargetRef}
-      defaultCamPosRef={defaultCamPosRef}
-      enableInteraction={enableInteraction}
-      introCamAnimRef={introCamAnimRef}
-    /> 
+          clipRef={clipRef}
+          headTargetRef={headTargetRef}
+          defaultTargetRef={defaultTargetRef}
+          defaultCamPosRef={defaultCamPosRef}
+          enableInteraction={enableInteraction}
+          introCamAnimRef={introCamAnimRef}
+          restPose={restPose}
+        /> 
       </Canvas> 
     </div> 
   ); 
