@@ -286,6 +286,8 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
   const controlsRef = useRef<any>(null);
   const resetAnimRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const introStartedRef = useRef(false);
+  const introStartTimerRef = useRef<number | undefined>(undefined);
   const introCamAnimRef = useRef<{ 
     active: boolean; 
     start: number; 
@@ -378,7 +380,7 @@ useEffect(() => {
       window.removeEventListener("mouseleave", handleLeave);
       window.removeEventListener("blur", handleLeave);
     };
-  }, []);
+  }, [enableInteraction]);
 
   // Unlock camera after intro or resize
   useEffect(() => {
@@ -441,6 +443,15 @@ useEffect(() => {
       node.removeEventListener("touchstart", handleMove);
       node.removeEventListener("pointerdown", handleMove);
       node.removeEventListener("pointerenter", handleMove);
+    };
+  }, [enableInteraction]);
+
+  // Cleanup any pending intro timer on unmount
+  useEffect(() => {
+    return () => {
+      if (introStartTimerRef.current) {
+        clearTimeout(introStartTimerRef.current);
+      }
     };
   }, []);
 
@@ -528,7 +539,9 @@ useEffect(() => {
             if (enableIntroAnimation) {
               // Only kick off the wave after the intro camera move finishes
               const startAfterCamera = () => {
-                setTimeout(() => {
+                if (introStartedRef.current) return;
+                introStartedRef.current = true;
+                introStartTimerRef.current = window.setTimeout(() => {
                   startIntroClip();
                 }, introCamDuration);
               };
