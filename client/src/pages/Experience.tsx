@@ -77,7 +77,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 
 export default function Experience() {
   const utdMainMedia: MediaItem[] = [
-    { type: "image", src: "/personal_1.jpg", alt: "UTD lab work 1" },
+    { type: "image", src: "/soccer_irvl.jpg", alt: "UTD lab work 1" },
     { type: "image", src: "/personal_2.jpg", alt: "UTD lab work 2" },
   ];
   const utdSecondaryMedia: MediaItem[] = [
