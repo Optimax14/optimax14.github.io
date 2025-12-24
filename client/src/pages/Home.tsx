@@ -281,7 +281,7 @@ export default function Home() {
         </div>
       )}
       {/* Hero Section with Photo */}
-      <section className="section-padding">
+      <section className="section-padding pt-16 sm:pt-20">
         <div className="container relative">
           <motion.div
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
@@ -291,13 +291,13 @@ export default function Home() {
           >
             {/* Left: Interactive Robot Model */} 
             <motion.div 
-              className="relative flex justify-center lg:justify-end" 
+            className="relative flex justify-center lg:justify-end -mt-2" 
               initial={{ opacity: 0, y: 12 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }} 
-              > 
-                <motion.div  
-                  className="w-full hero-frame"  
+            > 
+              <motion.div  
+                className="w-full hero-frame"  
                 initial={
                   firstVisit
                     ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 }
@@ -323,7 +323,7 @@ export default function Home() {
             {/* Right: Text Content (first visit shows after shrink) */}
             {contentVisible && (
               <motion.div
-                className="space-y-6"
+              className="space-y-6 -mt-4"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
@@ -335,7 +335,7 @@ export default function Home() {
 
                 <div>
                   <p className="text-lg text-foreground leading-relaxed">
-                    Passionate about advancing robotics through research and innovation. Exploring autonomous systems, manipulation, and human-robot interaction.
+                    Passionate about advancing general purpose robotics through research and development. My research focuses on developing efficient and effective algorithms for robot perception and planning, with a particular emphasis on real-time applications.
                   </p>
                 </div>
 

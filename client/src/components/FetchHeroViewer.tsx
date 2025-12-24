@@ -261,6 +261,7 @@ export default function FetchHeroViewer({
   introCamEnd: introCamEndOverride,
   introCamTarget: introCamTargetOverride,
   enableIntroAnimation = true,
+  resetCamPosition: resetCamPositionOverride,
 }: { 
   onLoaded?: () => void; 
   onStartReady?: (startWave: () => void) => void; 
@@ -271,6 +272,7 @@ export default function FetchHeroViewer({
   introCamEnd?: [number, number, number];
   introCamTarget?: [number, number, number];
   enableIntroAnimation?: boolean;
+  resetCamPosition?: [1.2, 1.0, 2.4];
 }) { 
   const assetsBase = resolvePublic("assets/fetch/");
   const urdfUrl = resolvePublic("assets/fetch/fetch.urdf");
@@ -512,6 +514,7 @@ useEffect(() => {
             const frontStart = introCamStartOverride ? new THREE.Vector3(...introCamStartOverride) : defaultStart;
             const frontEnd = introCamEndOverride ? new THREE.Vector3(...introCamEndOverride) : defaultEnd;
             const target = introCamTargetOverride ? new THREE.Vector3(...introCamTargetOverride) : center.clone();
+            const resetPos = resetCamPositionOverride ? new THREE.Vector3(...resetCamPositionOverride) : frontEnd.clone();
             if (cameraRef.current) {
               cameraRef.current.position.copy(enableIntroAnimation ? frontStart : frontEnd);
               cameraRef.current.lookAt(target);
@@ -522,7 +525,7 @@ useEffect(() => {
               controlsRef.current.update();
             }
             defaultTargetRef.current.copy(target);
-            defaultCamPosRef.current = frontEnd.clone();
+            defaultCamPosRef.current = resetPos.clone();
             introCamAnimRef.current = enableIntroAnimation
               ? {
                   active: true,

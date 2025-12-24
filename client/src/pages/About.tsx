@@ -246,17 +246,23 @@ export default function About() {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col gap-6 items-center self-center">
-                <img
-                  src="/UT_Dallas_2_Color_Emblem_-_SVG_Brand_Identity_File.svg.png"
-                  alt="UTD logo"
-                  className="w-24 h-24 object-contain"
-                />
-                <img
-                  src="/CollinCollege-logo.png"
-                  alt="Collin College logo"
-                  className="w-24 h-24 object-contain"
-                />
+              <div className="flex flex-col gap-6 items-center self-center text-right mt-2 lg:mt-4">
+                <div className="flex flex-col gap-2 items-center">
+                  <img
+                    src="/UT_Dallas_2_Color_Emblem_-_SVG_Brand_Identity_File.svg.png"
+                    alt="UTD logo"
+                    className="w-24 h-24 object-contain"
+                  />
+                  <span className="text-sm text-muted-foreground">Jan 2024 - Jun 2026</span>
+                </div>
+                <div className="flex flex-col gap-2 items-center">
+                  <img
+                    src="/CollinCollege-logo.png"
+                    alt="Collin College logo"
+                    className="w-24 h-24 object-contain"
+                  />
+                  <span className="text-sm text-muted-foreground">Aug 2021 - Dec 2023</span>
+                </div>
               </div>
             </div>
           </div>

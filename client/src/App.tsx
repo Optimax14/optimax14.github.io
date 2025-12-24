@@ -74,7 +74,7 @@ function App() {
             <footer className="border-t border-border py-8 mt-16">
               <div className="container">
                 <p className="text-center text-muted-foreground text-sm">
-                  © 2024 Itay Kadosh. All rights reserved.
+                  © 2026 Itay Kadosh. All rights reserved.
                 </p>
               </div>
             </footer>
