@@ -178,6 +178,7 @@ export default function Home() {
   const [introAnimationPlayed, setIntroAnimationPlayed] = useState(() => !initialFirstVisit);
   const [introDone, setIntroDone] = useState(() => !initialFirstVisit); // unlocks head tracking after intro
   const [heroVisible, setHeroVisible] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
   const startWaveRef = useRef<(() => void) | null>(null); 
   const SHRINK_DELAY_MS = 1000; // extra time to keep viewport full-screen after intro
   const updatesByYear: Record<string, Update[]> = {
@@ -300,6 +301,15 @@ export default function Home() {
     }
     return () => observer.disconnect();
   }, []);
+
+  // Hide loader once assets are fully fetched
+  useEffect(() => {
+    if (!showLoader) return;
+    // Hide once mostly loaded (softer threshold) or after a short timeout fallback
+    const ready = loadProgress >= 0.8;
+    const timer = setTimeout(() => setShowLoader(false), ready ? 200 : 1800);
+    return () => clearTimeout(timer);
+  }, [loadProgress, showLoader]);
   return (
     <div className="min-h-screen flex flex-col">
       {showLoader && (
@@ -346,6 +356,7 @@ export default function Home() {
                       onWaveComplete={handleWaveComplete} 
                       enableInteraction={!firstVisit ? true : introDone} 
                       enableIntroAnimation={firstVisit && !introAnimationPlayed && ANIMATION_ENABLED}
+                      onProgress={(p) => setLoadProgress(p)}
                     />
                   )}
                 </Suspense>
