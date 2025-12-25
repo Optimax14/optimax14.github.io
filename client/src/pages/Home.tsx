@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import FetchHeroViewer from "@/components/FetchHeroViewer";
+const FetchHeroViewer = lazy(() => import("@/components/FetchHeroViewer"));
 
 interface MediaItem {
   type: "image" | "video" | "gif";
@@ -116,6 +116,8 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
                   src={item.src}
                   alt={item.alt}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
               {item.type === "gif" && (
@@ -123,6 +125,8 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
                   src={item.src}
                   alt={item.alt}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
               {item.type === "video" && (
@@ -173,6 +177,7 @@ export default function Home() {
   const [contentVisible, setContentVisible] = useState(() => !initialFirstVisit); 
   const [introAnimationPlayed, setIntroAnimationPlayed] = useState(() => !initialFirstVisit);
   const [introDone, setIntroDone] = useState(() => !initialFirstVisit); // unlocks head tracking after intro
+  const [heroVisible, setHeroVisible] = useState(false);
   const startWaveRef = useRef<(() => void) | null>(null); 
   const SHRINK_DELAY_MS = 1000; // extra time to keep viewport full-screen after intro
   const updatesByYear: Record<string, Update[]> = {
@@ -273,6 +278,28 @@ export default function Home() {
       sessionStorage.setItem("heroSeen", "1"); 
     }, SHRINK_DELAY_MS); 
   }; 
+
+  // Lazy-mount hero viewer when in viewport to cut initial LCP
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHeroVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { root: null, rootMargin: "200px", threshold: 0.1 }
+    );
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    } else {
+      setHeroVisible(true);
+    }
+    return () => observer.disconnect();
+  }, []);
   return (
     <div className="min-h-screen flex flex-col">
       {showLoader && (
@@ -291,16 +318,17 @@ export default function Home() {
           >
             {/* Left: Interactive Robot Model */} 
             <motion.div 
-            className="relative flex justify-center lg:justify-end -mt-2" 
+              className="relative flex justify-center lg:justify-end -mt-2" 
+              ref={heroRef}
               initial={{ opacity: 0, y: 12 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }} 
             > 
               <motion.div  
                 className="w-full hero-frame"  
-                initial={
-                  firstVisit
-                    ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 }
+                initial={ 
+                  firstVisit 
+                    ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 } 
                     : { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
                 }
                 animate={
@@ -309,14 +337,18 @@ export default function Home() {
                     : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, marginTop: "0rem", opacity: 1, y: 0 }
                 }
                   transition={{ type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } }} 
-                > 
-                  <FetchHeroViewer 
-                  onLoaded={handleLoaded} 
-                  onStartReady={handleStartReady} 
-                  onWaveComplete={handleWaveComplete} 
-                  enableInteraction={!firstVisit ? true : introDone} 
-                  enableIntroAnimation={firstVisit && !introAnimationPlayed && ANIMATION_ENABLED}
-                /> 
+              > 
+                <Suspense fallback={<div className="w-full h-[48rem] bg-muted/30 animate-pulse rounded-lg" />}>
+                  {heroVisible && (
+                    <FetchHeroViewer 
+                      onLoaded={handleLoaded} 
+                      onStartReady={handleStartReady} 
+                      onWaveComplete={handleWaveComplete} 
+                      enableInteraction={!firstVisit ? true : introDone} 
+                      enableIntroAnimation={firstVisit && !introAnimationPlayed && ANIMATION_ENABLED}
+                    />
+                  )}
+                </Suspense>
               </motion.div> 
             </motion.div> 
 

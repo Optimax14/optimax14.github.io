@@ -62,6 +62,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
                   src={srcUrl}
                   alt={current.alt}
                   loading="lazy"
+                  decoding="async"
                   className="w-full h-auto max-w-full object-contain"
                 />
               );
@@ -117,7 +118,7 @@ export default function About() {
   ];
   return (
     <section className="section-padding">
-        <div className="container max-w-5xl">
+        <div className="container max-w-6xl">
           <h1 className="text-4xl font-bold mb-12 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
             About Me
           </h1>

@@ -87,7 +87,7 @@ export default function Experience() {
   return (
     <div className="min-h-screen">
       <section className="section-padding">
-        <div className="container max-w-5xl">
+        <div className="container max-w-7xl">
           <h1 className="text-4xl font-bold mb-12">Experience</h1>
 
           {/* UTD Robotics Researcher Section */}
@@ -223,6 +223,8 @@ export default function Experience() {
                     src="/about-photo-1.jpg"
                     alt="Clemson Research"
                     className="w-full h-auto object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -236,6 +238,8 @@ export default function Experience() {
                     src="/about-photo-1.jpg"
                     alt="Clemson Lab Work"
                     className="w-full h-auto object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>

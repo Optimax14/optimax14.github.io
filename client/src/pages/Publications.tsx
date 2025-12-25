@@ -128,7 +128,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
               {(() => {
                 const srcUrl = item.src?.startsWith("/") ? base + item.src.slice(1) : item.src;
                 if (item.type === "image" || item.type === "gif") {
-                  return <img src={srcUrl} alt={item.alt} loading="lazy" className="w-full h-full object-cover" />;
+                  return <img src={srcUrl} alt={item.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />;
                 }
                 if (item.type === "video") {
                   return (
