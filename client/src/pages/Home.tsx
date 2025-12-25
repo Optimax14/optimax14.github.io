@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-const FetchHeroViewer = lazy(() => import("@/components/FetchHeroViewer"));
+import FetchHeroViewer from "@/components/FetchHeroViewer";
 
 interface MediaItem {
   type: "image" | "video" | "gif";
@@ -348,18 +348,16 @@ export default function Home() {
                 }
                   transition={{ type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } }} 
               > 
-                <Suspense fallback={<div className="w-full h-[48rem] bg-muted/30 animate-pulse rounded-lg" />}>
-                  {heroVisible && (
-                    <FetchHeroViewer 
-                      onLoaded={handleLoaded} 
-                      onStartReady={handleStartReady} 
-                      onWaveComplete={handleWaveComplete} 
-                      enableInteraction={!firstVisit ? true : introDone} 
-                      enableIntroAnimation={firstVisit && !introAnimationPlayed && ANIMATION_ENABLED}
-                      onProgress={(p) => setLoadProgress(p)}
-                    />
-                  )}
-                </Suspense>
+                {heroVisible && (
+                  <FetchHeroViewer 
+                    onLoaded={handleLoaded} 
+                    onStartReady={handleStartReady} 
+                    onWaveComplete={handleWaveComplete} 
+                    enableInteraction={!firstVisit ? true : introDone} 
+                    enableIntroAnimation={firstVisit && !introAnimationPlayed && ANIMATION_ENABLED}
+                    onProgress={(p) => setLoadProgress(p)}
+                  />
+                )}
               </motion.div> 
             </motion.div> 
 

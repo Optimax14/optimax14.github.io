@@ -78,11 +78,19 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 export default function Experience() {
   const utdMainMedia: MediaItem[] = [
     { type: "image", src: "/soccer_irvl.jpg", alt: "UTD lab work 1" },
-    { type: "image", src: "/personal_2.jpg", alt: "UTD lab work 2" },
+    { type: "image", src: "/hotpot.png", alt: "UTD lab work 2" },
+    {type: "image", src: "/thanksgiving.jpg", alt: "UTD lab work 3" },
   ];
   const utdSecondaryMedia: MediaItem[] = [
-    { type: "image", src: "/hobbies_1.jpg", alt: "UTD project landscape 1" },
-    { type: "image", src: "/hobbies_2.jpg", alt: "UTD project landscape 2" },
+    { type: "image", src: "/robots.png", alt: "UTD project landscape 1" },
+  ];
+  const clemsonMainMedia: MediaItem[] = [
+    { type: "image", src: "/about-photo-1.jpg", alt: "Clemson research 1" },
+    { type: "image", src: "/robots.png", alt: "Clemson research 2" },
+  ];
+  const clemsonSecondaryMedia: MediaItem[] = [
+    { type: "image", src: "/about-photo-1.jpg", alt: "Clemson lab work 1" },
+    { type: "image", src: "/hobbies_2.jpg", alt: "Clemson lab work 2" },
   ];
   return (
     <div className="min-h-screen">
@@ -92,7 +100,7 @@ export default function Experience() {
 
           {/* UTD Robotics Researcher Section */}
           <div className="mb-20">
-            <h2 className="text-3xl font-bold mb-8">Robotics Researcher at UTD</h2>
+            <h2 className="text-3xl font-bold mb-8">Robotics Researcher</h2>
 
             {/* Photo Left, Text Right */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-12">
@@ -103,16 +111,25 @@ export default function Experience() {
               </div>
 
               <div className="space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-2xl font-semibold">Research Assistant</h3>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="text-left">
+                    <h3 className="text-2xl font-semibold">Undergraduate Researcher</h3>
                     <p className="text-lg text-muted-foreground">
-                      University of Texas at Dallas - Robotics Lab
+                      University of Texas at Dallas - Intelligent Robotics and Vision Lab
                     </p>
                   </div>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
-                    2023 - Present
-                  </span>
+                  <div className="flex flex-col items-center gap-2">
+                    <img
+                      src="/irvl_logo.png"
+                      alt="IRVL Lab Logo"
+                      className="h-24 w-auto object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
+                      Jul 2024 - Present
+                    </span>
+                  </div>
                 </div>
 
                 <p className="text-foreground leading-relaxed">
@@ -177,16 +194,34 @@ export default function Experience() {
             {/* Photo Right, Text Left */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-12">
               <div className="space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="text-left">
                     <h3 className="text-2xl font-semibold">Visiting Researcher</h3>
                     <p className="text-lg text-muted-foreground">
                       Clemson University - Robotics & Automation Lab
                     </p>
                   </div>
-                  <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
-                    Summer 2023
-                  </span>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="/ie.png"
+                        alt="Lab Logo"
+                        className="h-16 w-auto object-contain"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <img
+                        src="/NSF_logo.png"
+                        alt="NSF Logo"
+                        className="h-16 w-auto object-contain"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
+                      Summer 2023
+                    </span>
+                  </div>
                 </div>
 
                 <p className="text-foreground leading-relaxed">
@@ -218,14 +253,8 @@ export default function Experience() {
               </div>
 
               <div className="flex justify-center">
-                <div className="w-full max-w-md bg-muted rounded-lg overflow-hidden border border-border shadow-sm">
-                  <img
-                    src="/about-photo-1.jpg"
-                    alt="Clemson Research"
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <div className="w-full max-w-2xl">
+                  <MediaCarousel media={clemsonMainMedia} />
                 </div>
               </div>
             </div>
@@ -233,14 +262,8 @@ export default function Experience() {
             {/* Additional Photo */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div className="flex justify-center">
-                <div className="w-full max-w-md bg-muted rounded-lg overflow-hidden border border-border shadow-sm">
-                  <img
-                    src="/about-photo-1.jpg"
-                    alt="Clemson Lab Work"
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <div className="w-full max-w-2xl">
+                  <MediaCarousel media={clemsonSecondaryMedia} />
                 </div>
               </div>
 

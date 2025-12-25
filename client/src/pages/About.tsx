@@ -58,25 +58,29 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
             const srcUrl = current.src?.startsWith("/") ? base + current.src.slice(1) : current.src;
             if (current.type === "image" || current.type === "gif") {
               return (
-                <img
-                  src={srcUrl}
-                  alt={current.alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-auto max-w-full object-contain"
-                />
+                <div className="w-full h-full rounded-xl border border-white/20 bg-background/20 p-2.5">
+                  <img
+                    src={srcUrl}
+                    alt={current.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-auto max-w-full object-contain"
+                  />
+                </div>
               );
             }
             if (current.type === "video") {
               return (
-                <video
-                  src={srcUrl}
-                  className="w-full h-auto max-w-full object-contain"
-                  playsInline
-                  muted
-                  loop
-                  controls
-                />
+                <div className="w-full h-full rounded-xl border border-white/20 bg-background/20 p-1.5">
+                  <video
+                    src={srcUrl}
+                    className="w-full h-auto max-w-full object-contain"
+                    playsInline
+                    muted
+                    loop
+                    controls
+                  />
+                </div>
               );
             }
             return null;

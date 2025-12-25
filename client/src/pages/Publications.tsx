@@ -171,14 +171,14 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 export default function Publications() {
   const publications: Publication[] = [
     {
-      title: "Efficient Path Planning for Mobile Robots in Dynamic Environments",
-      authors: "Itay Kadosh, Co-Author 1, Co-Author 2",
+      title: "ARMoR: Arm-Based Robot Mobility on a Passive Platform via Reinforcement Learning of Contact-Driven Locomotion",
+      authors: "<strong>Itay Kadosh</strong>*, Daniel Kadosh*, Robert Teal*, Keval Shah*",
       venue: "IEEE International Conference on Robotics and Automation (ICRA)",
-      year: 2024,
-      monthYear: "November 2024",
+      year: 2025,
+      monthYear: "January 2025",
       status: "Published",
       abstract:
-        "This paper presents a novel path planning algorithm that efficiently handles dynamic obstacles while maintaining real-time performance. Our approach combines RRT* with dynamic window approach for robust navigation.",
+        "This paper presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion.",
       media: [
         { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
         { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
@@ -244,7 +244,7 @@ export default function Publications() {
 
   return (
     <section className="section-padding">
-      <div className="container max-w-5xl">
+        <div className="container max-w-8xl">
         <h1 className="text-4xl font-bold mb-12 animate-fadeInUp" style={{ animationDelay: "100ms" }}>
           Publications & Research
         </h1>
@@ -253,22 +253,25 @@ export default function Publications() {
           {sortedYears.map((year, yearIdx) => (
             <div key={year}>
               <h2 className="text-2xl font-bold mb-6">{year}</h2>
-              <div className="space-y-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {publicationsByYear[year].map((pub, idx) => (
                   <div
                     key={`${year}-${idx}`}
-                    className="border border-white/20 rounded-lg overflow-hidden transform hover:scale-[1.02] transition-all duration-300 animate-fadeInUp bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                    className="border border-white/20 rounded-md overflow-hidden transform hover:scale-[1.01] transition-all duration-300 animate-fadeInUp bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)]"
                     style={{ animationDelay: `${(yearIdx * publicationsByYear[year].length + idx + 1) * 150}ms` }}
                   >
-                    <div className="p-6 bg-card">
+                    <div className="p-4 bg-card">
                       <MediaCarousel media={pub.media} />
                     </div>
 
-                    <div className="p-6 space-y-4">
-                      <div className="flex items-start justify-between gap-4 mb-3">
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-start justify-between gap-3 mb-2">
                         <div>
-                          <h3 className="text-2xl font-semibold leading-tight">{pub.title}</h3>
-                          <p className="text-sm text-muted-foreground mt-2">{pub.authors}</p>
+                          <h3 className="text-xl font-semibold leading-snug">{pub.title}</h3>
+                          <p className="text-sm text-muted-foreground mt-2" dangerouslySetInnerHTML={{ __html: pub.authors }} />
+                          {pub.title.startsWith("ARMoR") && (
+                            <p className="text-xs text-muted-foreground mt-1 italic">* These authors contributed equally to this work</p>
+                          )}
                         </div>
                         <span
                           className={`px-3 py-1 rounded text-sm font-medium whitespace-nowrap ${
@@ -285,9 +288,9 @@ export default function Publications() {
                         <span>{pub.monthYear}</span>
                       </div>
 
-                      <p className="text-foreground leading-relaxed">{pub.abstract}</p>
+                      <p className="text-foreground leading-relaxed text-sm">{pub.abstract}</p>
 
-                      <div className="flex flex-wrap gap-3 pt-2">
+                      <div className="flex flex-wrap gap-3 pt-1">
                         {pub.links.pdf && (
                           <a
                             href={pub.links.pdf}

@@ -5,7 +5,6 @@ import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import { lazy, Suspense } from "react";
 import CV from "./pages/CV";
 import Fonts from "./pages/Fonts";
 import Navigation from "./components/Navigation";
@@ -19,10 +18,9 @@ import UpdateZephyr from "./pages/UpdateZephyr";
 import UpdateSolstice from "./pages/UpdateSolstice"; 
 import UpdateNova from "./pages/UpdateNova"; 
 import PoseLab from "./pages/PoseLab";
-
-const About = lazy(() => import("./pages/About"));
-const Experience = lazy(() => import("./pages/Experience"));
-const Publications = lazy(() => import("./pages/Publications"));
+import About from "./pages/About";
+import Experience from "./pages/Experience";
+import Publications from "./pages/Publications";
 
 function Router() {
   return (
@@ -64,16 +62,14 @@ function App() {
             <ScrollProgress />
             <Navigation />
             <main className="flex-1">
-              <Suspense fallback={<div className="w-full py-20 text-center text-muted-foreground">Loading…</div>}>
-                <motion.div
-                  key={location}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
-                  <Router />
-                </motion.div>
-              </Suspense>
+              <motion.div
+                key={location}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                <Router />
+              </motion.div>
             </main>
             <footer className="border-t border-border py-8 mt-16">
               <div className="container">
