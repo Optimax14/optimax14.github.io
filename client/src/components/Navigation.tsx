@@ -46,18 +46,6 @@ export default function Navigation() {
             >
               CV
             </Link>
-            <Link
-              href="/model"
-              className={`nav-link ${isActive("/model") ? "active" : ""}`}
-            >
-              3D Model
-            </Link>
-            <Link
-              href="/fetch"
-              className={`nav-link ${isActive("/fetch") ? "active" : ""}`}
-            >
-              Fetch Demo
-            </Link>
           </div>
         </div>
       </div>

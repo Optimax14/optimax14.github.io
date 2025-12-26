@@ -74,7 +74,7 @@ export default function ThreeSTLViewer({
     let modelMesh: THREE.Mesh | null = null;
     let rafId: number | null = null;
 
-    async function loadStl() {
+    async function loadModel() {
       const { STLLoader } = await import("three/examples/jsm/loaders/STLLoader.js");
       const loader = new STLLoader();
       loader.load(
@@ -134,7 +134,7 @@ export default function ThreeSTLViewer({
       disposeControls = () => controls?.dispose();
     })();
 
-    loadStl();
+    loadModel();
 
     const clock = new THREE.Clock();
     const animate = () => {
@@ -184,4 +184,3 @@ export default function ThreeSTLViewer({
     />
   );
 }
-

@@ -8,11 +8,9 @@ import Home from "./pages/Home";
 import CV from "./pages/CV";
 import Fonts from "./pages/Fonts";
 import Navigation from "./components/Navigation";
-import Model from "./pages/Model";
 import ScrollProgress from "./components/ScrollProgress";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import FetchDemo from "./pages/FetchDemo"; 
 import UpdateAurora from "./pages/UpdateAurora"; 
 import UpdateZephyr from "./pages/UpdateZephyr"; 
 import UpdateSolstice from "./pages/UpdateSolstice"; 
@@ -31,8 +29,6 @@ function Router() {
       <Route path={"/publications"} component={Publications} />
       <Route path={"/cv"} component={CV} />
       <Route path={"/fonts"} component={Fonts} />
-      <Route path={"/model"} component={Model} />
-      <Route path={"/fetch"} component={FetchDemo} />
       <Route path={"/updates/aurora"} component={UpdateAurora} />
       <Route path={"/updates/zephyr"} component={UpdateZephyr} /> 
       <Route path={"/updates/solstice"} component={UpdateSolstice} /> 

@@ -309,7 +309,7 @@ export default function Experience() {
           <div className="pt-12 border-t border-border">
             <h2 className="text-2xl font-bold mb-8 mt-12">Additional Experience</h2>
             <div className="space-y-6">
-              <div className="p-6 border border-border rounded-lg bg-card">
+              <div className="p-6 border border-white/20 rounded-md bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] transform hover:scale-[1.01] transition-all duration-300">
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h3 className="text-lg font-semibold">Undergraduate Researcher</h3>
@@ -323,7 +323,7 @@ export default function Experience() {
                 </p>
               </div>
 
-              <div className="p-6 border border-border rounded-lg bg-card">
+              <div className="p-6 border border-white/20 rounded-md bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] transform hover:scale-[1.01] transition-all duration-300">
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h3 className="text-lg font-semibold">Robotics Club President</h3>

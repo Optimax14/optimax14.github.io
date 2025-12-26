@@ -1,12 +1,19 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
 import { ModelErrorBoundary } from "@/components/ModelErrorBoundary";
 
+const STLViewer = lazy(() => import("@/components/ThreeSTLViewer"));
+
 interface MediaItem {
   type: "image" | "video" | "gif" | "model";
   src: string;
   alt: string;
-  color?: string;
-  background?: string;
+  viewerOptions?: {
+    color?: string;
+    background?: string;
+    metalness?: number;
+    roughness?: number;
+    height?: string | number;
+  };
 }
 
 interface Publication {
@@ -24,8 +31,6 @@ interface Publication {
     code: string | null;
   };
 }
-
-const STLViewer = lazy(() => import("@/components/ThreeSTLViewer"));
 
 function MediaCarousel({ media }: { media: MediaItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -158,27 +163,29 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
                         preload="metadata"
                       />
                     );
-                  case "model":
+                  case "model": {
+                    const opts = item.viewerOptions || {};
                     return (
                       <ModelErrorBoundary>
                         <Suspense
                           fallback={
-                            <div className="w-full h-full flex items-center justify-center bg-card text-muted-foreground text-sm">
+                            <div className="w-full h-full flex items-center justify-center bg-background text-muted-foreground">
                               Loading 3D model...
                             </div>
                           }
                         >
-                          <div className="w-full h-full bg-card border border-border rounded-lg">
-                            <STLViewer
-                              height="100%"
-                              src={srcUrl}
-                              color={item.color}
-                              background={item.background}
-                            />
-                          </div>
+                          <STLViewer
+                            src={srcUrl}
+                            background={opts.background ?? "#0b0f1a"}
+                            color={opts.color ?? "#ff7a00"}
+                            metalness={opts.metalness}
+                            roughness={opts.roughness}
+                            height={opts.height ?? "100%"}
+                          />
                         </Suspense>
                       </ModelErrorBoundary>
                     );
+                  }
                   default:
                     return null;
                 }
@@ -209,19 +216,24 @@ export default function Publications() {
     {
       title: "ARMoR: Arm-Based Robot Mobility on a Passive Platform via Reinforcement Learning of Contact-Driven Locomotion",
       authors: "<strong>Itay Kadosh</strong>*, Daniel Kadosh*, Robert Teal*, Keval Shah*",
-      venue: "IEEE International Conference on Robotics and Automation (ICRA)",
+      venue: "Coming soon",
       year: 2025,
       monthYear: "January 2025",
-      status: "Published",
+      status: "In Progress",
       abstract:
         "This paper presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion.",
       media: [
-        { type: "model", src: "/Robot_new.stl", alt: "ARMoR platform 3D model", color: "#ff7f50", background: "#0f172a" },
+        {
+          type: "model",
+          src: "/armor.stl",
+          alt: "ARMoR platform 3D model",
+          viewerOptions: { color: "#ff7a00", background: "#0b0f1a", height: "100%" },
+        },
         { type: "video", src: "/armor.mp4", alt: "ARMoR platform clip" },
         { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
         { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
       ],
-      links: { pdf: "#", arxiv: "#", code: "#", },
+      links: { pdf: null, arxiv: null, code: null, },
     },
     {
       title: "Deep Learning-Based Object Detection for Robotic Manipulation",

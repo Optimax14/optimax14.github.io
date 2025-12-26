@@ -240,6 +240,39 @@ export default function Home() {
     ],
   };
 
+  const socialLinks = [
+    {
+      label: "Google Scholar",
+      href: "https://scholar.google.com/citations?user=1ZLE5jsAAAAJ&hl=en",
+      icon: (
+        <img
+          src="/google_scholar.svg"
+          alt="Google Scholar"
+          className="w-5 h-5"
+          style={{ filter: "invert(1)" }}
+        />
+      ),
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/itay-kadosh",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="w-5 h-5" fill="currentColor">
+          <path d="M100.28 448H7.4V148.9h92.88zm-46.44-341a53.64 53.64 0 1 1 53.64-53.64 53.64 53.64 0 0 1-53.64 53.64zM447.9 448h-92.4V302.4c0-34.7-.7-79.2-48.29-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.5V148.9h88.8v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.2 61.9 111.2 142.3z" />
+        </svg>
+      ),
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/Optimax14",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" className="w-5 h-5" fill="currentColor">
+          <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.2.3-5.5-1.3-5.5-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.5 1.3 5.5 3.6zm-31-4.4c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.5 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244 8C106.4 8 0 113.3 0 250.6c0 107.1 69.8 198 166.5 230.3 12.2 2.3 16.6-5.2 16.6-11.6 0-5.5-.3-49.9-.3-76 0 0-67.7 14.5-81.9-28.9 0 0-11-28.2-26.9-35.4 0 0-22-15 1.6-14.7 0 0 23.8 1.6 37 24.9 21 37 56.2 26.4 70 20.1 2.3-15.3 8.3-26.4 15-32.4-54-6.2-110.8-13.7-110.8-106.5 0-26.4 7.3-39.6 22.6-56.5-2.6-6.5-11-33.3 2.6-67.9 20.7-6.5 68 26.1 68 26.1 19.8-5.5 41-8.3 62.1-8.3s42.3 2.9 62.1 8.3c0 0 47.3-32.6 68-26.1 13.6 34.7 5.2 61.4 2.6 67.9 15.3 16.9 24.9 30.1 24.9 56.5 0 92.9-56.2 100-110.1 106.5 8.6 7.6 16 22.5 16 45.4 0 32.4-.3 72.5-.3 80.8 0 6.5 4.3 14.2 16.6 11.6C426.2 448.6 496 357.7 496 250.6 496 113.3 383.5 8 244 8z" />
+        </svg>
+      ),
+    },
+  ];
+
   // First visit: loader -> full screen -> wave -> shrink -> show content 
   const handleLoaded = () => { 
     if (!firstVisit) { 
@@ -390,6 +423,21 @@ export default function Home() {
                   </p>
                 </div>
 
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  {socialLinks.map((social) => (
+                    <a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-background/30 backdrop-blur-md text-foreground hover:bg-background/60 transition-colors"
+                    >
+                      {social.icon}
+                      <span className="text-sm font-medium">{social.label}</span>
+                    </a>
+                  ))}
+                </div>
+
                 <div className="flex flex-wrap gap-4 pt-4">
                   <Link href="/about">
                     <Button variant="default" className="bg-foreground text-background hover:bg-muted-foreground transform hover:scale-105 transition-all duration-300">
@@ -410,7 +458,7 @@ export default function Home() {
 
              {/* Recent Updates Section - grouped by year */}
       {contentVisible && (
-        <section className="section-padding bg-card">
+        <section className="section-padding bg-card/15 backdrop-blur-md">
           <div className="container max-w-5xl">
             <h2 className="text-3xl font-bold mb-8">Recent Updates</h2>
             <div className="space-y-10">
@@ -423,7 +471,7 @@ export default function Home() {
                       {items.map((update, idx) => (
                         <div
                           key={`${year}-${idx}`}
-                          className="border border-border rounded-lg bg-background/50 hover:bg-background transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"
+                          className="border border-border rounded-lg bg-card/85 backdrop-blur-md hover:bg-card transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"
                         >
                           <div className="aspect-[4/3] w-full">
                             <MediaCarousel media={update.media} />

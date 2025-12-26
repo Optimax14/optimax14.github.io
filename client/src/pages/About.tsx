@@ -135,17 +135,15 @@ export default function About() {
 
             <div className="space-y-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
               <p className="text-lg leading-relaxed">
-                I am a passionate robotics researcher dedicated to advancing the field through
-                innovative research and practical applications. My work focuses on developing
-                intelligent robotic systems that can operate autonomously in complex environments
-                and interact effectively with humans.
+                I am a Computer Science and Mathematics student at The University of Texas at Dallas, with a strong passion for robotics and
+                autonomous systems. My journey into robotics began early into my undergraduate, where I was captivated by the
+                potential of machines to perceive, learn, and interact with the world around them.
               </p>
 
               <p className="text-lg leading-relaxed">
-                My research interests span multiple areas of robotics, including autonomous
-                navigation, robotic manipulation, perception systems, and human-robot interaction.
-                I am particularly interested in how robots can learn from their environment and
-                adapt their behavior to accomplish complex tasks more effectively.
+                My research interests revolve around developing general purpose robotic systems that can operate effectively in unstructured, unseen environments. 
+                I am interested in creating systems that are rigorously grounded in theory, yet practical and robust enough for real-world applications. 
+                My goal is to bring in my background in mathematics to create concrete systems that push the boundaries of what robots can achieve.
               </p>
             </div>
           </div>
@@ -155,11 +153,16 @@ export default function About() {
             <div className="space-y-6 order-1 lg:order-1 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
               <h2 className="text-2xl font-bold">Outside the Lab</h2>
               <p className="text-lg leading-relaxed">
-                When I’m not building or testing robots, I recharge by getting outdoors and exploring new hobbies.
-                I enjoy hiking, photography, and tinkering with DIY electronics projects that blend creativity with hands-on engineering.
+                When I'm not working on reserach or studying, I like to spend my time in nature. Hiking, camping, and exploring the outdoors help me recharge and find inspiration for my work.
               </p>
               <p className="text-lg leading-relaxed">
-                I’m also passionate about mentoring and community: sharing what I learn, collaborating on side projects, and staying curious about how technology can enrich everyday life.
+                I have recently taken up skiing as an annual winter hobby, having already skied in Angel Fire, New Mexico and Wolf Creek, Colorado. I look forward to exploring more ski resorts in the future!
+              </p>
+              <p className="text-lg leading-relaxed">
+                To complement my studies, I have been involved in private teaching for the past four years, helping elementary, middle, high school, as well as college students excel in subjects such as mathematics, physics, and computer science. Teaching has been a rewarding experience that has enhanced my communication skills and deepened my understanding of these subjects.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Working with and helping others has always been a fulfilling part of my life, and I look forward to continuing this journey alongside my graduate studies!
               </p>
             </div>
             <div className="flex justify-center order-2 lg:order-2 animate-scaleIn" style={{ animationDelay: '550ms' }}>
@@ -168,7 +171,7 @@ export default function About() {
           </div>
 
           {/* Research Interests Section */}
-          <div className="mb-16 p-8 bg-card border border-border rounded-lg hover:scale-[1.01] transition-all duration-300 animate-fadeInUp" style={{ animationDelay: '650ms' }}>
+          <div className="mb-16 p-6 border border-white/20 rounded-md bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] transform hover:scale-[1.01] transition-all duration-300 animate-fadeInUp" style={{ animationDelay: '650ms' }}>
             <h2 className="text-2xl font-bold mb-6">Research Interests</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -232,7 +235,7 @@ export default function About() {
           </div>
 
           {/* Education Section */}
-          <div className="p-8 bg-card border border-border rounded-lg hover:scale-[1.01] transition-all duration-300 animate-fadeInUp" style={{ animationDelay: '900ms' }}>
+          <div className="p-6 border border-white/20 rounded-md bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] transform hover:scale-[1.01] transition-all duration-300 animate-fadeInUp" style={{ animationDelay: '900ms' }}>
             <div className="grid grid-cols-1 lg:grid-cols-[2fr_auto] gap-8 items-center">
               <div className="space-y-5">
                 <h2 className="text-2xl font-bold">Education</h2>
