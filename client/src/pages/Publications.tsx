@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
+import { ModelErrorBoundary } from "@/components/ModelErrorBoundary";
 
 interface MediaItem {
-  type: "image" | "video" | "gif";
+  type: "image" | "video" | "gif" | "model";
   src: string;
   alt: string;
+  color?: string;
+  background?: string;
 }
 
 interface Publication {
@@ -21,6 +24,8 @@ interface Publication {
     code: string | null;
   };
 }
+
+const STLViewer = lazy(() => import("@/components/ThreeSTLViewer"));
 
 function MediaCarousel({ media }: { media: MediaItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -83,10 +88,10 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
   return (
     <div className="space-y-4">
       <div className="relative w-full bg-muted rounded-lg overflow-hidden border border-border shadow-sm aspect-video group">
-        <div className="absolute inset-0 flex items-center justify-between p-4 z-10">
+        <div className="absolute inset-0 flex items-center justify-between p-4 z-10 pointer-events-none">
           <button
             onClick={goToPreviousSlide}
-            className="transform translate-x-[-100%] group-hover:translate-x-0 opacity-0 group-hover:opacity-100 focus:opacity-100 bg-background/80 hover:bg-background text-foreground rounded-full p-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl"
+            className="pointer-events-auto transform translate-x-[-100%] group-hover:translate-x-0 opacity-0 group-hover:opacity-100 focus:opacity-100 bg-background/80 hover:bg-background text-foreground rounded-full p-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl"
             aria-label="Previous slide"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,7 +100,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
           </button>
           <button
             onClick={goToNextSlide}
-            className="transform translate-x-[100%] group-hover:translate-x-0 opacity-0 group-hover:opacity-100 focus:opacity-100 bg-background/80 hover:bg-background text-foreground rounded-full p-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl"
+            className="pointer-events-auto transform translate-x-[100%] group-hover:translate-x-0 opacity-0 group-hover:opacity-100 focus:opacity-100 bg-background/80 hover:bg-background text-foreground rounded-full p-3 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl"
             aria-label="Next slide"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -127,25 +132,56 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
             >
               {(() => {
                 const srcUrl = item.src?.startsWith("/") ? base + item.src.slice(1) : item.src;
-                if (item.type === "image" || item.type === "gif") {
-                  return <img src={srcUrl} alt={item.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />;
+                switch (item.type) {
+                  case "image":
+                  case "gif":
+                    return (
+                      <img
+                        src={srcUrl}
+                        alt={item.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-contain bg-background"
+                      />
+                    );
+                  case "video":
+                    return (
+                      <video
+                        ref={(el: HTMLVideoElement | null) => {
+                          if (el) videoRefs.current[index] = el;
+                        }}
+                        src={index === currentIndex ? srcUrl : undefined}
+                        className="w-full h-full object-cover"
+                        playsInline
+                        muted
+                        loop
+                        preload="metadata"
+                      />
+                    );
+                  case "model":
+                    return (
+                      <ModelErrorBoundary>
+                        <Suspense
+                          fallback={
+                            <div className="w-full h-full flex items-center justify-center bg-card text-muted-foreground text-sm">
+                              Loading 3D model...
+                            </div>
+                          }
+                        >
+                          <div className="w-full h-full bg-card border border-border rounded-lg">
+                            <STLViewer
+                              height="100%"
+                              src={srcUrl}
+                              color={item.color}
+                              background={item.background}
+                            />
+                          </div>
+                        </Suspense>
+                      </ModelErrorBoundary>
+                    );
+                  default:
+                    return null;
                 }
-                if (item.type === "video") {
-                  return (
-                    <video
-                      ref={(el: HTMLVideoElement | null) => {
-                        if (el) videoRefs.current[index] = el;
-                      }}
-                      src={index === currentIndex ? srcUrl : undefined}
-                      className="w-full h-full object-cover"
-                      playsInline
-                      muted
-                      loop
-                      preload="metadata"
-                    />
-                  );
-                }
-                return null;
               })()}
             </div>
           ))}
@@ -180,9 +216,10 @@ export default function Publications() {
       abstract:
         "This paper presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion.",
       media: [
+        { type: "model", src: "/Robot_new.stl", alt: "ARMoR platform 3D model", color: "#ff7f50", background: "#0f172a" },
+        { type: "video", src: "/armor.mp4", alt: "ARMoR platform clip" },
         { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
         { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
-        { type: "video", src: "/IMG_5807.MOV", alt: "Path planning demonstration" },
       ],
       links: { pdf: "#", arxiv: "#", code: "#", },
     },
@@ -233,6 +270,20 @@ export default function Publications() {
         { type: "video", src: "/IMG_5807.MOV", alt: "Path planning demonstration" },
       ],
       links: { pdf: null, arxiv: "#", code: null, },
+    },
+    {
+      title: "Reinforcement Learning for Robotics and Autonomous Mobility",
+      authors: "<strong>Itay Kadosh</strong> and Hyeonduk Sim",
+      venue: "MATH 6335 — Machine Learning and Control Theory (Course Report)",
+      year: 2025,
+      monthYear: "May 2025",
+      status: "Published",
+      abstract:
+        "A comprehensive course report exploring reinforcement learning techniques for robotics and autonomous mobility. Covers problem formulation, policy optimization, simulation experiments, and analysis of control strategies.",
+      media: [
+        { type: "image", src: "/report_cover.png", alt: "Report cover" },
+      ],
+      links: { pdf: "/MATH_6335_Report.pdf", arxiv: null, code: null, },
     },
   ];
 

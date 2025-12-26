@@ -29,7 +29,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 
   return (
     <div className="space-y-3 w-full">
-      <div className="relative w-full rounded-lg overflow-hidden shadow-sm h-[320px] sm:h-[420px] bg-transparent">
+      <div className="relative w-full rounded-lg overflow-hidden shadow-sm bg-transparent">
         <div className="absolute inset-0 flex items-center justify-between p-3 z-10">
           <button
             onClick={goToPreviousSlide}
@@ -46,14 +46,34 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
         </div>
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full flex items-center justify-center p-2">
           {(() => {
             const srcUrl = current.src?.startsWith("/") ? base + current.src.slice(1) : current.src;
             if (current.type === "image" || current.type === "gif") {
-              return <img src={srcUrl} alt={current.alt} className="w-full h-auto max-h-full object-contain" loading="lazy" />;
+              return (
+                <div className="w-full h-full rounded-xl border border-white/20 bg-background/20 p-1.5">
+                  <img
+                    src={srcUrl}
+                    alt={current.alt}
+                    className="w-full h-auto max-w-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
+              );
             }
             if (current.type === "video") {
-              return <video src={srcUrl} className="w-full h-auto max-h-full object-contain" playsInline muted loop controls />;
+              return (
+                <div className="w-full h-full rounded-xl border border-white/20 bg-background/20 p-1.5">
+                  <video
+                    src={srcUrl}
+                    className="w-full h-auto max-w-full object-contain"
+                    playsInline
+                    muted
+                    loop
+                    controls
+                  />
+                </div>
+              );
             }
             return null;
           })()}
