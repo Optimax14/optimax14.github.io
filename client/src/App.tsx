@@ -19,6 +19,7 @@ import PoseLab from "./pages/PoseLab";
 import About from "./pages/About";
 import Experience from "./pages/Experience";
 import Publications from "./pages/Publications";
+import { logVisit } from "./utils/visitLogger";
 
 function Router() {
   return (
@@ -48,6 +49,9 @@ function App() {
     } catch {
       window.scrollTo(0, 0);
     }
+  }, [location]);
+  useEffect(() => {
+    logVisit(location);
   }, [location]);
   return (
     <ErrorBoundary>

@@ -153,7 +153,7 @@ export default function About() {
             <div className="space-y-6 order-1 lg:order-1 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
               <h2 className="text-2xl font-bold">Outside the Lab</h2>
               <p className="text-lg leading-relaxed">
-                When I'm not working on reserach or studying, I like to spend my time in nature. Hiking, camping, and exploring the outdoors help me recharge and find inspiration for my work.
+                When I'm not working on research or studying, I like to spend my time in nature. Hiking, camping, and exploring the outdoors help me recharge and find inspiration for my work.
               </p>
               <p className="text-lg leading-relaxed">
                 I have recently taken up skiing as an annual winter hobby, having already skied in Angel Fire, New Mexico and Wolf Creek, Colorado. I look forward to exploring more ski resorts in the future!
@@ -187,7 +187,7 @@ export default function About() {
                   </li>
                   <li className="flex items-start">
                     <span className="mr-3 text-foreground">-</span>
-                    <span>Computer vision and perception</span>
+                    <span>Computer vision and robotic perception</span>
                   </li>
                 </ul>
               </div>
@@ -196,15 +196,15 @@ export default function About() {
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="mr-3 text-foreground">-</span>
-                    <span>Machine learning for robotics</span>
+                    <span>Machine learning and Control theory for robotics</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-3 text-foreground">-</span>
-                    <span>Human-robot interaction</span>
+                    <span>Partial Differential Equations</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-3 text-foreground">-</span>
-                    <span>Control systems and dynamics</span>
+                    <span>Geometric Deep Learning - Equivarient CNNs</span>
                   </li>
                 </ul>
               </div>
@@ -227,9 +227,11 @@ export default function About() {
               </p>
 
               <p className="text-lg leading-relaxed">
-                My goal is to conduct research that bridges the gap between theoretical robotics
-                and practical applications, creating systems that can make a real-world impact
-                in manufacturing, healthcare, exploration, and other critical domains.
+                In graduate school, I hope to work on furthering reasoning capabilities for Vision Language Action models (VLAs) in robotics, as well as exploring novel approaches to robot learning and adaptation in complex environments.
+              </p>
+
+              <p className="text-lg leading-relaxed">
+                I am to enroll in a PhD program in Computer Science or Robotics starting Fall 2026. If you are interested in discussing potential research opportunities or collaborations, please feel free to reach out to me!
               </p>
             </div>
           </div>
@@ -242,15 +244,18 @@ export default function About() {
                 <div className="space-y-3">
                   <h3 className="text-lg font-semibold">The University of Texas at Dallas</h3>
                   <p className="text-lg leading-relaxed">
-                    Coursework and research focused on robotics, computer vision, machine learning, control systems,
-                    and algorithms, building a comprehensive toolkit for applied robotics.
+                    Currently pursuing a double Bachelor of Science (BS) degree in Computer Science and Mathematics with a focus on machine learning and robotics. Additionally part of
+                    the Fast Track program, where I take graduate coursework in Computer science and Mathematics.                    
+                  </p>
+                  <p className="text-lg leading-relaxed">
+                    For more information, see my CV or contact me directly, I am happy to share my transcript.
                   </p>
                 </div>
                 <div className="space-y-3">
                   <h3 className="text-lg font-semibold">Collin College</h3>
                   <p className="text-lg leading-relaxed">
-                    Strong foundations in computer science, mathematics, and engineering principles that shaped my
-                    approach to problem solving and experimentation.
+                    Finished an Associates of Science (AAS) degree with a focus on foundational computer science and mathematics courses.
+                    
                   </p>
                 </div>
               </div>
@@ -269,7 +274,7 @@ export default function About() {
                     alt="Collin College logo"
                     className="w-24 h-24 object-contain"
                   />
-                  <span className="text-sm text-muted-foreground">Aug 2021 - Dec 2023</span>
+                  <span className="text-sm text-muted-foreground">Jun 2023 - Dec 2023</span>
                 </div>
               </div>
             </div>

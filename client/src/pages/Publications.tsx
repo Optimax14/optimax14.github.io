@@ -221,7 +221,7 @@ export default function Publications() {
       monthYear: "January 2025",
       status: "In Progress",
       abstract:
-        "This paper presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion.",
+        "This project presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion. ",
       media: [
         {
           type: "model",
@@ -379,7 +379,7 @@ export default function Publications() {
                           </a>
                         )}
                         {!pub.links.pdf && !pub.links.arxiv && !pub.links.code && (
-                          <span className="text-sm text-muted-foreground italic">Links coming soon</span>
+                          <span className="text-sm text-muted-foreground italic">Links and paper coming soon</span>
                         )}
                       </div>
                     </div>
