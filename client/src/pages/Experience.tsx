@@ -153,8 +153,13 @@ export default function Experience() {
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                  Conducting cutting-edge research on autonomous navigation systems and developing
-                  advanced algorithms for robot path planning in dynamic environments.
+                  Mentored by Dr. Yu Xiang, working as part of the Intelligent Robotics and Vision Lab (IRVL)
+                  at UTD.
+                </p>
+
+                <p className="text-foreground leading-relaxed">
+                  Conducting research on autonomous robotics with a focus on using perception in data-driven navigation and mapping.
+                  Working on projects involving SLAM, path planning, and robot localization using ROS and machine learning techniques.
                 </p>
 
                 <div className="space-y-3 mt-6">

@@ -314,6 +314,8 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
       wrist_roll_joint: 0.05,
       torso_lift_joint: 0.03,
       upperarm_roll_joint: 0.12,
+      r_gripper_finger_joint: 0.01,
+      l_gripper_finger_joint: 0.01,
     }),
     []
   );
@@ -325,15 +327,15 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
         // Start in the existing relaxed pose
         { time: 0.0, joints: { ...restPose } },
         // Roll arm out to prep for a wave
-        { time: 0.9, joints: { shoulder_pan_joint: 1.81, shoulder_lift_joint: 1.8, elbow_flex_joint: 1.5, wrist_flex_joint: 1.2, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
-        // Wave up
-        { time: 1.4, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 0.6, elbow_flex_joint: 0.3, wrist_flex_joint: 0.9, wrist_roll_joint: -0.5, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
-        // Wave down
-        { time: 1.9, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 1.0, elbow_flex_joint: 0.8, wrist_flex_joint: 0.6, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
-        // Wave up
-        { time: 2.4, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 0.6, elbow_flex_joint: 0.3, wrist_flex_joint: 0.9, wrist_roll_joint: -0.5, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
-        // Wave down
-        { time: 2.9, joints: { shoulder_pan_joint: 1.3, shoulder_lift_joint: 1.0, elbow_flex_joint: 0.8, wrist_flex_joint: 0.6, wrist_roll_joint: -0.2, torso_lift_joint: 0.06, upperarm_roll_joint: -2.8 } },
+          { time: 0.9, joints: { shoulder_pan_joint: 1.75, shoulder_lift_joint: 1.9, elbow_flex_joint: 1.6, wrist_flex_joint: 1.1, wrist_roll_joint: -0.3, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          // Wave up (bigger lift/extend)
+          { time: 1.4, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 0.35, elbow_flex_joint: 0.15, wrist_flex_joint: 1.15, wrist_roll_joint: -0.7, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          // Wave down (more pronounced drop)
+          { time: 1.9, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.25, elbow_flex_joint: 1.1, wrist_flex_joint: 0.15, wrist_roll_joint: 0.15, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          // Wave up
+          { time: 2.4, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 0.35, elbow_flex_joint: 0.15, wrist_flex_joint: 1.15, wrist_roll_joint: -0.7, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          // Wave down
+          { time: 2.9, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.25, elbow_flex_joint: 1.1, wrist_flex_joint: 0.15, wrist_roll_joint: 0.15, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
         // Settle slightly more neutral
         { time: 3.6, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.4, elbow_flex_joint: 1.0, wrist_flex_joint: 0.4, wrist_roll_joint: -0.1, torso_lift_joint: 0.05, upperarm_roll_joint: -2.0 } },
       ], 

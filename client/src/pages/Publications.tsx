@@ -22,7 +22,7 @@ interface Publication {
   venue: string;
   year: number;
   monthYear: string;
-  status: "Published" | "Under Review" | "In Progress";
+  status: "Published" | "Under Review" | "In Progress" | "Finished";
   abstract: string;
   media: MediaItem[];
   links: {
@@ -267,29 +267,14 @@ export default function Publications() {
       ],
       links: { pdf: null, arxiv: null, code: null, },
     },
-    {
-      title: "Grasp Quality Prediction Using Reinforcement Learning",
-      authors: "Itay Kadosh, Co-Author 6",
-      venue: "Under Review at IROS 2024",
-      year: 2025,
-      monthYear: "April 2025",
-      status: "In Progress",
-      abstract:
-        "We present a reinforcement learning approach to predict grasp quality for diverse objects. Our method generalizes well across object categories and achieves high success rates in real-world experiments.",
-      media: [
-        { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
-        { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
-        { type: "video", src: "/IMG_5807.MOV", alt: "Path planning demonstration" },
-      ],
-      links: { pdf: null, arxiv: "#", code: null, },
-    },
+
     {
       title: "Reinforcement Learning for Robotics and Autonomous Mobility",
       authors: "<strong>Itay Kadosh</strong> and Hyeonduk Sim",
       venue: "MATH 6335 — Machine Learning and Control Theory (Course Report)",
       year: 2025,
       monthYear: "May 2025",
-      status: "Published",
+      status: "Finished",
       abstract:
         "A comprehensive course report exploring reinforcement learning techniques for robotics and autonomous mobility. Covers problem formulation, policy optimization, simulation experiments, and analysis of control strategies.",
       media: [
@@ -338,7 +323,7 @@ export default function Publications() {
                         </div>
                         <span
                           className={`px-3 py-1 rounded text-sm font-medium whitespace-nowrap ${
-                            pub.status === "Published" ? "bg-foreground text-background" : "bg-muted text-foreground"
+                            pub.status === "Published" || pub.status === "Finished" ? "bg-foreground text-background" : "bg-muted text-foreground"
                           }`}
                         >
                           {pub.status}

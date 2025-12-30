@@ -347,7 +347,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {showLoader && (
         <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
-          <div className="text-lg font-semibold text-foreground">Loading experience...</div>
+          <div className="text-lg font-semibold text-neutral-800">Loading experience...</div>
         </div>
       )}
       {/* Hero Section with Photo */}
