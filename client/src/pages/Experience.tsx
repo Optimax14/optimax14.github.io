@@ -103,6 +103,7 @@ export default function Experience() {
   ];
   const utdSecondaryMedia: MediaItem[] = [
     { type: "image", src: "/robots.png", alt: "UTD project landscape 1" },
+    { type: "image", src: "/so101_lineup.png", alt: "UTD project landscape 2" },
   ];
   const clemsonMainMedia: MediaItem[] = [
     { type: "image", src: "/about-photo-1.jpg", alt: "Clemson research 1" },
@@ -158,31 +159,14 @@ export default function Experience() {
                 </p>
 
                 <p className="text-foreground leading-relaxed">
-                  Conducting research on autonomous robotics with a focus on using perception in data-driven navigation and mapping.
+                  Conducting research on autonomous robotics with a focus on robotic perception and applications of machine learning for mapping.
                   Working on projects involving SLAM, path planning, and robot localization using ROS and machine learning techniques.
                 </p>
 
-                <div className="space-y-3 mt-6">
-                  <h4 className="font-semibold text-foreground">Key Contributions</h4>
-                  <ul className="space-y-2">
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Developed ROS-based navigation stack for autonomous mobile robots</span>
-                    </li>
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Implemented advanced SLAM algorithms for real-time localization</span>
-                    </li>
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Collaborated with team on real-world robot deployment and testing</span>
-                    </li>
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Published research findings in peer-reviewed conferences</span>
-                    </li>
-                  </ul>
-                </div>
+                <p className="text-foreground leading-relaxed">
+                  During my time at IRVL, I have collaborated with undergraduate as well as graduate students and contributed to ongoing research projects that have been or are being prepared for submission to top conferences.
+                </p>
+                
               </div>
             </div>
 
@@ -191,17 +175,18 @@ export default function Experience() {
               <div className="space-y-4 order-2 lg:order-1">
                 <h4 className="font-semibold text-foreground">Research Focus</h4>
                 <p className="text-foreground leading-relaxed">
-                  My research at UTD focuses on developing robust autonomous navigation systems
-                  that can handle complex, dynamic environments. I work on perception, planning,
-                  and control algorithms that enable robots to navigate safely and efficiently
-                  while avoiding obstacles and adapting to changing conditions.
+                  My research at UTD focuses on leveraging machine learning techniques to enhance robotic perception and navigation capabilities.
+                  This includes developing algorithms for simultaneous localization and mapping (SLAM), object recognition, and path planning in dynamic environments.
                 </p>
 
                 <p className="text-foreground leading-relaxed">
-                  This work has direct applications in autonomous vehicles, warehouse automation,
-                  and search-and-rescue robotics. I'm particularly interested in how machine
-                  learning can improve navigation performance in novel environments.
+                  I have been involved in projects that utilize deep learning for extracting semantics from sensor data, learn policies for locomotion, as well as make efficient decisions for robotic exploration driven by perception.
                 </p>
+
+                <p className="text-foreground leading-relaxed">
+                  Moving forward, I aim to further explore the intersection of machine learning and robotics, focusing on general-purpose robotics that can adapt to a wide range of tasks and environments. I hope to work more in depth with vision language action models during my graduate studies.
+                </p>
+
               </div>
 
               <div className="flex justify-center order-1 lg:order-2">
@@ -212,25 +197,26 @@ export default function Experience() {
             </div>
           </div>
 
-          {/* Clemson Visiting Researcher Section */}
+          {/* Clemson HCORE REU Section */}
           <div className="mb-20 pt-12 border-t border-border">
-            <h2 className="text-3xl font-bold mb-8 mt-12">Visiting Summer Researcher at Clemson</h2>
+            <h2 className="text-3xl font-bold mb-8 mt-12">HCORE REU (Clemson University)</h2>
 
             {/* Photo Right, Text Left */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-12">
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div className="text-left">
-                    <h3 className="text-2xl font-semibold">Visiting Researcher</h3>
+                    <h3 className="text-2xl font-semibold">Undergraduate Researcher</h3>
                     <p className="text-lg text-muted-foreground">
-                      Clemson University - Robotics & Automation Lab
+                      HCORE REU - Department of Industrial Engineering at Clemson University
                     </p>
                   </div>
+
                   <div className="flex flex-col items-center gap-2">
                     <div className="flex items-center gap-2">
                       <img
                         src="/ie.png"
-                        alt="Lab Logo"
+                        alt="Industrial Engineering Logo"
                         className="h-16 w-auto object-contain"
                         loading="lazy"
                         decoding="async"
@@ -244,37 +230,25 @@ export default function Experience() {
                       />
                     </div>
                     <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
-                      Summer 2023
+                      May 2025 - Present
                     </span>
                   </div>
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                  Spent an intensive summer conducting research on robotic manipulation and
-                  computer vision systems for object recognition and grasping.
+                  Mentored by Professor Tuğçe Işık, I participate in the HCORE NSF REU program in the Department of Industrial
+                  Engineering at Clemson University.
                 </p>
 
-                <div className="space-y-3 mt-6">
-                  <h4 className="font-semibold text-foreground">Key Contributions</h4>
-                  <ul className="space-y-2">
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Developed deep learning models for object detection and classification</span>
-                    </li>
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Optimized inference for real-time performance on robotic platforms</span>
-                    </li>
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Implemented grasp quality prediction algorithms</span>
-                    </li>
-                    <li className="flex items-start text-foreground">
-                      <span className="mr-3">→</span>
-                      <span>Tested and validated perception systems on physical robot hardware</span>
-                    </li>
-                  </ul>
-                </div>
+                <p className="text-foreground leading-relaxed">
+                  This work focuses on human performance and mental fatigue in realistic work settings, studying how task
+                  rotations (with varying cognitive workload and complexity) influence worker outcomes over time.
+                </p>
+
+                <p className="text-foreground leading-relaxed">
+                  I contributed to an experimental study examining how task rotation affects mental fatigue, worker errors,
+                  and task completion times, supporting progress toward a submission to a top industrial engineering conference.
+                </p>
               </div>
 
               <div className="flex justify-center">
@@ -295,20 +269,18 @@ export default function Experience() {
               <div className="space-y-4">
                 <h4 className="font-semibold text-foreground">Research Outcomes</h4>
                 <p className="text-foreground leading-relaxed">
-                  During my time at Clemson, I gained valuable experience working with state-of-the-art
-                  robotic arms and vision systems. The research focused on bridging the gap between
-                  computer vision and robotic manipulation, enabling robots to autonomously grasp
-                  and manipulate diverse objects.
+                  Through this experience, I’ve strengthened my skills in experimental thinking and research communication—
+                  connecting study design and measurement to clear conclusions about performance under workload and fatigue.
                 </p>
 
                 <p className="text-foreground leading-relaxed">
-                  This experience was instrumental in developing my understanding of the complete
-                  pipeline from perception to action in robotic systems. I collaborated with
-                  experienced researchers and contributed to publications that advanced the field.
+                  The project has also helped me develop a stronger intuition for how to structure research questions, analyze
+                  results, and translate findings into a coherent narrative for dissemination.
                 </p>
               </div>
             </div>
           </div>
+
 
           {/* Additional Experience Section */}
           <div className="pt-12 border-t border-border">

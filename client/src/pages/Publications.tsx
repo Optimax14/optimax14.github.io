@@ -32,6 +32,37 @@ interface Publication {
   };
 }
 
+function SpinningQuestion() {
+  const cycle = ["Coming soon", "Coming soon.", "Coming soon..", "Coming soon..."];
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setIdx((prev) => (prev + 1) % cycle.length);
+    }, 1100);
+    return () => clearInterval(t);
+  }, [cycle.length]);
+
+  return (
+    <div className="flex flex-col items-center justify-center h-full gap-4">
+      <div
+        className="w-24 h-24 rounded-full shadow-lg flex items-center justify-center text-white text-4xl font-black"
+        style={{
+          background: "linear-gradient(135deg, #4f46e5 0%, #8b5cf6 50%, #22d3ee 100%)",
+          animation: "spin 1.8s linear infinite",
+          boxShadow: "0 16px 40px rgba(0,0,0,0.25)",
+        }}
+        aria-label="Coming soon"
+      >
+        ?
+      </div>
+      <div className="text-lg font-semibold tracking-wide">
+        <span>{cycle[idx]}</span>
+      </div>
+    </div>
+  );
+}
+
 function MediaCarousel({ media }: { media: MediaItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
@@ -140,6 +171,13 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
                 switch (item.type) {
                   case "image":
                   case "gif":
+                    if (!item.src) {
+                      return (
+                        <div className="w-full h-full flex items-center justify-center bg-background text-foreground">
+                          <SpinningQuestion />
+                        </div>
+                      );
+                    }
                     return (
                       <img
                         src={srcUrl}
@@ -261,9 +299,7 @@ export default function Publications() {
       abstract:
         "This ongoing work explores safe and efficient collaboration between humans and robots in manufacturing environments. We develop control strategies that adapt to human behavior and ensure workplace safety.",
       media: [
-        { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
-        { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
-        { type: "video", src: "/IMG_5807.MOV", alt: "Path planning demonstration" },
+        { type: "image", src: "", alt: "Coming soon" },
       ],
       links: { pdf: null, arxiv: null, code: null, },
     },

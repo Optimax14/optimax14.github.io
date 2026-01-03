@@ -307,3 +307,105 @@
     background-position: 24% 6%, 62% 24%, 64% 62%, -32px 24px, 20px -18px, 0 0;
   }
 }
+
+@keyframes spin3d {
+  from {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+  50% {
+    transform: rotateY(180deg) rotateX(6deg);
+  }
+  to {
+    transform: rotateY(360deg) rotateX(0deg);
+  }
+}
+
+/* 3D question mark placeholder */
+.qmark-3d {
+  perspective: 900px;
+}
+.qmark-3d-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  animation: spin3d 6s linear infinite;
+}
+.qmark-3d-text {
+  display: inline-block;
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #7c3aed 0%, #22d3ee 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  position: relative;
+  transform: translateZ(14px);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 3px rgba(0, 0, 0, 0.25),
+    0 6px 10px rgba(0, 0, 0, 0.22),
+    0 12px 18px rgba(0, 0, 0, 0.18),
+    0 18px 28px rgba(0, 0, 0, 0.16);
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.28));
+}
+.qmark-3d-text::before,
+.qmark-3d-text::after {
+  content: "?";
+  position: absolute;
+  inset: 0;
+  color: rgba(0, 0, 0, 0.4);
+  transform-style: preserve-3d;
+}
+.qmark-3d-text::before {
+  transform: translateZ(-18px) translateY(4px);
+  filter: blur(0.35px);
+}
+.qmark-3d-text::after {
+  transform: translateZ(-10px) translateY(2px);
+  color: rgba(0, 0, 0, 0.35);
+  filter: blur(0.28px);
+}
+
+/* Spinning question icon */
+.spin-q {
+  width: 72px;
+  height: 72px;
+  display: inline-block;
+  animation: spin 1.2s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin-q {
+    animation: none;
+  }
+}
+
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+@keyframes spin3d {
+  from {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+  50% {
+    transform: rotateY(180deg) rotateX(6deg);
+  }
+  to {
+    transform: rotateY(360deg) rotateX(0deg);
+  }
+}

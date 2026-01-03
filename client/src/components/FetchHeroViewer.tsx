@@ -63,6 +63,13 @@ function FetchRobot({
   const { scene, camera } = useThree(); 
 
   useEffect(() => {
+    // Safety: ensure we never keep a previous robot instance in the scene
+    if (robotRef.current) {
+      scene.remove(robotRef.current);
+      robotRef.current = null;
+      jointMapRef.current = {};
+    }
+
     ensureFetchPreload(assetsBase, urdfUrl, onProgress).then((preloaded) => {
       if (!preloaded) return;
       const robot = preloaded.clone(true);
@@ -272,7 +279,7 @@ export default function FetchHeroViewer({
   introCamEnd?: [number, number, number];
   introCamTarget?: [number, number, number];
   enableIntroAnimation?: boolean;
-  resetCamPosition?: [1.2, 1.0, 2.4];
+  resetCamPosition?: [number, number, number];
 }) { 
   const assetsBase = resolvePublic("assets/fetch/");
   const urdfUrl = resolvePublic("assets/fetch/fetch.urdf");
@@ -329,15 +336,15 @@ const clipRef = useRef<{ clip: Clip; start: number } | null>(null);
         // Roll arm out to prep for a wave
           { time: 0.9, joints: { shoulder_pan_joint: 1.75, shoulder_lift_joint: 1.9, elbow_flex_joint: 1.6, wrist_flex_joint: 1.1, wrist_roll_joint: -0.3, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
           // Wave up (bigger lift/extend)
-          { time: 1.4, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 0.35, elbow_flex_joint: 0.15, wrist_flex_joint: 1.15, wrist_roll_joint: -0.7, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          { time: 1.4, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 0.35, elbow_flex_joint: 1, wrist_flex_joint: 1.15, wrist_roll_joint: -0.7, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
           // Wave down (more pronounced drop)
-          { time: 1.9, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.25, elbow_flex_joint: 1.1, wrist_flex_joint: 0.15, wrist_roll_joint: 0.15, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          { time: 1.9, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.25, elbow_flex_joint: 1, wrist_flex_joint: 0.15, wrist_roll_joint: 0.15, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
           // Wave up
-          { time: 2.4, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 0.35, elbow_flex_joint: 0.15, wrist_flex_joint: 1.15, wrist_roll_joint: -0.7, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          { time: 2.4, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 0.35, elbow_flex_joint: 1, wrist_flex_joint: 1.15, wrist_roll_joint: -0.7, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
           // Wave down
-          { time: 2.9, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.25, elbow_flex_joint: 1.1, wrist_flex_joint: 0.15, wrist_roll_joint: 0.15, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
+          { time: 2.9, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.25, elbow_flex_joint: 1, wrist_flex_joint: 0.15, wrist_roll_joint: 0.15, torso_lift_joint: 0.06, upperarm_roll_joint: -3.1 } },
         // Settle slightly more neutral
-        { time: 3.6, joints: { shoulder_pan_joint: 1.1, shoulder_lift_joint: 1.4, elbow_flex_joint: 1.0, wrist_flex_joint: 0.4, wrist_roll_joint: -0.1, torso_lift_joint: 0.05, upperarm_roll_joint: -2.0 } },
+        { time: 3.6, joints: { ...restPose } },
       ], 
     }), 
     [restPose] 
