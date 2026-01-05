@@ -181,6 +181,17 @@ export default function Home() {
   const [loadProgress, setLoadProgress] = useState(0);
   const startWaveRef = useRef<(() => void) | null>(null); 
   const SHRINK_DELAY_MS = 1000; // extra time to keep viewport full-screen after intro
+  const featuredUpdates: Update[] = [
+    {
+      date: "Featured",
+      title: "ARMoR Platform Demo",
+      description: "Our arm-driven mobility policy in real world deployment.",
+      link: { text: "See more", href: "/publications" },
+      media: [
+        { type: "video", src: "/armor.mp4", alt: "ARMoR clip" },
+      ],
+    },
+  ];
   const updatesByYear: Record<string, Update[]> = {
     "2026": [
       {
@@ -460,11 +471,41 @@ export default function Home() {
       {contentVisible && (
         <section className="section-padding bg-card/15 backdrop-blur-md">
           <div className="container max-w-5xl">
-            <h2 className="text-3xl font-bold mb-8">Recent Updates</h2>
-            <div className="space-y-10">
-              {Object.entries(updatesByYear)
-                .sort(([a], [b]) => Number(b) - Number(a))
-                .map(([year, items]) => (
+              <h2 className="text-3xl font-bold mb-8">Recent Updates</h2>
+              {/* Featured updates */}
+              <div className="mb-10">
+                <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                  Featured
+                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-foreground text-background">Featured</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {featuredUpdates.map((update, idx) => (
+                    <div
+                      key={`featured-${idx}`}
+                      className="border border-border rounded-lg bg-card/85 backdrop-blur-md hover:bg-card transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"
+                    >
+                      <div className="aspect-[4/3] w-full">
+                        <MediaCarousel media={update.media} />
+                      </div>
+                      <div className="p-4 flex flex-col flex-1 relative">
+                        <span className="absolute top-3 right-3 px-2 py-1 text-xs font-semibold rounded-full bg-foreground text-background">Featured</span>
+                        <span className="text-sm font-medium text-muted-foreground">{update.date}</span>
+                        <h4 className="text-lg font-semibold mt-1 mb-2">{update.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-4 flex-1">{update.description}</p>
+                        <Link href={update.link.href} className="self-start">
+                          <Button variant="outline" size="sm">{update.link.text}</Button>
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* By-year updates */}
+              <div className="space-y-10">
+                {Object.entries(updatesByYear)
+                  .sort(([a], [b]) => Number(b) - Number(a))
+                  .map(([year, items]) => (
                   <div key={year} className="space-y-4">
                     <h3 className="text-2xl font-semibold">{year}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
