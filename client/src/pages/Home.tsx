@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import FetchHeroViewer from "@/components/FetchHeroViewer";
+const LazyFetchHeroViewer = React.lazy(() => import("@/components/FetchHeroViewer"));
 
 interface MediaItem {
   type: "image" | "video" | "gif";
@@ -19,6 +19,19 @@ interface Update {
     href: string;
   };
   media: MediaItem[];
+}
+
+function HeroFallback() {
+  return (
+    <div
+      className="w-full h-full rounded-2xl border border-border bg-card/60 backdrop-blur-md flex items-center justify-center text-muted-foreground"
+    >
+      <div className="text-center px-6">
+        <div className="text-xs uppercase tracking-[0.3em]">Interactive Model</div>
+        <div className="text-sm mt-2">Loading 3D viewer...</div>
+      </div>
+    </div>
+  );
 }
 
 //
@@ -127,6 +140,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                   className="w-full h-full object-cover"
                   loading="lazy"
                   decoding="async"
+                  fetchPriority="low"
                 />
               )}
               {item.type === "gif" && (
@@ -136,6 +150,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                   className="w-full h-full object-cover"
                   loading="lazy"
                   decoding="async"
+                  fetchPriority="low"
                 />
               )}
               {item.type === "video" && (
@@ -148,7 +163,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                   playsInline
                   muted
                   loop
-                  preload={index === currentIndex ? "auto" : "metadata"}
+                  preload={index === currentIndex ? "metadata" : "none"}
                 />
               )}
             </div>
@@ -204,6 +219,12 @@ export default function Home() {
   const startWaveRef = useRef<(() => void) | null>(null); 
   const shrinkDelayMs = allowRichMotion ? 1000 : 0; // extra time to keep viewport full-screen after intro
   const loaderDelayMs = allowRichMotion ? 1000 : 0;
+  useEffect(() => {
+    document.body.dataset.lowMotion = reduceMotion ? "true" : "false";
+    return () => {
+      delete document.body.dataset.lowMotion;
+    };
+  }, [reduceMotion]);
   const featuredUpdates: Update[] = [
     {
       date: "Featured",
@@ -416,15 +437,21 @@ export default function Home() {
                   transition={allowRichMotion ? { type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } } : { duration: 0 }} 
               > 
                 {heroVisible && (
-                  <FetchHeroViewer 
-                    onLoaded={handleLoaded} 
-                    onStartReady={handleStartReady} 
-                    onWaveComplete={handleWaveComplete} 
-                    enableInteraction={!firstVisit ? true : introDone} 
-                    enableIntroAnimation={firstVisit && !introAnimationPlayed && allowRichMotion}
-                    performanceMode={reduceMotion ? "low" : "high"}
-                    onProgress={(p) => setLoadProgress(p)}
-                  />
+                  reduceMotion ? (
+                    <HeroFallback />
+                  ) : (
+                    <Suspense fallback={<HeroFallback />}>
+                      <LazyFetchHeroViewer 
+                        onLoaded={handleLoaded} 
+                        onStartReady={handleStartReady} 
+                        onWaveComplete={handleWaveComplete} 
+                        enableInteraction={!firstVisit ? true : introDone} 
+                        enableIntroAnimation={firstVisit && !introAnimationPlayed && allowRichMotion}
+                        performanceMode="high"
+                        onProgress={(p) => setLoadProgress(p)}
+                      />
+                    </Suspense>
+                  )
                 )}
               </motion.div> 
             </motion.div> 
