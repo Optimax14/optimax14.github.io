@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import FetchHeroViewer from "@/components/FetchHeroViewer";
@@ -25,11 +25,18 @@ interface Update {
 // Robot hero uses <GLBViewer/>. Provide env override via VITE_ROBOT_MODEL.
 //
 
-function MediaCarousel({ media }: { media: MediaItem[] }) {
+function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; reduceMotion?: boolean }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
   const videoRefs = React.useRef<{ [key: number]: HTMLVideoElement | null }>({});
+  const slideCooldownMs = reduceMotion ? 0 : 800;
+  const transitionMs = reduceMotion ? 0 : 500;
+  const visibleIndices = new Set(
+    reduceMotion || media.length <= 1
+      ? [currentIndex]
+      : [currentIndex, (currentIndex + 1) % media.length, (currentIndex - 1 + media.length) % media.length]
+  );
 
   useEffect(() => {
     Object.values(videoRefs.current).forEach(video => {
@@ -53,7 +60,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
     setIsSliding(true);
     setDirection("left");
     setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
-    setTimeout(() => setIsSliding(false), 800);
+    setTimeout(() => setIsSliding(false), slideCooldownMs);
   };
 
   const goToNextSlide = () => {
@@ -61,7 +68,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
     setIsSliding(true);
     setDirection("right");
     setCurrentIndex((prev) => (prev + 1) % media.length);
-    setTimeout(() => setIsSliding(false), 800);
+    setTimeout(() => setIsSliding(false), slideCooldownMs);
   };
 
   if (!media || media.length === 0) {
@@ -95,7 +102,9 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
         
         {/* Media Content */}
         <div className="relative w-full h-full overflow-hidden">
-          {media.map((item, index) => (
+          {media.map((item, index) => {
+            if (!visibleIndices.has(index)) return null;
+            return (
             <div
               key={index}
               className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-in-out transform
@@ -108,7 +117,7 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
               style={{
                 zIndex: index === currentIndex ? 1 : 0,
                 opacity: index === currentIndex ? 1 : 0,
-                transition: 'all 500ms ease-in-out'
+                transition: reduceMotion ? "none" : `transform ${transitionMs}ms ease-in-out, opacity ${transitionMs}ms ease-in-out`
               }}
             >
               {item.type === "image" && (
@@ -132,18 +141,19 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
               {item.type === "video" && (
                 <video
                   ref={(el: HTMLVideoElement | null) => {
-                    if (el) videoRefs.current[index] = el;
+                    videoRefs.current[index] = el;
                   }}
                   src={item.src}
                   className="w-full h-full object-cover"
                   playsInline
                   muted
                   loop
-                  preload="auto"
+                  preload={index === currentIndex ? "auto" : "metadata"}
                 />
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -170,17 +180,30 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 
 export default function Home() { 
   const ANIMATION_ENABLED = true; // toggle to re-enable hero animation in dev
+  const prefersReducedMotion = useReducedMotion();
+  const [lowPerfMode] = useState(() => {
+    const nav = navigator as any;
+    const connection = nav?.connection || nav?.mozConnection || nav?.webkitConnection;
+    const saveData = Boolean(connection?.saveData);
+    const effectiveType = connection?.effectiveType;
+    const deviceMemory = nav?.deviceMemory ?? 8;
+    const cores = nav?.hardwareConcurrency ?? 8;
+    return saveData || effectiveType === "2g" || effectiveType === "slow-2g" || deviceMemory <= 4 || cores <= 4;
+  });
+  const reduceMotion = prefersReducedMotion || lowPerfMode;
+  const allowRichMotion = ANIMATION_ENABLED && !reduceMotion;
   const initialFirstVisit = !sessionStorage.getItem("heroSeen");
   const [firstVisit, setFirstVisit] = useState(initialFirstVisit); 
-  const [compact, setCompact] = useState(() => (!initialFirstVisit ? true : false)); 
-  const [showLoader, setShowLoader] = useState(() => initialFirstVisit); 
-  const [contentVisible, setContentVisible] = useState(() => !initialFirstVisit); 
-  const [introAnimationPlayed, setIntroAnimationPlayed] = useState(() => !initialFirstVisit);
-  const [introDone, setIntroDone] = useState(() => !initialFirstVisit); // unlocks head tracking after intro
+  const [compact, setCompact] = useState(() => (!initialFirstVisit || !allowRichMotion ? true : false)); 
+  const [showLoader, setShowLoader] = useState(() => initialFirstVisit && allowRichMotion); 
+  const [contentVisible, setContentVisible] = useState(() => !initialFirstVisit || !allowRichMotion); 
+  const [introAnimationPlayed, setIntroAnimationPlayed] = useState(() => !initialFirstVisit || !allowRichMotion);
+  const [introDone, setIntroDone] = useState(() => !initialFirstVisit || !allowRichMotion); // unlocks head tracking after intro
   const [heroVisible, setHeroVisible] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
   const startWaveRef = useRef<(() => void) | null>(null); 
-  const SHRINK_DELAY_MS = 1000; // extra time to keep viewport full-screen after intro
+  const shrinkDelayMs = allowRichMotion ? 1000 : 0; // extra time to keep viewport full-screen after intro
+  const loaderDelayMs = allowRichMotion ? 1000 : 0;
   const featuredUpdates: Update[] = [
     {
       date: "Featured",
@@ -298,7 +321,7 @@ export default function Home() {
       setShowLoader(false);
       // start wave once ready
       startWaveRef.current?.();
-    }, 1000);
+    }, loaderDelayMs);
   };
 
   const handleStartReady = (fn: () => void) => {
@@ -321,7 +344,7 @@ export default function Home() {
       setContentVisible(true); 
       setFirstVisit(false); 
       sessionStorage.setItem("heroSeen", "1"); 
-    }, SHRINK_DELAY_MS); 
+    }, shrinkDelayMs); 
   }; 
 
   // Lazy-mount hero viewer when in viewport to cut initial LCP
@@ -366,22 +389,22 @@ export default function Home() {
         <div className="container relative">
           <motion.div
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
-            initial={{ opacity: 0, y: 16 }}
+            initial={allowRichMotion ? { opacity: 0, y: 16 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={allowRichMotion ? { duration: 0.5, ease: "easeOut" } : { duration: 0 }}
           >
             {/* Left: Interactive Robot Model */} 
             <motion.div 
               className="relative flex justify-center lg:justify-end -mt-2" 
               ref={heroRef}
-              initial={{ opacity: 0, y: 12 }} 
+              initial={allowRichMotion ? { opacity: 0, y: 12 } : false} 
               animate={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }} 
+              transition={allowRichMotion ? { duration: 0.5, ease: "easeOut", delay: 0.05 } : { duration: 0 }} 
             > 
               <motion.div  
                 className="w-full hero-frame"  
                 initial={ 
-                  firstVisit 
+                  allowRichMotion && firstVisit 
                     ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 } 
                     : { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
                 }
@@ -390,7 +413,7 @@ export default function Home() {
                     ? { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
                     : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, marginTop: "0rem", opacity: 1, y: 0 }
                 }
-                  transition={{ type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } }} 
+                  transition={allowRichMotion ? { type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } } : { duration: 0 }} 
               > 
                 {heroVisible && (
                   <FetchHeroViewer 
@@ -398,7 +421,8 @@ export default function Home() {
                     onStartReady={handleStartReady} 
                     onWaveComplete={handleWaveComplete} 
                     enableInteraction={!firstVisit ? true : introDone} 
-                    enableIntroAnimation={firstVisit && !introAnimationPlayed && ANIMATION_ENABLED}
+                    enableIntroAnimation={firstVisit && !introAnimationPlayed && allowRichMotion}
+                    performanceMode={reduceMotion ? "low" : "high"}
                     onProgress={(p) => setLoadProgress(p)}
                   />
                 )}
@@ -407,11 +431,11 @@ export default function Home() {
 
             {/* Right: Text Content (first visit shows after shrink) */}
             {contentVisible && (
-              <motion.div
-              className="space-y-6 -mt-4"
-                initial={{ opacity: 0, y: 12 }}
+            <motion.div
+            className="space-y-6 -mt-4"
+                initial={allowRichMotion ? { opacity: 0, y: 12 } : false}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                transition={allowRichMotion ? { duration: 0.5, ease: "easeOut", delay: 0.1 } : { duration: 0 }}
               >
                 <div>
                   <h1 className="text-5xl sm:text-6xl font-bold mb-4">Itay Kadosh</h1>
@@ -485,7 +509,7 @@ export default function Home() {
                       className="border border-border rounded-lg bg-card/85 backdrop-blur-md hover:bg-card transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"
                     >
                       <div className="aspect-[4/3] w-full">
-                        <MediaCarousel media={update.media} />
+                        <MediaCarousel media={update.media} reduceMotion={reduceMotion} />
                       </div>
                       <div className="p-4 flex flex-col flex-1 relative">
                         <span className="absolute top-3 right-3 px-2 py-1 text-xs font-semibold rounded-full bg-foreground text-background">Featured</span>
@@ -515,7 +539,7 @@ export default function Home() {
                           className="border border-border rounded-lg bg-card/85 backdrop-blur-md hover:bg-card transition-all duration-300 transform hover:scale-[1.02] overflow-hidden flex flex-col"
                         >
                           <div className="aspect-[4/3] w-full">
-                            <MediaCarousel media={update.media} />
+                            <MediaCarousel media={update.media} reduceMotion={reduceMotion} />
                           </div>
                           <div className="p-4 flex flex-col flex-1">
                             <span className="text-sm font-medium text-muted-foreground">{update.date}</span>

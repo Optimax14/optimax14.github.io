@@ -269,6 +269,7 @@ export default function FetchHeroViewer({
   introCamTarget: introCamTargetOverride,
   enableIntroAnimation = true,
   resetCamPosition: resetCamPositionOverride,
+  performanceMode = "high",
 }: { 
   onLoaded?: () => void; 
   onStartReady?: (startWave: () => void) => void; 
@@ -280,9 +281,13 @@ export default function FetchHeroViewer({
   introCamTarget?: [number, number, number];
   enableIntroAnimation?: boolean;
   resetCamPosition?: [number, number, number];
+  performanceMode?: "high" | "low";
 }) { 
   const assetsBase = resolvePublic("assets/fetch/");
   const urdfUrl = resolvePublic("assets/fetch/fetch.urdf");
+  const isLowPerf = performanceMode === "low";
+  const shadowMapSize = isLowPerf ? 1024 : 2048;
+  const floorSegments = isLowPerf ? 24 : 64;
 
 const clipRef = useRef<{ clip: Clip; start: number } | null>(null);   
   const robotRef = useRef<THREE.Object3D | null>(null);  
@@ -469,15 +474,17 @@ useEffect(() => {
   return ( 
     <div className="w-full h-full relative" ref={containerRef}> 
       <Canvas 
-        shadows 
+        dpr={isLowPerf ? 1 : [1, 2]}
+        shadows={!isLowPerf} 
         camera={{ position: [2.5, 1.5, 2.5], fov: 45, near: 0.01, far: 100 }} 
         gl={{ 
-          antialias: true, 
+          antialias: !isLowPerf, 
           alpha: true, 
+          powerPreference: isLowPerf ? "low-power" : "high-performance",
           outputColorSpace: THREE.SRGBColorSpace,
           toneMapping: THREE.ACESFilmicToneMapping, 
           toneMappingExposure: 1.0, 
-          shadowMap: { enabled: true, type: THREE.PCFSoftShadowMap }, 
+          shadowMap: !isLowPerf ? { enabled: true, type: THREE.PCFSoftShadowMap } : undefined, 
         } as any} 
         onCreated={({ camera }) => { 
           cameraRef.current = camera as THREE.PerspectiveCamera; 
@@ -485,7 +492,7 @@ useEffect(() => {
       > 
         <color attach="background" args={["#ffffff"]} />
         <ambientLight intensity={0.35} color={0xffffff} />
-        <directionalLight position={[6, 10, 6]} intensity={1.1} color={0xffffff} castShadow shadow-mapSize={[2048, 2048] as any} />
+        <directionalLight position={[6, 10, 6]} intensity={1.1} color={0xffffff} castShadow={!isLowPerf} shadow-mapSize={[shadowMapSize, shadowMapSize] as any} />
         <directionalLight position={[-5, 5, -5]} intensity={0.5} color={0xffffff} />
         <spotLight position={[0, 8, 4]} angle={0.7} penumbra={0.5} intensity={0.6} distance={40} color={0xffffff} />
         {/* Soft floor to ground the robot */} 
@@ -494,18 +501,20 @@ useEffect(() => {
           position={[floorPosRef.current.x, floorPosRef.current.y, floorPosRef.current.z]}  
           receiveShadow  
         >  
-          <circleGeometry args={[2, 64]} />  
+          <circleGeometry args={[2, floorSegments]} />  
           <meshStandardMaterial color="#bcc2cc" roughness={0.92} metalness={0.0} />  
         </mesh>  
-        <ContactShadows  
-          position={[floorPosRef.current.x, floorPosRef.current.y + 0.004, floorPosRef.current.z]}  
-          opacity={0.6}  
-          width={9}  
-          height={9}  
-          blur={2.4}  
-          far={10}  
-        />  
-        <Environment preset="studio" background={false} blur={0.4} />
+        {!isLowPerf && (
+          <ContactShadows  
+            position={[floorPosRef.current.x, floorPosRef.current.y + 0.004, floorPosRef.current.z]}  
+            opacity={0.6}  
+            width={9}  
+            height={9}  
+            blur={2.4}  
+            far={10}  
+          />  
+        )}
+        {!isLowPerf && <Environment preset="studio" background={false} blur={0.4} />}
 
         <FetchRobot  
           urdfUrl={urdfUrl}  
