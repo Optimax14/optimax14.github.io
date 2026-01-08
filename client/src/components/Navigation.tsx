@@ -38,7 +38,7 @@ export default function Navigation() {
               href="/publications"
               className={`nav-link ${isActive("/publications") ? "active" : ""}`}
             >
-              Publications
+              Research
             </Link>
             <Link
               href="/cv"

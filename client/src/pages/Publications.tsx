@@ -285,9 +285,10 @@ export default function Publications() {
         "Autonomous exploration + semantic map updates for large indoor spaces. GroundingDINO/SAMv2 RGB-D fusion with dynamic object association; under review at ICRA 2026.",
       media: [
         { type: "image", src: "/autox_main_fig.png", alt: "AutoX-SemMap system overview" },
+        { type: "video", src: "/exploration.mp4", alt: "AutoX-SemMap exploration demo" },
       ],
       readMore: "/updates/autox-semmap",
-      links: { pdf: "https://arxiv.org/pdf/2409.15493.pdf", arxiv: "https://arxiv.org/abs/2409.15493", code: "#" },
+      links: { pdf: "https://arxiv.org/pdf/2409.15493.pdf", arxiv: "https://arxiv.org/abs/2409.15493", code: "https://github.com/IRVLUTD/AutoX-SemMap" },
     },
     {
       title: "IntelX: Coverage Prediction for Efficient Indoor Robot Exploration",
@@ -448,7 +449,7 @@ export default function Publications() {
                               className="ml-auto bg-muted/60 text-foreground border-border/60 disabled:opacity-70"
                               disabled
                             >
-                              Read Me (coming soon)
+                              Read More (coming soon)
                             </Button>
                           ) : (
                             <Button asChild size="sm" className="ml-auto">

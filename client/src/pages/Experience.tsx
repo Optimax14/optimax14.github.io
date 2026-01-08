@@ -269,7 +269,7 @@ export default function Experience() {
               <div className="space-y-4">
                 <h4 className="font-semibold text-foreground">Research Outcomes</h4>
                 <p className="text-foreground leading-relaxed">
-                  Through this experience, I’ve strengthened my skills in experimental thinking and research communication—
+                  Through this experience, I’ve strengthened my skills in experimental thinking and research communication,
                   connecting study design and measurement to clear conclusions about performance under workload and fatigue.
                 </p>
 
