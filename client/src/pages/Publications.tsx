@@ -1,5 +1,7 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
+import { Link } from "wouter";
 import { ModelErrorBoundary } from "@/components/ModelErrorBoundary";
+import { Button } from "@/components/ui/button";
 
 const STLViewer = lazy(() => import("@/components/ThreeSTLViewer"));
 
@@ -25,6 +27,7 @@ interface Publication {
   status: "Published" | "Under Review" | "In Progress" | "Finished";
   abstract: string;
   media: MediaItem[];
+  readMore?: string;
   links: {
     pdf: string | null;
     arxiv: string | null;
@@ -256,7 +259,7 @@ export default function Publications() {
       authors: "<strong>Itay Kadosh</strong>*, Daniel Kadosh*, Robert Teal*, Keval Shah*",
       venue: "Coming soon",
       year: 2025,
-      monthYear: "January 2025",
+      monthYear: "Jan 2025",
       status: "In Progress",
       abstract:
         "This project presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion. ",
@@ -268,46 +271,76 @@ export default function Publications() {
           viewerOptions: { color: "#ff7a00", background: "#0b0f1a", height: "100%" },
         },
         { type: "video", src: "/armor.mp4", alt: "ARMoR platform clip" },
-        { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
-        { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
       ],
-      links: { pdf: null, arxiv: null, code: null, },
+      links: { pdf: null, arxiv: null, code: null },
     },
     {
-      title: "Deep Learning-Based Object Detection for Robotic Manipulation",
-      authors: "Itay Kadosh, Co-Author 3",
-      venue: "Robotics and Autonomous Systems Journal",
+      title: "AutoX-SemMap: Autonomous Exploration and Semantic Updating of Large-Scale Indoor Environments with Mobile Robots",
+      authors: "Sai Haneesh Allu, <strong>Itay Kadosh</strong>, Tyler Summers, Yu Xiang",
+      venue: "ICRA 2026 (Under Review) - IRVL",
       year: 2024,
-      monthYear: "October 2024",
-      status: "Published",
+      monthYear: "Sep 2024",
+      status: "Under Review",
       abstract:
-        "We propose an optimized deep learning architecture for real-time object detection on embedded robotic platforms. The model achieves 95% accuracy while maintaining inference speed suitable for robotic control loops.",
+        "Autonomous exploration + semantic map updates for large indoor spaces. GroundingDINO/SAMv2 RGB-D fusion with dynamic object association; under review at ICRA 2026.",
       media: [
-        { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
-        { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
-        { type: "video", src: "/IMG_5807.MOV", alt: "Path planning demonstration" },
+        { type: "image", src: "/autox_main_fig.png", alt: "AutoX-SemMap system overview" },
       ],
-      links: { pdf: "#", arxiv: "#", code: "#", },
+      readMore: "/updates/autox-semmap",
+      links: { pdf: "https://arxiv.org/pdf/2409.15493.pdf", arxiv: "https://arxiv.org/abs/2409.15493", code: "#" },
     },
     {
-      title: "Human-Robot Collaboration in Manufacturing Tasks",
-      authors: "Itay Kadosh, Co-Author 4, Co-Author 5",
-      venue: "In Preparation",
+      title: "IntelX: Coverage Prediction for Efficient Indoor Robot Exploration",
+      authors: "Saurav Dosi, <strong>Itay Kadosh</strong>, Yu Xiang",
+      venue: "Intelligent Robotics and Vision Laboratory (IRVL)",
       year: 2025,
-      monthYear: "February 2025",
+      monthYear: "Present",
       status: "In Progress",
       abstract:
-        "This ongoing work explores safe and efficient collaboration between humans and robots in manufacturing environments. We develop control strategies that adapt to human behavior and ensure workplace safety.",
+        "This work presents a novel approach to indoor exploration using coverage prediction models to optimize robot paths. Using a Unet Segmentation Regression approach for map coverage prediction locally as well as a novel global planner, we demonstrate improved exploration efficiency in complex indoor environments.",
       media: [
         { type: "image", src: "", alt: "Coming soon" },
       ],
-      links: { pdf: null, arxiv: null, code: null, },
+      readMore: "#",
+      links: { pdf: null, arxiv: null, code: null },
+    },
+
+
+
+    {
+      title: "RPX (Robot Perception X): Benchmark & Dataset for Robotics Perception Tasks",
+      authors: "<strong>Itay Kadosh</strong>*, Jishnu Jaykumar*, Sai Haneesh Allu, Yu Xiang",
+      venue: "Intelligent Robotics and Vision Laboratory (IRVL)",
+      year: 2025,
+      monthYear: "Present",
+      status: "In Progress",
+      abstract:
+        "This work presents RPX, a comprehensive real-world perception benchmark and dataset for evaluating robotics perception tasks including object detection, segmentation, pose estimation, and other tasks in indoor environments. RPX aims to facilitate advancements in robotic perception by providing diverse scenarios and standardized evaluation metrics.",
+      media: [
+        { type: "image", src: "", alt: "Coming soon" },
+      ],
+      links: { pdf: null, arxiv: null, code: null },
+    },
+
+    {
+      title: "Measuring the Effects of Mental Fatigue on Worker Performance Through Task Rotations",
+      authors: "Toni Dismuke*, <strong>Itay Kadosh</strong>*, Emily Yuan*, Shirin Ghasemi, David Neyens, Tugce Isik",
+      venue: "Department of Industrial Engineering, Clemson University",
+      year: 2025,
+      monthYear: "Nov 2025",
+      status: "Under Review",
+      abstract:
+        "Experimental study on how task rotations impact mental fatigue and worker performance using multimodal measures. Full paper under review; coming soon.",
+      media: [
+        { type: "image", src: "/hcore_final_poster.png", alt: "HCORE REU final poster" },
+      ],
+      links: { pdf: "/HCORE-poster-final.pdf", arxiv: null, code: null },
     },
 
     {
       title: "Reinforcement Learning for Robotics and Autonomous Mobility",
       authors: "<strong>Itay Kadosh</strong> and Hyeonduk Sim",
-      venue: "MATH 6335 — Machine Learning and Control Theory (Course Report)",
+      venue: "MATH 6335 - Machine Learning and Control Theory (Course Report)",
       year: 2025,
       monthYear: "May 2025",
       status: "Finished",
@@ -316,7 +349,7 @@ export default function Publications() {
       media: [
         { type: "image", src: "/report_cover.png", alt: "Report cover" },
       ],
-      links: { pdf: "/MATH_6335_Report.pdf", arxiv: null, code: null, },
+      links: { pdf: "/MATH_6335_Report.pdf", arxiv: null, code: null },
     },
   ];
 
@@ -341,29 +374,31 @@ export default function Publications() {
                 {publicationsByYear[year].map((pub, idx) => (
                   <div
                     key={`${year}-${idx}`}
-                    className="border border-white/20 rounded-md overflow-hidden transform hover:scale-[1.01] transition-all duration-300 animate-fadeInUp bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)]"
+                    className="border border-white/20 rounded-md overflow-hidden transform hover:scale-[1.01] transition-all duration-300 animate-fadeInUp bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] flex flex-col"
                     style={{ animationDelay: `${(yearIdx * publicationsByYear[year].length + idx + 1) * 150}ms` }}
                   >
                     <div className="p-4 bg-card">
                       <MediaCarousel media={pub.media} />
                     </div>
 
-                    <div className="p-4 space-y-3">
+                    <div className="p-4 flex flex-col gap-3 flex-1">
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div>
                           <h3 className="text-xl font-semibold leading-snug">{pub.title}</h3>
                           <p className="text-sm text-muted-foreground mt-2" dangerouslySetInnerHTML={{ __html: pub.authors }} />
-                          {pub.title.startsWith("ARMoR") && (
+                          {pub.authors.includes("*") && (
                             <p className="text-xs text-muted-foreground mt-1 italic">* These authors contributed equally to this work</p>
                           )}
                         </div>
-                        <span
-                          className={`px-3 py-1 rounded text-sm font-medium whitespace-nowrap ${
-                            pub.status === "Published" || pub.status === "Finished" ? "bg-foreground text-background" : "bg-muted text-foreground"
-                          }`}
-                        >
-                          {pub.status}
-                        </span>
+                        <div className="flex flex-col items-end gap-2">
+                          <span
+                            className={`px-3 py-1 rounded text-sm font-medium whitespace-nowrap ${
+                              pub.status === "Published" || pub.status === "Finished" ? "bg-foreground text-background" : "bg-muted text-foreground"
+                            }`}
+                          >
+                            {pub.status}
+                          </span>
+                        </div>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
@@ -374,14 +409,17 @@ export default function Publications() {
 
                       <p className="text-foreground leading-relaxed text-sm">{pub.abstract}</p>
 
-                      <div className="flex flex-wrap gap-3 pt-1">
+                      <div className="mt-auto flex flex-wrap items-center gap-3 pt-1">
                         {pub.links.pdf && (
                           <a
                             href={pub.links.pdf}
                             className="text-sm text-foreground underline hover:text-muted-foreground transition-colors"
                           >
-                            PDF
+                            {pub.links.pdf.toLowerCase().includes("poster") ? "Poster" : "PDF"}
                           </a>
+                        )}
+                        {pub.links.pdf?.toLowerCase().includes("poster") && (
+                          <span className="text-sm text-muted-foreground">Paper coming soon</span>
                         )}
                         {pub.links.arxiv && (
                           <a
@@ -401,6 +439,22 @@ export default function Publications() {
                         )}
                         {!pub.links.pdf && !pub.links.arxiv && !pub.links.code && (
                           <span className="text-sm text-muted-foreground italic">Links and paper coming soon</span>
+                        )}
+                        {pub.readMore && (
+                          pub.readMore === "#" ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="ml-auto bg-muted/60 text-foreground border-border/60 disabled:opacity-70"
+                              disabled
+                            >
+                              Read Me (coming soon)
+                            </Button>
+                          ) : (
+                            <Button asChild size="sm" className="ml-auto">
+                              <Link href={pub.readMore}>Read More</Link>
+                            </Button>
+                          )
                         )}
                       </div>
                     </div>

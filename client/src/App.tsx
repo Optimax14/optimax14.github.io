@@ -15,6 +15,7 @@ import UpdateAurora from "./pages/UpdateAurora";
 import UpdateZephyr from "./pages/UpdateZephyr"; 
 import UpdateSolstice from "./pages/UpdateSolstice"; 
 import UpdateNova from "./pages/UpdateNova"; 
+import UpdateAutoXSemMap from "./pages/UpdateAutoXSemMap";
 import PoseLab from "./pages/PoseLab";
 import About from "./pages/About";
 import Experience from "./pages/Experience";
@@ -34,6 +35,7 @@ function Router() {
       <Route path={"/updates/zephyr"} component={UpdateZephyr} /> 
       <Route path={"/updates/solstice"} component={UpdateSolstice} /> 
       <Route path={"/updates/nova"} component={UpdateNova} /> 
+      <Route path={"/updates/autox-semmap"} component={UpdateAutoXSemMap} />
       <Route path={"/404"} component={NotFound} /> 
       {/* Final fallback route */}
       <Route component={NotFound} />

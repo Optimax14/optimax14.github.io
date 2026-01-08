@@ -29,18 +29,18 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 
   return (
     <div className="space-y-3 w-full">
-      <div className="relative w-full rounded-lg overflow-hidden shadow-sm bg-transparent">
+      <div className="relative w-full rounded-lg overflow-hidden shadow-sm bg-transparent group">
         <div className="absolute inset-0 flex items-center justify-between p-3 z-10">
           <button
             onClick={goToPreviousSlide}
-            className="bg-background/80 hover:bg-background text-foreground rounded-full p-2 shadow transition"
+            className="transform translate-x-[-100%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 focus:opacity-100 bg-background/80 hover:bg-background text-foreground rounded-full p-2 shadow transition"
             aria-label="Previous slide"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
           <button
             onClick={goToNextSlide}
-            className="bg-background/80 hover:bg-background text-foreground rounded-full p-2 shadow transition"
+            className="transform translate-x-[100%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 focus:opacity-100 bg-background/80 hover:bg-background text-foreground rounded-full p-2 shadow transition"
             aria-label="Next slide"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
@@ -106,12 +106,12 @@ export default function Experience() {
     { type: "image", src: "/so101_lineup.png", alt: "UTD project landscape 2" },
   ];
   const clemsonMainMedia: MediaItem[] = [
-    { type: "image", src: "/about-photo-1.jpg", alt: "Clemson research 1" },
-    { type: "image", src: "/robots.png", alt: "Clemson research 2" },
+    { type: "image", src: "/hcore_poster.jpeg", alt: "HCORE REU BMW visit" },
+    { type: "image", src: "/hcore_bmw.jpeg", alt: "HCORE REU poster session" },
   ];
   const clemsonSecondaryMedia: MediaItem[] = [
-    { type: "image", src: "/about-photo-1.jpg", alt: "Clemson lab work 1" },
-    { type: "image", src: "/hobbies_2.jpg", alt: "Clemson lab work 2" },
+    { type: "image", src: "/clemson.jpg", alt: "Clemson lab work 1" },
+    // { type: "image", src: "/hobbies_2.jpg", alt: "Clemson lab work 2" },
   ];
   return (
     <div className="min-h-screen">
@@ -154,7 +154,7 @@ export default function Experience() {
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                  Mentored by Dr. Yu Xiang, working as part of the Intelligent Robotics and Vision Lab (IRVL)
+                  Mentored by <strong>Dr. Yu Xiang</strong>, working as part of the Intelligent Robotics and Vision Lab (IRVL)
                   at UTD.
                 </p>
 
@@ -236,7 +236,7 @@ export default function Experience() {
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                  Mentored by Professor Tuğçe Işık, I participate in the HCORE NSF REU program in the Department of Industrial
+                  Mentored by <strong>Professor Tuğçe Işık</strong>, I participate in the HCORE NSF REU program in the Department of Industrial
                   Engineering at Clemson University.
                 </p>
 
@@ -289,28 +289,30 @@ export default function Experience() {
               <div className="p-6 border border-white/20 rounded-md bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] transform hover:scale-[1.01] transition-all duration-300">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="text-lg font-semibold">Undergraduate Researcher</h3>
-                    <p className="text-muted-foreground">Computer Vision Lab</p>
+                    <h3 className="text-lg font-semibold">Independent Study</h3>
+                    <p className="text-muted-foreground">
+                      Professor <strong>Mike Panahi</strong> · Collin College
+                    </p>
                   </div>
-                  <span className="text-sm text-muted-foreground">2022 - 2023</span>
+                  <span className="text-sm text-muted-foreground">Sep 2023 - Mar 2024</span>
                 </div>
                 <p className="text-foreground">
-                  Worked on computer vision projects focusing on object detection and pose estimation
-                  for robotic applications.
+                  Researched numerical analysis with iterative solvers (Gauss-Seidel, SOR, Jacobi) and eigenvalue
+                  approximation via Gerschgorin’s Theorems. Implemented algorithm in C, Python, and MATLAB.
                 </p>
               </div>
 
               <div className="p-6 border border-white/20 rounded-md bg-background/30 backdrop-blur-xl backdrop-saturate-150 shadow-[0_14px_40px_rgba(0,0,0,0.22)] transform hover:scale-[1.01] transition-all duration-300">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="text-lg font-semibold">Robotics Club President</h3>
-                    <p className="text-muted-foreground">University Robotics Club</p>
+                    <h3 className="text-lg font-semibold">Computer Science and Mathematics Teacher</h3>
+                    <p className="text-muted-foreground">Private instruction</p>
                   </div>
-                  <span className="text-sm text-muted-foreground">2022 - 2023</span>
+                  <span className="text-sm text-muted-foreground">Feb 2022 - Jun 2025</span>
                 </div>
                 <p className="text-foreground">
-                  Led a team of 15+ students in designing and building competition robots for various
-                  robotics competitions.
+                  Taught 20+ students from middle school to college in Linear Algebra, Calculus, Python, Data
+                  Structures, and OOP.
                 </p>
               </div>
             </div>
