@@ -10,7 +10,7 @@ import Fonts from "./pages/Fonts";
 import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import UpdateAurora from "./pages/UpdateAurora"; 
 import UpdateZephyr from "./pages/UpdateZephyr"; 
 import UpdateSolstice from "./pages/UpdateSolstice"; 
@@ -45,6 +45,7 @@ function Router() {
 
 function App() {
   const [location] = useLocation();
+  const initialPageview = useRef(true);
   useEffect(() => {
     try {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -54,6 +55,20 @@ function App() {
   }, [location]);
   useEffect(() => {
     logVisit(location);
+  }, [location]);
+  useEffect(() => {
+    if (initialPageview.current) {
+      initialPageview.current = false;
+      return;
+    }
+    if (typeof window === "undefined") return;
+    const gtag = (window as any).gtag;
+    if (typeof gtag !== "function") return;
+    gtag("event", "page_view", {
+      page_path: location,
+      page_title: document.title,
+      page_location: window.location.href,
+    });
   }, [location]);
   return (
     <ErrorBoundary>
