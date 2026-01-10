@@ -28,7 +28,9 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
   };
 
   return (
-    <div className="space-y-3 w-full">
+    <div
+      className="space-y-3 w-full"
+    >
       <div className="relative w-full rounded-lg overflow-hidden shadow-sm bg-transparent group">
         <div className="absolute inset-0 flex items-center justify-between p-3 z-10">
           <button

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/utils/analytics";
 
 export default function CV() {
   return (
@@ -17,7 +18,11 @@ export default function CV() {
               className="bg-foreground text-background hover:bg-muted-foreground w-full sm:w-auto"
               asChild
             >
-              <a href="/cv.pdf" download>
+              <a
+                href="/cv.pdf"
+                download
+                onClick={() => trackEvent("cv_download", { file: "/cv.pdf" })}
+              >
                 Download PDF
               </a>
             </Button>

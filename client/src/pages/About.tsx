@@ -9,28 +9,36 @@ type MediaItem = {
 function MediaCarousel({ media }: { media: MediaItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const fadeMs = 400;
+  const base = import.meta.env.BASE_URL || "/";
+  const current = media[currentIndex];
+
+  const switchToIndex = (nextIndex: number) => {
+    if (isSliding || nextIndex === currentIndex) return;
+    setIsSliding(true);
+    setIsFading(true);
+    window.setTimeout(() => {
+      setCurrentIndex(nextIndex);
+      setIsFading(false);
+      setIsSliding(false);
+    }, fadeMs);
+  };
 
   const goToPreviousSlide = () => {
-    if (isSliding) return;
-    setIsSliding(true);
-    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
-    setTimeout(() => setIsSliding(false), 800);
+    switchToIndex((currentIndex - 1 + media.length) % media.length);
   };
 
   const goToNextSlide = () => {
-    if (isSliding) return;
-    setIsSliding(true);
-    setCurrentIndex((prev) => (prev + 1) % media.length);
-    setTimeout(() => setIsSliding(false), 800);
+    switchToIndex((currentIndex + 1) % media.length);
   };
 
   if (!media || media.length === 0) return null;
 
-  const base = import.meta.env.BASE_URL || "/";
-  const current = media[currentIndex];
-
   return (
-    <div className="space-y-4 w-full">
+    <div
+      className="space-y-4 w-full"
+    >
       <div className="relative w-full rounded-lg overflow-hidden shadow-sm group">
         <div className="absolute inset-0 flex items-center justify-between p-4 z-10">
           <button
@@ -58,7 +66,11 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
             const srcUrl = current.src?.startsWith("/") ? base + current.src.slice(1) : current.src;
             if (current.type === "image" || current.type === "gif") {
               return (
-                <div className="w-full h-full rounded-xl border border-white/20 bg-background/20 p-2.5">
+                <div
+                  className={`w-full h-full rounded-xl border border-white/20 bg-background/20 p-2.5 transition-opacity duration-500 ${
+                    isFading ? "opacity-0" : "opacity-100"
+                  }`}
+                >
                   <img
                     src={srcUrl}
                     alt={current.alt}
@@ -71,7 +83,11 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
             }
             if (current.type === "video") {
               return (
-                <div className="w-full h-full rounded-xl border border-white/20 bg-background/20 p-1.5">
+                <div
+                  className={`w-full h-full rounded-xl border border-white/20 bg-background/20 p-1.5 transition-opacity duration-500 ${
+                    isFading ? "opacity-0" : "opacity-100"
+                  }`}
+                >
                   <video
                     src={srcUrl}
                     className="w-full h-auto max-w-full object-contain"
@@ -93,12 +109,8 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
           {media.map((_, idx) => (
             <button
               key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className={`h-2 rounded-full transition-all ${
-                idx === currentIndex
-                  ? "bg-foreground w-8"
-                  : "bg-border w-2 hover:bg-muted-foreground"
-              }`}
+              onClick={() => switchToIndex(idx)}
+              className={`h-2 rounded-full transition-all ${idx === currentIndex ? "bg-foreground w-8" : "bg-border w-2 hover:bg-muted-foreground"}`}
               aria-label={`Go to media ${idx + 1}`}
             />
           ))}

@@ -2,6 +2,7 @@ import React, { useEffect, useState, Suspense, lazy } from "react";
 import { Link } from "wouter";
 import { ModelErrorBoundary } from "@/components/ModelErrorBoundary";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/utils/analytics";
 
 const STLViewer = lazy(() => import("@/components/ThreeSTLViewer"));
 
@@ -70,7 +71,11 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
+  const [isPaused, setIsPaused] = useState(false);
   const videoRefs = React.useRef<{ [key: number]: HTMLVideoElement | null }>({});
+  const autoCycleMs = 15000;
+  const currentItem = media[currentIndex];
+  const isVideo = currentItem?.type === "video";
 
   useEffect(() => {
     Object.values(videoRefs.current).forEach((video) => {
@@ -88,6 +93,15 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
       }
     }
   }, [currentIndex]);
+
+  useEffect(() => {
+    if (media.length <= 1 || isPaused || isVideo) return;
+    const id = window.setInterval(() => {
+      setDirection("right");
+      setCurrentIndex((prev) => (prev + 1) % media.length);
+    }, autoCycleMs);
+    return () => window.clearInterval(id);
+  }, [autoCycleMs, isPaused, isVideo, media.length, currentIndex]);
 
   const goToPreviousSlide = () => {
     if (isSliding) return;
@@ -125,7 +139,13 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
   const base = import.meta.env.BASE_URL || "/";
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={() => setIsPaused(false)}
+    >
       <div className="relative w-full bg-muted rounded-lg overflow-hidden border border-border shadow-sm aspect-video group">
         <div className="absolute inset-0 flex items-center justify-between p-4 z-10 pointer-events-none">
           <button
@@ -200,7 +220,11 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
                         className="w-full h-full object-cover"
                         playsInline
                         muted
-                        loop
+                        loop={false}
+                        onEnded={() => {
+                          if (isPaused) return;
+                          goToNextSlide();
+                        }}
                         preload="metadata"
                       />
                     );
@@ -253,6 +277,10 @@ function MediaCarousel({ media }: { media: MediaItem[] }) {
 }
 
 export default function Publications() {
+  const trackExternal = (url: string, label: string) => {
+    if (!url.startsWith("http")) return;
+    trackEvent("external_link", { link_url: url, link_text: label });
+  };
   const publications: Publication[] = [
     {
       title: "ARMoR: Arm-Based Robot Mobility on a Passive Platform via Reinforcement Learning of Contact-Driven Locomotion",
@@ -415,6 +443,7 @@ export default function Publications() {
                           <a
                             href={pub.links.pdf}
                             className="text-sm text-foreground underline hover:text-muted-foreground transition-colors"
+                            onClick={() => trackExternal(pub.links.pdf as string, pub.links.pdf.toLowerCase().includes("poster") ? "Poster" : "PDF")}
                           >
                             {pub.links.pdf.toLowerCase().includes("poster") ? "Poster" : "PDF"}
                           </a>
@@ -426,6 +455,7 @@ export default function Publications() {
                           <a
                             href={pub.links.arxiv}
                             className="text-sm text-foreground underline hover:text-muted-foreground transition-colors"
+                            onClick={() => trackExternal(pub.links.arxiv as string, "arXiv")}
                           >
                             arXiv
                           </a>
@@ -434,6 +464,7 @@ export default function Publications() {
                           <a
                             href={pub.links.code}
                             className="text-sm text-foreground underline hover:text-muted-foreground transition-colors"
+                            onClick={() => trackExternal(pub.links.code as string, "Code")}
                           >
                             Code
                           </a>

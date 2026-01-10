@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/utils/analytics";
 const LazyFetchHeroViewer = React.lazy(() => import("@/components/FetchHeroViewer"));
 
 interface MediaItem {
@@ -43,6 +44,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
   const [isSliding, setIsSliding] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
   const videoRefs = React.useRef<{ [key: number]: HTMLVideoElement | null }>({});
+  const currentItem = media[currentIndex];
   const slideCooldownMs = reduceMotion ? 0 : 800;
   const transitionMs = reduceMotion ? 0 : 500;
   const visibleIndices = new Set(
@@ -89,7 +91,9 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
   }
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+    >
       <div className="relative w-full bg-muted rounded-lg overflow-hidden border border-border shadow-sm aspect-video group">
         {/* Navigation Arrows */}
         <div className="absolute inset-0 flex items-center justify-between p-4 z-10">
@@ -162,7 +166,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                   className="w-full h-full object-cover"
                   playsInline
                   muted
-                  loop
+                  loop={false}
                   preload={index === currentIndex ? "metadata" : "none"}
                 />
               )}
@@ -475,7 +479,7 @@ export default function Home() {
                     
                     <br /><br />
                     Currently a senior at the University of Texas at Dallas, pursuing a double degree in Computer Science and Mathematics.
-                    I'm seeking opportunities to join a lab as a PhD student at the moment, for all inquires please email <a href="mailto:ixk230032@utdallas.edu" className="text-blue-500 hover:underline">ixk230032@utdallas.edu</a>
+                    I'm seeking opportunities to join a lab as a PhD student at the moment, for all inquires please email <a href="mailto:ixk230032@utdallas.edu" className="text-blue-500 hover:underline" onClick={() => trackEvent("email_click", { email: "ixk230032@utdallas.edu" })}>ixk230032@utdallas.edu</a>
                   </p>
                 </div>
 
@@ -486,6 +490,7 @@ export default function Home() {
                       href={social.href}
                       target="_blank"
                       rel="noreferrer"
+                      onClick={() => trackEvent("external_link", { link_url: social.href, link_text: social.label })}
                       className="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-background/30 backdrop-blur-md text-foreground hover:bg-background/60 transition-colors"
                     >
                       {social.icon}

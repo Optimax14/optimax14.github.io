@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/utils/analytics";
 
 export default function UpdateAutoXSemMap() {
   return (
@@ -24,7 +25,12 @@ export default function UpdateAutoXSemMap() {
             <Link href="/publications">Back to Publications</Link>
           </Button>
           <Button variant="outline" asChild>
-            <a href="https://arxiv.org/abs/2409.15493" target="_blank" rel="noreferrer">
+            <a
+              href="https://arxiv.org/abs/2409.15493"
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => trackEvent("external_link", { link_url: "https://arxiv.org/abs/2409.15493", link_text: "arXiv" })}
+            >
               View arXiv
             </a>
           </Button>
