@@ -9,7 +9,7 @@ import CV from "./pages/CV";
 import Fonts from "./pages/Fonts";
 import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import UpdateAurora from "./pages/UpdateAurora"; 
 import UpdateZephyr from "./pages/UpdateZephyr"; 
@@ -46,6 +46,23 @@ function Router() {
 function App() {
   const [location] = useLocation();
   const initialPageview = useRef(true);
+  const prefersReducedMotion = useReducedMotion();
+  useEffect(() => {
+    const nav = navigator as any;
+    const connection = nav?.connection || nav?.mozConnection || nav?.webkitConnection;
+    const saveData = Boolean(connection?.saveData);
+    const effectiveType = connection?.effectiveType;
+    const deviceMemory = nav?.deviceMemory ?? 8;
+    const cores = nav?.hardwareConcurrency ?? 8;
+    const lowPerf =
+      prefersReducedMotion ||
+      saveData ||
+      effectiveType === "2g" ||
+      effectiveType === "slow-2g" ||
+      deviceMemory <= 8 ||
+      cores <= 8;
+    document.body.dataset.lowMotion = lowPerf ? "true" : "false";
+  }, [prefersReducedMotion]);
   useEffect(() => {
     try {
       window.scrollTo({ top: 0, behavior: "smooth" });

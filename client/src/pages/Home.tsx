@@ -217,14 +217,8 @@ export default function Home() {
   const [heroVisible, setHeroVisible] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
   const startWaveRef = useRef<(() => void) | null>(null); 
-  const shrinkDelayMs = allowRichMotion ? 1000 : 0; // extra time to keep viewport full-screen after intro
+  const shrinkDelayMs = allowRichMotion ? 0 : 0; // extra time to keep viewport full-screen after intro
   const loaderDelayMs = allowRichMotion ? 1000 : 0;
-  useEffect(() => {
-    document.body.dataset.lowMotion = reduceMotion ? "true" : "false";
-    return () => {
-      delete document.body.dataset.lowMotion;
-    };
-  }, [reduceMotion]);
   const featuredUpdates: Update[] = [
     {
       date: "Featured",

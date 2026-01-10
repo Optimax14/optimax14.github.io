@@ -63,6 +63,7 @@ function FetchRobot({
   const { scene, camera } = useThree(); 
 
   useEffect(() => {
+    let cancelled = false;
     // Safety: ensure we never keep a previous robot instance in the scene
     if (robotRef.current) {
       scene.remove(robotRef.current);
@@ -71,7 +72,7 @@ function FetchRobot({
     }
 
     ensureFetchPreload(assetsBase, urdfUrl, onProgress).then((preloaded) => {
-      if (!preloaded) return;
+      if (cancelled || !preloaded) return;
       const robot = preloaded.clone(true);
         robot.rotation.set(-Math.PI / 2, 0, 0);
         scene.add(robot);
@@ -122,6 +123,7 @@ function FetchRobot({
     });
 
     return () => {
+      cancelled = true;
       if (robotRef.current) scene.remove(robotRef.current);
     };
   }, [urdfUrl, assetsBase, scene, camera, onIntroCamera, onReady, onProgress]);
