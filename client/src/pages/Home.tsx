@@ -366,25 +366,21 @@ export default function Home() {
     }, shrinkDelayMs); 
   }; 
 
-  // Lazy-mount hero viewer when in viewport to cut initial LCP
+  // Lazy-mount hero viewer only while in/near viewport to reduce scroll overhead
   const heroRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setHeroVisible(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { root: null, rootMargin: "200px", threshold: 0.1 }
-    );
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    } else {
+    const node = heroRef.current;
+    if (!node) {
       setHeroVisible(true);
+      return;
     }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHeroVisible(entry.isIntersecting);
+      },
+      { root: null, rootMargin: "250px", threshold: 0.12 }
+    );
+    observer.observe(node);
     return () => observer.disconnect();
   }, []);
 

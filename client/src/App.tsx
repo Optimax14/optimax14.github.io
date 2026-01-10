@@ -1,26 +1,25 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import CV from "./pages/CV";
-import Fonts from "./pages/Fonts";
 import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import UpdateAurora from "./pages/UpdateAurora"; 
-import UpdateZephyr from "./pages/UpdateZephyr"; 
-import UpdateSolstice from "./pages/UpdateSolstice"; 
-import UpdateNova from "./pages/UpdateNova"; 
-import UpdateAutoXSemMap from "./pages/UpdateAutoXSemMap";
-import PoseLab from "./pages/PoseLab";
-import About from "./pages/About";
-import Experience from "./pages/Experience";
-import Publications from "./pages/Publications";
+import { Suspense, lazy, useEffect, useRef } from "react";
 import { logVisit } from "./utils/visitLogger";
+
+const Home = lazy(() => import("./pages/Home"));
+const About = lazy(() => import("./pages/About"));
+const Experience = lazy(() => import("./pages/Experience"));
+const Publications = lazy(() => import("./pages/Publications"));
+const CV = lazy(() => import("./pages/CV"));
+const UpdateAurora = lazy(() => import("./pages/UpdateAurora"));
+const UpdateZephyr = lazy(() => import("./pages/UpdateZephyr"));
+const UpdateSolstice = lazy(() => import("./pages/UpdateSolstice"));
+const UpdateNova = lazy(() => import("./pages/UpdateNova"));
+const UpdateAutoXSemMap = lazy(() => import("./pages/UpdateAutoXSemMap"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function Router() {
   return (
@@ -30,7 +29,6 @@ function Router() {
       <Route path={"/experience"} component={Experience} />
       <Route path={"/publications"} component={Publications} />
       <Route path={"/cv"} component={CV} />
-      <Route path={"/fonts"} component={Fonts} />
       <Route path={"/updates/aurora"} component={UpdateAurora} />
       <Route path={"/updates/zephyr"} component={UpdateZephyr} /> 
       <Route path={"/updates/solstice"} component={UpdateSolstice} /> 
@@ -40,6 +38,16 @@ function Router() {
       {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
+  );
+}
+
+function RouteFallback() {
+  return (
+    <div className="section-padding">
+      <div className="container">
+        <div className="text-sm text-muted-foreground">Loading page...</div>
+      </div>
+    </div>
   );
 }
 
@@ -85,7 +93,9 @@ function App() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                <Router />
+                <Suspense fallback={<RouteFallback />}>
+                  <Router />
+                </Suspense>
               </motion.div>
             </main>
             <footer className="border-t border-border py-8 mt-16">

@@ -355,26 +355,3 @@
   }
 }
 
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-@keyframes spin3d {
-  from {
-    transform: rotateY(0deg) rotateX(0deg);
-  }
-  50% {
-    transform: rotateY(180deg) rotateX(6deg);
-  }
-  to {
-    transform: rotateY(360deg) rotateX(0deg);
-  }
-}
