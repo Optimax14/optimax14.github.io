@@ -213,9 +213,11 @@ export default function Home() {
   const allowRichMotion = ANIMATION_ENABLED && !reduceMotion;
   const initialFirstVisit = !sessionStorage.getItem("heroSeen");
   const [firstVisit, setFirstVisit] = useState(initialFirstVisit); 
-  const [compact, setCompact] = useState(() => (!initialFirstVisit || !allowRichMotion ? true : false)); 
-  const [showLoader, setShowLoader] = useState(() => initialFirstVisit && allowRichMotion); 
-  const [contentVisible, setContentVisible] = useState(() => !initialFirstVisit || !allowRichMotion); 
+  // The hero no longer takes over the viewport on first visit: name, title and
+  // affiliation must be readable immediately, with the robot as a supporting element.
+  const [compact, setCompact] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
+  const [contentVisible, setContentVisible] = useState(true); 
   const [introAnimationPlayed, setIntroAnimationPlayed] = useState(() => !initialFirstVisit || !allowRichMotion);
   const [introDone, setIntroDone] = useState(() => !initialFirstVisit || !allowRichMotion); // unlocks head tracking after intro
   const [heroVisible, setHeroVisible] = useState(false);
@@ -226,69 +228,74 @@ export default function Home() {
   const featuredUpdates: Update[] = [
     {
       date: "Featured",
-      title: "ARMoR Platform Demo",
-      description: "Our arm-driven mobility policy in real world deployment.",
+      title: "Layered Control on Cellular Sheaves",
+      description:
+        "First-author submission to IEEE L-CSS: fleet coordination as a constrained harmonic extension on a cellular sheaf, solved by a distributed interior-point method.",
       link: { text: "See more", href: "/publications" },
-      media: [
-        { type: "video", src: "/armor.mp4", alt: "ARMoR clip" },
-      ],
+      media: [{ type: "video", src: "/armor.mp4", alt: "Multi-agent coordination" }],
     },
   ];
   const updatesByYear: Record<string, Update[]> = {
     "2026": [
       {
-        date: "November 2026",
-        title: "Perception + Planning Demo",
-        description: "A focused showcase page for the latest on-device perception and planning demo.",
-        link: { text: "Read More", href: "/updates/nova" },
-        media: [
-          { type: "image", src: "/about-photo-1.jpg", alt: "Perception and planning" },
-          { type: "gif", src: "/Wow.gif", alt: "Demo clip" },
-        ],
+        date: "September 2026",
+        title: "Submitted to IEEE L-CSS / ACC 2027",
+        description:
+          "My first paper as a Ph.D. student, on layered control for multi-agent coordination over cellular sheaves, is under review at IEEE L-CSS with the ACC 2027 joint-submission option.",
+        link: { text: "Read More", href: "/publications" },
+        media: [{ type: "image", src: "/about-photo-1.jpg", alt: "Sheaf coordination" }],
+      },
+      {
+        date: "August 2026",
+        title: "Started my Ph.D. at the University of Florida",
+        description:
+          "Joined the GATAS Lab under Prof. James Fairbanks in Mechanical and Aerospace Engineering, working on multi-agent control, applied category theory, and scientific computing.",
+        link: { text: "Read More", href: "/about" },
+        media: [{ type: "image", src: "/grad_school_1.jpg", alt: "Graduate school" }],
+      },
+      {
+        date: "2026",
+        title: "AutoX-SemMap accepted to the IROS 2026 WORLDS Workshop",
+        description:
+          "Our persistent semantic mapping work, where I built the RGB-D perception pipeline and the dynamic object-updating module, was accepted to the WORLDS workshop at IROS 2026.",
+        link: { text: "Read More", href: "/publications" },
+        media: [{ type: "video", src: "/exploration.mp4", alt: "Autonomous exploration" }],
+      },
+      {
+        date: "2026",
+        title: "RPX dataset released publicly",
+        description:
+          "The RPX robot perception benchmark is now public on Hugging Face: 250 objects across 120 backgrounds, 237 GB, released under CC-BY-4.0.",
+        link: { text: "Read More", href: "/publications" },
+        media: [{ type: "image", src: "/robots.png", alt: "RPX dataset" }],
       },
     ],
     "2025": [
       {
-        date: "October 2025",
-        title: "New Publication at ICRA",
-        description: "Our paper on efficient path planning for mobile robots has been accepted at ICRA 2026.",
-        link: { text: "Read More", href: "/publications" },
-        media: [
-          { type: "image", src: "/about-photo-1.jpg", alt: "Path planning visualization" },
-          { type: "gif", src: "/Wow.gif", alt: "Robot navigation animation" },
-        ],
-      },
-      {
-        date: "September 2025",
-        title: "Human-Robot Collaboration",
-        description: "Achieved significant milestones in adaptive control strategies for robot-human interaction.",
+        date: "May 2025",
+        title: "Joined Handshake AI as an Independent AI Researcher",
+        description:
+          "Authoring and grading PhD-level mathematics and physics tasks used to evaluate frontier agentic models on long-horizon reasoning.",
         link: { text: "Read More", href: "/experience" },
-        media: [
-          { type: "image", src: "/about-photo-1.jpg", alt: "Research progress" },
-          { type: "gif", src: "/Wow.gif", alt: "Robot demonstration" },
-        ],
+        media: [{ type: "image", src: "/about-photo-1.jpg", alt: "AI research" }],
       },
       {
-        date: "August 2025",
-        title: "Graduate Applications",
-        description: "Preparing applications for top robotics programs, focusing on autonomous systems research.",
-        link: { text: "Read More", href: "/about" },
-        media: [
-          { type: "image", src: "/about-photo-1.jpg", alt: "Graduate research" },
-          { type: "gif", src: "/Wow.gif", alt: "Research presentation" },
-        ],
+        date: "May 2025",
+        title: "NSF REU at Clemson University",
+        description:
+          "Co-first-authored an experimental study on how task rotation and cognitive workload affect mental fatigue, worker errors, and task completion times.",
+        link: { text: "Read More", href: "/experience" },
+        media: [{ type: "image", src: "/hcore_final_poster.png", alt: "HCORE REU poster" }],
       },
     ],
     "2024": [
       {
-        date: "November 2024",
-        title: "Perception + Planning Demo",
-        description: "A focused showcase page for the latest on-device perception and planning demo.",
-        link: { text: "Read More", href: "/updates/nova" },
-        media: [
-          { type: "image", src: "/about-photo-1.jpg", alt: "Perception and planning" },
-          { type: "gif", src: "/Wow.gif", alt: "Demo clip" },
-        ],
+        date: "July 2024",
+        title: "Joined the Intelligent Robotics and Vision Lab at UTD",
+        description:
+          "Began research on robotic perception, semantic mapping, and data-driven exploration with Prof. Yu Xiang.",
+        link: { text: "Read More", href: "/experience" },
+        media: [{ type: "image", src: "/soccer_irvl.jpg", alt: "IRVL" }],
       },
     ],
   };
@@ -410,7 +417,7 @@ export default function Home() {
           >
             {/* Left: Interactive Robot Model */} 
             <motion.div 
-              className="relative flex justify-center lg:justify-end -mt-2" 
+              className="relative flex justify-center lg:justify-end order-2" 
               ref={heroRef}
               initial={allowRichMotion ? { opacity: 0, y: 12 } : false} 
               animate={{ opacity: 1, y: 0 }} 
@@ -419,13 +426,13 @@ export default function Home() {
               <motion.div  
                 className="w-full hero-frame"  
                 initial={ 
-                  allowRichMotion && firstVisit 
+                  false
                     ? { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, opacity: 0, y: 12 } 
-                    : { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
+                    : { scale: 1, width: "100%", height: "26rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "0rem", opacity: 1, y: 0 }
                 }
                 animate={
                   compact
-                    ? { scale: 1, width: "100%", height: "48rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "-2rem", opacity: 1, y: 0 }
+                    ? { scale: 1, width: "100%", height: "26rem", position: "relative", top: 0, left: 0, zIndex: 1, marginTop: "0rem", opacity: 1, y: 0 }
                     : { scale: 1, width: "100%", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: 40, marginTop: "0rem", opacity: 1, y: 0 }
                 }
                   transition={allowRichMotion ? { type: "spring", stiffness: 50, damping: 18, opacity: { duration: 0.4 }, y: { duration: 0.4 } } : { duration: 0 }} 
@@ -453,29 +460,27 @@ export default function Home() {
             {/* Right: Text Content (first visit shows after shrink) */}
             {contentVisible && (
             <motion.div
-            className="space-y-6 -mt-4"
+            className="space-y-6 order-1"
                 initial={allowRichMotion ? { opacity: 0, y: 12 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={allowRichMotion ? { duration: 0.5, ease: "easeOut", delay: 0.1 } : { duration: 0 }}
               >
                 <div>
                   <h1 className="text-5xl sm:text-6xl font-bold mb-4">Itay Kadosh</h1>
-                  <p className="text-2xl text-muted-foreground font-light">Robotics Researcher - CS & Math at UTD</p>
+                  <p className="text-2xl text-muted-foreground font-light">Ph.D. Student, Mechanical &amp; Aerospace Engineering at the University of Florida</p>
                 </div>
 
                 <div>
                   <p className="text-lg text-foreground leading-relaxed">
-                    Passionate about advancing general purpose robotics through research and development. My research focuses on developing efficient and effective algorithms for robot perception and planning, with a particular emphasis on real-time applications.
+                    I use deep mathematical structure to make engineering systems elegant and small. My current work models multi-agent control problems with cellular sheaves, a structure from algebraic topology, so that coordination can be solved by the agents themselves rather than by a central computer.
                   </p>
                 </div>
 
                 <div>
                   <p className="text-lg text-foreground leading-relaxed">
-                    Welcome to my personal website. Here you'll find my research, publications, experience, academic background, general updates, and fun things I wanted to share.
-                    
+                    I am a Ph.D. student in Mechanical and Aerospace Engineering at the University of Florida, advised by <strong>Prof. James Fairbanks</strong> in the GATAS Lab, part of the AFOSR University Center of Excellence on Compositional Dynamics, Optimization, and Control. Before Florida I completed a double degree in Computer Science and Applied Mathematics at UT Dallas, where I researched robot perception at IRVL.
                     <br /><br />
-                    Currently a senior at the University of Texas at Dallas, pursuing a double degree in Computer Science and Mathematics.
-                    I'm seeking opportunities to join a lab as a PhD student at the moment, for all inquires please email <a href="mailto:ixk230032@utdallas.edu" className="text-blue-500 hover:underline" onClick={() => trackEvent("email_click", { email: "ixk230032@utdallas.edu" })}>ixk230032@utdallas.edu</a>
+                    For all inquiries please email <a href="mailto:itaykadosh@ufl.edu" className="text-blue-500 hover:underline" onClick={() => trackEvent("email_click", { email: "itaykadosh@ufl.edu" })}>itaykadosh@ufl.edu</a>
                   </p>
                 </div>
 

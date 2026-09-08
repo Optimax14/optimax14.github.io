@@ -147,15 +147,16 @@ export default function About() {
 
             <div className="space-y-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
               <p className="text-lg leading-relaxed">
-                I am a Computer Science and Mathematics student at The University of Texas at Dallas, with a strong passion for robotics and
-                autonomous systems. My journey into robotics began early into my undergraduate, where I was captivated by the
-                potential of machines to perceive, learn, and interact with the world around them.
+                I am a Ph.D. student in Mechanical and Aerospace Engineering at the University of Florida, advised by Prof. James Fairbanks
+                in the GATAS Lab. Before Florida I completed a double Bachelor of Science in Computer Science and Applied Mathematics at
+                The University of Texas at Dallas, where I researched robot perception at the Intelligent Robotics and Vision Lab.
               </p>
 
               <p className="text-lg leading-relaxed">
-                My research interests revolve around developing general purpose robotic systems that can operate effectively in unstructured, unseen environments. 
-                I am interested in creating systems that are rigorously grounded in theory, yet practical and robust enough for real-world applications. 
-                My goal is to bring in my background in mathematics to create concrete systems that push the boundaries of what robots can achieve.
+                My work uses deep mathematical structure to make engineering systems elegant and small. Right now that means modeling multi-agent
+                control problems with cellular sheaves, a structure from algebraic topology that lets coordination be solved by the agents themselves
+                rather than by a central computer. The broader bet is that where engineering usually spends an abundance of computation, a rich enough
+                theory can find a smaller and provably correct solution instead.
               </p>
             </div>
           </div>
@@ -254,10 +255,18 @@ export default function About() {
               <div className="space-y-5">
                 <h2 className="text-2xl font-bold">Education</h2>
                 <div className="space-y-3">
+                  <h3 className="text-lg font-semibold">University of Florida</h3>
+                  <p className="text-lg leading-relaxed">
+                    Ph.D. student in Mechanical and Aerospace Engineering, advised by Prof. James Fairbanks in the GATAS Lab, part of the AFOSR
+                    University Center of Excellence on Compositional Dynamics, Optimization, and Control. My research spans multi-agent control,
+                    applied category and sheaf theory, optimization, and high-performance scientific computing.
+                  </p>
+                </div>
+                <div className="space-y-3">
                   <h3 className="text-lg font-semibold">The University of Texas at Dallas</h3>
                   <p className="text-lg leading-relaxed">
-                    Currently pursuing a double Bachelor of Science (BS) degree in Computer Science and Mathematics with a focus on machine learning and robotics. Additionally part of
-                    the Fast Track program, where I take graduate coursework in Computer science and Mathematics.                    
+                    Completed a double Bachelor of Science (BS) in Computer Science and Applied Mathematics, Magna Cum Laude, with a focus on
+                    machine learning and robotics. I was also part of the Fast Track program, taking graduate coursework in both departments.
                   </p>
                   <p className="text-lg leading-relaxed">
                     For more information, see my CV or contact me directly, I am happy to share my transcript.
@@ -266,19 +275,23 @@ export default function About() {
                 <div className="space-y-3">
                   <h3 className="text-lg font-semibold">Collin College</h3>
                   <p className="text-lg leading-relaxed">
-                    Finished an Associates of Science (AAS) degree with a focus on foundational computer science and mathematics courses.
+                    Finished an Associate of Applied Science (AAS) degree with a focus on foundational computer science and mathematics courses.
                     
                   </p>
                 </div>
               </div>
               <div className="flex flex-col gap-6 items-center self-center text-right mt-2 lg:mt-4">
                 <div className="flex flex-col gap-2 items-center">
+                  <span className="text-lg font-semibold text-center">University of Florida</span>
+                  <span className="text-sm text-muted-foreground">Aug 2026 - Present</span>
+                </div>
+                <div className="flex flex-col gap-2 items-center">
                   <img
                     src="/UT_Dallas_2_Color_Emblem_-_SVG_Brand_Identity_File.svg.png"
                     alt="UTD logo"
                     className="w-24 h-24 object-contain"
                   />
-                  <span className="text-sm text-muted-foreground">Jan 2024 - Jun 2026</span>
+                  <span className="text-sm text-muted-foreground">Jan 2024 - May 2026</span>
                 </div>
                 <div className="flex flex-col gap-2 items-center">
                   <img

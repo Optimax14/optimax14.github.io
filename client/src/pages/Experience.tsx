@@ -121,6 +121,54 @@ export default function Experience() {
         <div className="container max-w-7xl">
           <h1 className="text-4xl font-bold mb-12">Experience</h1>
 
+          {/* UF PhD Section */}
+          <div className="mb-20">
+            <h2 className="text-3xl font-bold mb-8">Ph.D. Researcher</h2>
+
+            <div className="space-y-4 mb-12">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="text-left">
+                  <h3 className="text-2xl font-semibold">Graduate Research Assistant</h3>
+                  <p className="text-lg text-muted-foreground">
+                    University of Florida - GATAS Lab, Mechanical and Aerospace Engineering
+                  </p>
+                </div>
+                <p className="text-lg text-muted-foreground whitespace-nowrap">Aug 2026 - Present</p>
+              </div>
+              <p className="text-lg leading-relaxed">
+                Advised by <strong>Prof. James Fairbanks</strong>, in the AFOSR University Center of Excellence on Compositional
+                Dynamics, Optimization, and Control. My work models multi-agent coordination as a constrained harmonic extension
+                on a cellular sheaf, solved by a direct distributed interior-point method, so that all inter-agent communication is
+                confined to one layer and the fleet coordinates without a central computer.
+              </p>
+              <p className="text-lg leading-relaxed">
+                My first paper here, on which I am first author, is under review at IEEE L-CSS with the ACC 2027 joint-submission
+                option. I also contribute to <a href="https://github.com/AlgebraicJulia/CellularSheaves.jl" className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">CellularSheaves.jl</a>,
+                the open-source Julia package underlying that work, where I wrote the distributed harmonic-extension solver,
+                closed-loop MPC for multi-agent tracking, and a Tikhonov filter with analytic feedforward.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Alongside the research, I brought the lab onto a <strong>Claude for Science</strong> team plan and ran a series of
+                Claude Code lectures, bringing 11 graduate and undergraduate researchers to power-user fluency across the CLI
+                workflow, agent loops, plugins and MCP tooling, and generating publication figures and slide decks.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="text-left">
+                  <h3 className="text-2xl font-semibold">Independent AI Researcher</h3>
+                  <p className="text-lg text-muted-foreground">Handshake AI</p>
+                </div>
+                <p className="text-lg text-muted-foreground whitespace-nowrap">May 2025 - Nov 2025</p>
+              </div>
+              <p className="text-lg leading-relaxed">
+                I author and grade PhD-level mathematics and physics tasks used to evaluate frontier agentic models on
+                long-horizon, multi-step reasoning.
+              </p>
+            </div>
+          </div>
+
           {/* UTD Robotics Researcher Section */}
           <div className="mb-20">
             <h2 className="text-3xl font-bold mb-8">Robotics Researcher</h2>
@@ -150,19 +198,19 @@ export default function Experience() {
                       decoding="async"
                     />
                     <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
-                      Jul 2024 - Present
+                      Jul 2024 - May 2026
                     </span>
                   </div>
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                  Mentored by <strong>Dr. Yu Xiang</strong>, working as part of the Intelligent Robotics and Vision Lab (IRVL)
+                  Mentored by <strong>Dr. Yu Xiang</strong>, I worked as part of the Intelligent Robotics and Vision Lab (IRVL)
                   at UTD.
                 </p>
 
                 <p className="text-foreground leading-relaxed">
-                  Conducting research on autonomous robotics with a focus on robotic perception and applications of machine learning for mapping.
-                  Working on projects involving SLAM, path planning, and robot localization using ROS and machine learning techniques.
+                  Conducted research on autonomous robotics with a focus on robotic perception and applications of machine learning for mapping.
+                  Worked on projects involving SLAM, path planning, and robot localization using ROS and machine learning techniques.
                 </p>
 
                 <p className="text-foreground leading-relaxed">
@@ -232,13 +280,13 @@ export default function Experience() {
                       />
                     </div>
                     <span className="text-sm text-muted-foreground whitespace-nowrap font-medium">
-                      May 2025 - Present
+                      May 2025 - Nov 2025
                     </span>
                   </div>
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                  Mentored by <strong>Professor Tuğçe Işık</strong>, I participate in the HCORE NSF REU program in the Department of Industrial
+                  Mentored by <strong>Professor Tuğçe Işık</strong>, I participated in the HCORE NSF REU program in the Department of Industrial
                   Engineering at Clemson University.
                 </p>
 

@@ -492,7 +492,7 @@ useEffect(() => {
           cameraRef.current = camera as THREE.PerspectiveCamera; 
         }} 
       > 
-        <color attach="background" args={["#ffffff"]} />
+        {/* transparent: the dark hero frame provides the backdrop */}
         <ambientLight intensity={0.35} color={0xffffff} />
         <directionalLight position={[6, 10, 6]} intensity={1.1} color={0xffffff} castShadow={!isLowPerf} shadow-mapSize={[shadowMapSize, shadowMapSize] as any} />
         <directionalLight position={[-5, 5, -5]} intensity={0.5} color={0xffffff} />
@@ -504,7 +504,7 @@ useEffect(() => {
           receiveShadow  
         >  
           <circleGeometry args={[2, floorSegments]} />  
-          <meshStandardMaterial color="#bcc2cc" roughness={0.92} metalness={0.0} />  
+          <meshStandardMaterial color="#1b2130" roughness={0.95} metalness={0.0} />  
         </mesh>  
         {!isLowPerf && (
           <ContactShadows  

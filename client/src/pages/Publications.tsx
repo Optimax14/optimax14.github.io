@@ -33,36 +33,20 @@ interface Publication {
     pdf: string | null;
     arxiv: string | null;
     code: string | null;
+    dataset?: string | null;
   };
 }
 
 function SpinningQuestion() {
-  const cycle = ["Coming soon", "Coming soon.", "Coming soon..", "Coming soon..."];
-  const [idx, setIdx] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setIdx((prev) => (prev + 1) % cycle.length);
-    }, 1100);
-    return () => clearInterval(t);
-  }, [cycle.length]);
-
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-4">
-      <div
-        className="w-24 h-24 rounded-full shadow-lg flex items-center justify-center text-white text-4xl font-black"
-        style={{
-          background: "linear-gradient(135deg, #4f46e5 0%, #8b5cf6 50%, #22d3ee 100%)",
-          animation: "spin 1.8s linear infinite",
-          boxShadow: "0 16px 40px rgba(0,0,0,0.25)",
-        }}
-        aria-label="Coming soon"
-      >
-        ?
+    <div className="flex flex-col items-center justify-center h-full gap-3 px-6 text-center">
+      <div className="w-10 h-10 rounded-full border border-border/70 flex items-center justify-center text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <path d="M14 2v6h6" />
+        </svg>
       </div>
-      <div className="text-lg font-semibold tracking-wide">
-        <span>{cycle[idx]}</span>
-      </div>
+      <p className="text-sm text-muted-foreground">Figures available on publication</p>
     </div>
   );
 }
@@ -283,14 +267,73 @@ export default function Publications() {
   };
   const publications: Publication[] = [
     {
+      title: "A Layered Control Architecture for Multi-Agent Coordination on Cellular Sheaves with a Constrained Harmonic Extension",
+      authors: "<strong>Itay Kadosh</strong>, Richard Samuelson, James P. Fairbanks",
+      venue: "Submitted to IEEE L-CSS (ACC 2027 joint option) - GATAS Lab, University of Florida",
+      year: 2026,
+      monthYear: "Sep 2026",
+      status: "Under Review",
+      abstract:
+        "A layered control architecture for multi-agent formation control and target tracking. The coordinated configuration is a harmonic extension on a cellular sheaf subject to convex constraints, computed by a direct distributed interior-point solver to which all inter-agent communication is confined. We prove the composite closed loop is input-to-state stable with respect to target motion, and the solver gives each agent a disjoint slice of the factorization at O(log n) communication rounds against Theta(n) for a central coordinator.",
+      media: [
+        { type: "image", src: "", alt: "Coming soon" },
+      ],
+      links: { pdf: null, arxiv: null, code: "https://github.com/AlgebraicJulia/CellularSheaves.jl" },
+    },
+    {
+      title: "Build Once, Monitor Continuously: Persistent Semantic Mapping via Autonomous Exploration and Open-Vocabulary Object Updates",
+      authors: "Sai Haneesh Allu, <strong>Itay Kadosh</strong>, Tyler Summers, Yu Xiang",
+      venue: "IROS 2026 WORLDS Workshop (Accepted) - IRVL",
+      year: 2026,
+      monthYear: "Sep 2024",
+      status: "Published",
+      abstract:
+        "Autonomous exploration and semantic map updates for large indoor spaces. I implemented the RGB-D perception pipeline, fine-tuning GroundingDINO and SAM 2 for open-set detection and fusing depth into point clouds, along with the dynamic object-updating module that decides whether a live detection is a previously seen object or a new one.",
+      media: [
+        { type: "image", src: "/autox_main_fig.png", alt: "AutoX-SemMap system overview" },
+        { type: "video", src: "/exploration.mp4", alt: "AutoX-SemMap exploration demo" },
+      ],
+      readMore: "/updates/autox-semmap",
+      links: { pdf: "https://arxiv.org/pdf/2409.15493.pdf", arxiv: "https://arxiv.org/abs/2409.15493", code: "https://github.com/IRVLUTD/AutoX-SemMap" },
+    },
+    {
+      title: "RPX (Robot Perception X): Benchmark & Dataset for Robotics Perception Tasks",
+      authors: "<strong>Itay Kadosh</strong>*, Jishnu Jaykumar*, Sai Haneesh Allu, Yu Xiang",
+      venue: "Submitted to ICRA 2027 - IRVL",
+      year: 2026,
+      monthYear: "Sep 2026",
+      status: "Under Review",
+      abstract:
+        "RPX is a real-world RGB-D benchmark and dataset for evaluating vision foundation models under embodied deployment conditions: 250 objects captured against 120 backgrounds, with tasks spanning unseen object instance segmentation, visual and spatial grounding, next-best-view prediction, novel view synthesis, monocular depth, and camera pose estimation. Now public on Hugging Face at 237 GB under CC-BY-4.0, with an evaluation package so other researchers can plug in their own models.",
+      media: [
+        { type: "image", src: "/robots.png", alt: "RPX dataset" },
+      ],
+      links: { pdf: null, arxiv: null, code: null, dataset: "https://huggingface.co/datasets/IRVLUTD/RPX" },
+    },
+    {
+      title: "IntelX: Coverage Prediction for Efficient Indoor Robot Exploration",
+      authors: "Saurav Dosi, <strong>Itay Kadosh</strong>, Yu Xiang",
+      venue: "Submitted to ICRA 2027 - IRVL",
+      year: 2026,
+      monthYear: "Sep 2026",
+      status: "Under Review",
+      abstract:
+        "Indoor exploration driven by learned coverage prediction. We convert real architectural blueprints into occupancy maps, generate a roughly 1M-sample exploration dataset, and train a ResNet-based local planner that predicts the highest coverage gain within a radius of the robot, paired with a memory-based global planner that balances local gain against long-term efficiency.",
+      media: [
+        { type: "image", src: "", alt: "Coming soon" },
+      ],
+      readMore: "#",
+      links: { pdf: null, arxiv: null, code: null },
+    },
+    {
       title: "ARMoR: Arm-Based Robot Mobility on a Passive Platform via Reinforcement Learning of Contact-Driven Locomotion",
       authors: "<strong>Itay Kadosh</strong>*, Daniel Kadosh*, Robert Teal*, Keval Shah*",
-      venue: "Coming soon",
+      venue: "Course project, CS 6341 Robotics - UT Dallas",
       year: 2025,
-      monthYear: "Jan 2025",
+      monthYear: "Aug 2025",
       status: "In Progress",
       abstract:
-        "This project presents a novel arm-driven mobility approach where a passive platform is locomoted by coordinated arm motions learned through reinforcement learning, achieving robust contact-driven locomotion. ",
+        "A mobile manipulator paradigm that replaces a motorized base with a passive omni-wheel platform driven solely by a high-DOF arm. We designed a low-cost 3D-printed holonomic base around the open-source LeRobot SO101 arm and trained contact-driven locomotion policies in NVIDIA Isaac Sim with many parallel robots.",
       media: [
         {
           type: "model",
@@ -303,69 +346,19 @@ export default function Publications() {
       links: { pdf: null, arxiv: null, code: null },
     },
     {
-      title: "AutoX-SemMap: Autonomous Exploration and Semantic Updating of Large-Scale Indoor Environments with Mobile Robots",
-      authors: "Sai Haneesh Allu, <strong>Itay Kadosh</strong>, Tyler Summers, Yu Xiang",
-      venue: "ICRA 2026 (Under Review) - IRVL",
-      year: 2024,
-      monthYear: "Sep 2024",
-      status: "Under Review",
-      abstract:
-        "Autonomous exploration + semantic map updates for large indoor spaces. GroundingDINO/SAMv2 RGB-D fusion with dynamic object association; under review at ICRA 2026.",
-      media: [
-        { type: "image", src: "/autox_main_fig.png", alt: "AutoX-SemMap system overview" },
-        { type: "video", src: "/exploration.mp4", alt: "AutoX-SemMap exploration demo" },
-      ],
-      readMore: "/updates/autox-semmap",
-      links: { pdf: "https://arxiv.org/pdf/2409.15493.pdf", arxiv: "https://arxiv.org/abs/2409.15493", code: "https://github.com/IRVLUTD/AutoX-SemMap" },
-    },
-    {
-      title: "IntelX: Coverage Prediction for Efficient Indoor Robot Exploration",
-      authors: "Saurav Dosi, <strong>Itay Kadosh</strong>, Yu Xiang",
-      venue: "Intelligent Robotics and Vision Laboratory (IRVL)",
-      year: 2025,
-      monthYear: "Present",
-      status: "In Progress",
-      abstract:
-        "This work presents a novel approach to indoor exploration using coverage prediction models to optimize robot paths. Using a Unet Segmentation Regression approach for map coverage prediction locally as well as a novel global planner, we demonstrate improved exploration efficiency in complex indoor environments.",
-      media: [
-        { type: "image", src: "", alt: "Coming soon" },
-      ],
-      readMore: "#",
-      links: { pdf: null, arxiv: null, code: null },
-    },
-
-
-
-    {
-      title: "RPX (Robot Perception X): Benchmark & Dataset for Robotics Perception Tasks",
-      authors: "<strong>Itay Kadosh</strong>*, Jishnu Jaykumar*, Sai Haneesh Allu, Yu Xiang",
-      venue: "Intelligent Robotics and Vision Laboratory (IRVL)",
-      year: 2025,
-      monthYear: "Present",
-      status: "In Progress",
-      abstract:
-        "This work presents RPX, a comprehensive real-world perception benchmark and dataset for evaluating robotics perception tasks including object detection, segmentation, pose estimation, and other tasks in indoor environments. RPX aims to facilitate advancements in robotic perception by providing diverse scenarios and standardized evaluation metrics.",
-      media: [
-        { type: "image", src: "", alt: "Coming soon" },
-      ],
-      links: { pdf: null, arxiv: null, code: null },
-    },
-
-    {
       title: "Measuring the Effects of Mental Fatigue on Worker Performance Through Task Rotations",
       authors: "Toni Dismuke*, <strong>Itay Kadosh</strong>*, Emily Yuan*, Shirin Ghasemi, David Neyens, Tugce Isik",
-      venue: "Department of Industrial Engineering, Clemson University",
+      venue: "Department of Industrial Engineering, Clemson University - in preparation for IISE 2027",
       year: 2025,
       monthYear: "Nov 2025",
-      status: "Under Review",
+      status: "In Progress",
       abstract:
-        "Experimental study on how task rotations impact mental fatigue and worker performance using multimodal measures. Full paper under review; coming soon.",
+        "A within-subject experimental study of how task rotations with varying cognitive workload and complexity affect mental fatigue and worker performance, across six manual, procedural, and diagnostic tasks under realistic industrial noise. We collected completion times, video-coded error counts, and NASA-TLX workload ratings.",
       media: [
         { type: "image", src: "/hcore_final_poster.png", alt: "HCORE REU final poster" },
       ],
       links: { pdf: "/HCORE-poster-final.pdf", arxiv: null, code: null },
     },
-
     {
       title: "Reinforcement Learning for Robotics and Autonomous Mobility",
       authors: "<strong>Itay Kadosh</strong> and Hyeonduk Sim",
@@ -374,7 +367,7 @@ export default function Publications() {
       monthYear: "May 2025",
       status: "Finished",
       abstract:
-        "A comprehensive course report exploring reinforcement learning techniques for robotics and autonomous mobility. Covers problem formulation, policy optimization, simulation experiments, and analysis of control strategies.",
+        "A course report exploring reinforcement learning techniques for robotics and autonomous mobility. Covers problem formulation, policy optimization, simulation experiments, and analysis of control strategies.",
       media: [
         { type: "image", src: "/report_cover.png", alt: "Report cover" },
       ],
@@ -469,7 +462,16 @@ export default function Publications() {
                             Code
                           </a>
                         )}
-                        {!pub.links.pdf && !pub.links.arxiv && !pub.links.code && (
+                        {pub.links.dataset && (
+                          <a
+                            href={pub.links.dataset}
+                            className="text-sm text-foreground underline hover:text-muted-foreground transition-colors"
+                            onClick={() => trackExternal(pub.links.dataset as string, "Dataset")}
+                          >
+                            Dataset
+                          </a>
+                        )}
+                        {!pub.links.pdf && !pub.links.arxiv && !pub.links.code && !pub.links.dataset && (
                           <span className="text-sm text-muted-foreground italic">Links and paper coming soon</span>
                         )}
                         {pub.readMore && (
