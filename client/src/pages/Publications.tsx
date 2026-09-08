@@ -276,7 +276,7 @@ export default function Publications() {
       abstract:
         "A layered control architecture for multi-agent formation control and target tracking. The coordinated configuration is a harmonic extension on a cellular sheaf subject to convex constraints, computed by a direct distributed interior-point solver to which all inter-agent communication is confined. We prove the composite closed loop is input-to-state stable with respect to target motion, and the solver gives each agent a disjoint slice of the factorization at O(log n) communication rounds against Theta(n) for a central coordinator.",
       media: [
-        { type: "image", src: "", alt: "Coming soon" },
+        { type: "image", src: "/sheaf_architecture.jpg", alt: "Layered control architecture: coordination layer, reference filter, per-agent execution" },
       ],
       links: { pdf: null, arxiv: null, code: "https://github.com/AlgebraicJulia/CellularSheaves.jl" },
     },
@@ -306,7 +306,8 @@ export default function Publications() {
       abstract:
         "RPX is a real-world RGB-D benchmark and dataset for evaluating vision foundation models under embodied deployment conditions: 250 objects captured against 120 backgrounds, with tasks spanning unseen object instance segmentation, visual and spatial grounding, next-best-view prediction, novel view synthesis, monocular depth, and camera pose estimation. Now public on Hugging Face at 237 GB under CC-BY-4.0, with an evaluation package so other researchers can plug in their own models.",
       media: [
-        { type: "image", src: "/robots.png", alt: "RPX dataset" },
+        { type: "video", src: "/rpx.mp4", alt: "RPX capture modalities" },
+        { type: "image", src: "/rpx_modalities.jpg", alt: "RPX modalities: third-person, camera pose, RGB, depth, masks and fisheye views" },
       ],
       links: { pdf: null, arxiv: null, code: null, dataset: "https://huggingface.co/datasets/IRVLUTD/RPX" },
     },

@@ -141,7 +141,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                 <img
                   src={item.src}
                   alt={item.alt}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain bg-black/20"
                   loading="lazy"
                   decoding="async"
                   fetchPriority="low"
@@ -151,7 +151,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                 <img
                   src={item.src}
                   alt={item.alt}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain bg-black/20"
                   loading="lazy"
                   decoding="async"
                   fetchPriority="low"
@@ -163,7 +163,7 @@ function MediaCarousel({ media, reduceMotion = false }: { media: MediaItem[]; re
                     videoRefs.current[index] = el;
                   }}
                   src={item.src}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain bg-black/20"
                   playsInline
                   muted
                   loop={false}
@@ -225,14 +225,49 @@ export default function Home() {
   const startWaveRef = useRef<(() => void) | null>(null); 
   const shrinkDelayMs = allowRichMotion ? 0 : 0; // extra time to keep viewport full-screen after intro
   const loaderDelayMs = allowRichMotion ? 1000 : 0;
+  // Featured: the projects themselves, each with imagery that actually shows the work.
   const featuredUpdates: Update[] = [
     {
-      date: "Featured",
+      date: "First author",
       title: "Layered Control on Cellular Sheaves",
       description:
-        "First-author submission to IEEE L-CSS: fleet coordination as a constrained harmonic extension on a cellular sheaf, solved by a distributed interior-point method.",
+        "Fleet coordination as a constrained harmonic extension on a cellular sheaf, solved by a distributed interior-point method at O(log n) communication rounds. Submitted to IEEE L-CSS with the ACC 2027 joint option.",
       link: { text: "See more", href: "/publications" },
-      media: [{ type: "video", src: "/armor.mp4", alt: "Multi-agent coordination" }],
+      media: [
+        { type: "image", src: "/sheaf_architecture.jpg", alt: "Layered control architecture: coordination layer, reference filter, per-agent execution" },
+      ],
+    },
+    {
+      date: "Co-first author",
+      title: "RPX — Robot Perception X",
+      description:
+        "A real-world RGB-D benchmark for vision foundation models: 250 objects across 120 backgrounds, with segmentation, grounding, next-best-view, depth and pose tasks. Public on Hugging Face, submitted to ICRA 2027.",
+      link: { text: "See more", href: "/publications" },
+      media: [
+        { type: "video", src: "/rpx.mp4", alt: "RPX capture modalities" },
+        { type: "image", src: "/rpx_modalities.jpg", alt: "RPX modalities: third-person, camera pose, RGB, depth, masks and fisheye views" },
+      ],
+    },
+    {
+      date: "IROS 2026 Workshop",
+      title: "Persistent Semantic Mapping",
+      description:
+        "Autonomous exploration with open-vocabulary object updates. I built the RGB-D perception pipeline, fine-tuning GroundingDINO and SAM 2, plus the dynamic object-updating module.",
+      link: { text: "See more", href: "/publications" },
+      media: [
+        { type: "image", src: "/autox_main_fig.png", alt: "AutoX-SemMap system overview" },
+        { type: "video", src: "/exploration.mp4", alt: "Autonomous exploration run" },
+      ],
+    },
+    {
+      date: "Project",
+      title: "ARMoR — Arm-Driven Mobility",
+      description:
+        "A passive omni-wheel platform locomoted entirely by a high-DOF arm, with contact-driven policies trained in NVIDIA Isaac Sim.",
+      link: { text: "See more", href: "/publications" },
+      media: [
+        { type: "video", src: "/armor.mp4", alt: "ARMoR platform clip" },
+      ],
     },
   ];
   const updatesByYear: Record<string, Update[]> = {
@@ -241,9 +276,9 @@ export default function Home() {
         date: "September 2026",
         title: "Submitted to IEEE L-CSS / ACC 2027",
         description:
-          "My first paper as a Ph.D. student, on layered control for multi-agent coordination over cellular sheaves, is under review at IEEE L-CSS with the ACC 2027 joint-submission option.",
+          "My first paper as a Ph.D. student, on layered control for multi-agent coordination over cellular sheaves, is under review.",
         link: { text: "Read More", href: "/publications" },
-        media: [{ type: "image", src: "/about-photo-1.jpg", alt: "Sheaf coordination" }],
+        media: [{ type: "image", src: "/sheaf_architecture.jpg", alt: "Layered control architecture" }],
       },
       {
         date: "August 2026",
@@ -251,13 +286,13 @@ export default function Home() {
         description:
           "Joined the GATAS Lab under Prof. James Fairbanks in Mechanical and Aerospace Engineering, working on multi-agent control, applied category theory, and scientific computing.",
         link: { text: "Read More", href: "/about" },
-        media: [{ type: "image", src: "/grad_school_1.jpg", alt: "Graduate school" }],
+        media: [{ type: "image", src: "/gatas_logo.png", alt: "GATAS Lab" }],
       },
       {
         date: "2026",
-        title: "AutoX-SemMap accepted to the IROS 2026 WORLDS Workshop",
+        title: "Accepted to the IROS 2026 WORLDS Workshop",
         description:
-          "Our persistent semantic mapping work, where I built the RGB-D perception pipeline and the dynamic object-updating module, was accepted to the WORLDS workshop at IROS 2026.",
+          "Our persistent semantic mapping work was accepted to the WORLDS workshop at IROS 2026.",
         link: { text: "Read More", href: "/publications" },
         media: [{ type: "video", src: "/exploration.mp4", alt: "Autonomous exploration" }],
       },
@@ -265,25 +300,25 @@ export default function Home() {
         date: "2026",
         title: "RPX dataset released publicly",
         description:
-          "The RPX robot perception benchmark is now public on Hugging Face: 250 objects across 120 backgrounds, 237 GB, released under CC-BY-4.0.",
+          "The RPX benchmark is now public on Hugging Face: 237 GB under CC-BY-4.0, with an evaluation package for other researchers.",
         link: { text: "Read More", href: "/publications" },
-        media: [{ type: "image", src: "/robots.png", alt: "RPX dataset" }],
+        media: [{ type: "image", src: "/rpx_modalities.jpg", alt: "RPX capture modalities" }],
       },
     ],
     "2025": [
       {
-        date: "May 2025",
-        title: "Joined Handshake AI as an Independent AI Researcher",
+        date: "May 2025 - Present",
+        title: "Independent AI Researcher at Handshake AI",
         description:
           "Authoring and grading PhD-level mathematics and physics tasks used to evaluate frontier agentic models on long-horizon reasoning.",
         link: { text: "Read More", href: "/experience" },
-        media: [{ type: "image", src: "/about-photo-1.jpg", alt: "AI research" }],
+        media: [{ type: "image", src: "/handshake.jpg", alt: "Handshake" }],
       },
       {
         date: "May 2025",
         title: "NSF REU at Clemson University",
         description:
-          "Co-first-authored an experimental study on how task rotation and cognitive workload affect mental fatigue, worker errors, and task completion times.",
+          "Co-authored an experimental study on how task rotation and cognitive workload affect mental fatigue, worker errors, and task completion times.",
         link: { text: "Read More", href: "/experience" },
         media: [{ type: "image", src: "/hcore_final_poster.png", alt: "HCORE REU poster" }],
       },
@@ -295,7 +330,7 @@ export default function Home() {
         description:
           "Began research on robotic perception, semantic mapping, and data-driven exploration with Prof. Yu Xiang.",
         link: { text: "Read More", href: "/experience" },
-        media: [{ type: "image", src: "/soccer_irvl.jpg", alt: "IRVL" }],
+        media: [{ type: "image", src: "/robots.png", alt: "IRVL robot platforms" }],
       },
     ],
   };
