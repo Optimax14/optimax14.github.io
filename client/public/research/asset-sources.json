@@ -1,0 +1,30 @@
+{
+  "verified": "2026-10-30",
+  "pathpack": {
+    "file": "pathpack-project.webp",
+    "source": "https://algebraicjulia.github.io/PATHPACK.jl/dev/how-it-works",
+    "description": "Actual graph and reordered matrix canvases exported from the public explainer at its Reorder step; arranged without cropping and labelled for this portfolio. Illustrative example, not benchmark data.",
+    "reproduce": [
+      "node scripts/export-pathpack-panels.mjs",
+      "python3 scripts/prepare-pathpack-figure.py"
+    ]
+  },
+  "intelx": {
+    "file": "intelx-predictions.webp",
+    "source": "https://irvlutd.github.io/IntelX/static/img/fig3_prediction.webp",
+    "description": "Public coverage-gain targets and predictions, including direction-rank-reversal failure; compressed to WebP. Credit: IntelX team."
+  },
+  "autox": {
+    "file": "../media/autox.webp",
+    "source": "https://irvlutd.github.io/SemanticMapping/assets/images/overview.png",
+    "description": "Public system overview, web-compressed from the existing repository copy. Credit: AutoX-SemMap team."
+  },
+  "rpx": {
+    "provenance": "rpx/media-attribution.json",
+    "license": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "fetch": {
+    "provenance": "fetch/credits.json",
+    "optimization": "fetch/optimization.json"
+  }
+}

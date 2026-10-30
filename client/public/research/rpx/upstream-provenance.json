@@ -1,0 +1,228 @@
+{
+  "images": [
+    {
+      "file": "rpx-overview.webp",
+      "source": "rpx-hero-nolabels.pdf (paper Fig. 1 without panel labels, 2026-10-14) rendered at 335 dpi, resized to 2400 px wide",
+      "sha256": "df9a9a494f4bcb19181dcf0d1531550efd4be35e44fc31f6089f2a1edeff33ac",
+      "description": "RPX overview figure (redesigned Fig. 1 hero, no panel labels) on a white background"
+    },
+    {
+      "file": "hero-interaction.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "855790195e9c9f384d4883092191b99b9eecfee2159203ddd175cbb013c767bd",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "clutter.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00067 at dataset revision 51432e5",
+      "sha256": "46f0643ef81d196f583019e4869b19716e763cfa5da8cc77c56de002a303b78f",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "interaction.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "855790195e9c9f384d4883092191b99b9eecfee2159203ddd175cbb013c767bd",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "clean.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00080 at dataset revision 51432e5",
+      "sha256": "c91e9cdb23fc4011b871bee93492f09bb58a6797ce17e6b7618dbe6bf1ca5a5c",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "ego.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00149 at dataset revision 51432e5",
+      "sha256": "9c6dc455bc054df4c4cfcf2efe65367e619dd47bfc8064e7db31938c9ed0a21e",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "rgb.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "bf4704e6fdd7dac2ebedd2af7128dcb66f3091662b286ba21dd1dc6db9cb9cec",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "depth.png",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "19a5351da248b8f70b7eec2e387cc0d1651c2e250f1be79d652ec87918246388",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "mask.png",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "6a2007ec4bb8eb83ec7be95a53e45e678e3810485203697592558c364eb0460d",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "stereo-left.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "8d289ddf455bddce292542ad7ebab4ec91ad2668ca9d8605ce82549ce01f11a5",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "stereo-right.jpg",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "5d23a6863c13c8cf232dabcfc79a593c8423d0d7a063c8a7bd06e86ed4875791",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "mask-annotation.png",
+      "source": "User-supplied mask annotation workflow figure (image.png)",
+      "sha256": "341d12421da394590e552b610d844072e60a5d30db4563735bbbf96ea6907908",
+      "description": "Original supplied PNG; original pixels preserved"
+    },
+    {
+      "file": "rpx-hero-light.webp",
+      "source": "tools/docs/hero/build_hero.py with tools/docs/hero/hero_data.json (paper Tables III-VI, Fig. 4) and scene049 guide images",
+      "sha256": "fa6bb30ab974031818e4a32756a0570ec67b947ed5ee8890343c7864c1090d7d",
+      "description": "README banner, light theme: tools/docs/hero/build_hero.py --variant full --theme light"
+    },
+    {
+      "file": "rpx-finding-light.webp",
+      "source": "tools/docs/hero/build_hero.py with tools/docs/hero/hero_data.json (paper Tables III-VI, Fig. 4) and scene049 guide images",
+      "sha256": "f29545d3c02f69ae2b73d8c577243786accc8c225b63c05e4fd8c43035804f00",
+      "description": "Docs home figure, light theme: build_hero.py --variant panel --theme light"
+    },
+    {
+      "file": "rpx-finding-dark.webp",
+      "source": "tools/docs/hero/build_hero.py with tools/docs/hero/hero_data.json (paper Tables III-VI, Fig. 4) and scene049 guide images",
+      "sha256": "39e056cfa32202d25f629fa6a65cccd9ba2ad1597cc49558c9fd643cc3e7474d",
+      "description": "Docs home figure, dark theme: build_hero.py --variant panel --theme dark"
+    },
+    {
+      "file": "scene049-rgb.png",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "af2cf8c22c3b9613c0cb12acb99ebbeb510d15bf5a83d061a591f93755ebe0af",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "scene049-next.png",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00186 at dataset revision 51432e5",
+      "sha256": "6a34c6394bb3ee0b38b000d333248cb3899c46a0e0a8be52e8d6525164e5fcf1",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "scene049-depth.png",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; frame 00185 at dataset revision 51432e5",
+      "sha256": "19a5351da248b8f70b7eec2e387cc0d1651c2e250f1be79d652ec87918246388",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    },
+    {
+      "file": "scene049-sos-reference.png",
+      "source": "scene049 (Hard, capture site 10) via tools/docs/build_scene_media.py; objects/lion.2 frame 329 at dataset revision 51432e5",
+      "sha256": "addd270ad5926b07bf5de358064ef6ff6c090d393980dda9f09eb3de8a559096",
+      "description": "Released RPX capture; masks are the released SAM 2 labels"
+    }
+  ],
+  "workflow_figures": [
+    {
+      "file": "add-metrics.svg",
+      "sha256": "7d7b402825c2a181a0dfa2b4c260685fd55bc185b67638e8a0f60de28adcab85",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "add-tasks.svg",
+      "sha256": "191a98a0ebecc9ce11dad127cdaf709ab7b78281157ffb111196091b54488c9f",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "benchmark-t1.svg",
+      "sha256": "8e260dee6bf0c16e37cca66eb3d4c6b71e97d0fd38aecaaabaa1c7a8c6fb4525",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "benchmark-t2.svg",
+      "sha256": "6640aa083e7bf3e653e5451df912553a42ec860ada2046c7d6cbd1d712a267fe",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "benchmark-t3.svg",
+      "sha256": "9644b2523c5176691819c567efc42b90203d8a004d5cb690faf2e4d792160753",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "benchmark-t4.svg",
+      "sha256": "cf0137f16c3fcbb30ec5b36b2b356245135ef0cbd7205e89ad59f9804e3b5b59",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "benchmark-t5.svg",
+      "sha256": "6152d6cc7417af036084f795c4b48ebec3c201c7a6852486d31be1be9b151d7a",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "benchmark-t6.svg",
+      "sha256": "45577b2ec92cdc4f9faab158f6470e0daf81411b21a8581b6a84aac50b4202e8",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "bring-your-model.svg",
+      "sha256": "cefb791233292988b4375b69681bc35214966ffc9c4347de6b4497cc3c937361",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "data-contract.svg",
+      "sha256": "5d5dc5881d997b5538a08ed02cc2da28e33e4ea79b2f1e6ac886055473adba9a",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "favicon.svg",
+      "sha256": "7805806ba987a0312f368f14e55530aa42806d145bad7007ac984eaab8b88342",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "getting-started.svg",
+      "sha256": "f283c3afbde6d7d40ab7daae32a951fbf2295d9b3bba8c8bc84685d1c08146f5",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "hardware-profiler.svg",
+      "sha256": "c00009b48a1658356bbf5b8db3927a22dab30ad58c20abf4c060a8a98dd4f9d8",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "logo-dark.svg",
+      "sha256": "4334e858159982944756aeffcd89de71e70db4751221742aaa9f5505a95454f2",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "logo.svg",
+      "sha256": "cae353aa4030e7ad5f5acb4ecfb1d9ef0067393f8e2a3ecf4e5a1014008e6ed4",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "mask-pipeline.svg",
+      "sha256": "9fda8d93b4f1c7c11afb8a8c583e0b7aab3bdbdbaa5b49202ffbeaba9e8b986b",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "phi-jedi.svg",
+      "sha256": "479bb3c7157761d01451fc26aa1f34998582dd1b246ec259d67af93ad4163ae2",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    },
+    {
+      "file": "toolkit-overview.svg",
+      "sha256": "fc52cf58b3889f8b823e0d8f21c7925819050f01662549bbeea5a264ddfc3c3c",
+      "generator": "tools/docs/build_figures.py",
+      "description": "Vector workflow with sourced RPX imagery; labels are contracts, not model predictions"
+    }
+  ]
+}

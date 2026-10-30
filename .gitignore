@@ -108,3 +108,7 @@ client/public/Robot_new.gltf
 *.gltf
 client/public/Robot_new.gltf
 *.gltf
+
+# Local Vite cache and browser QA outputs
+.vite/
+artifacts/

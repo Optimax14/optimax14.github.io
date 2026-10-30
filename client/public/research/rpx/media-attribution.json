@@ -1,0 +1,77 @@
+{
+  "verified": "2026-10-30",
+  "credit": "RPX authors / IRVLUTD; dataset CC BY 4.0, toolkit MIT. See source citation/licensing page.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source_licenses": "https://irvlutd.github.io/RPX/toolkit-docs/citation/",
+  "upstream_provenance_url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/provenance.json",
+  "assets": [
+    {
+      "source_file": "rpx-jumbotron.mp4",
+      "url": "https://huggingface.co/datasets/IRVLUTD/RPX/resolve/main/assets/rpx-jumbotron.mp4",
+      "sha256": "5c8ef5a8b61f722ac1ebb70824a757b6c3fc02acb223bb29f8cbcda047da27fd",
+      "upstream_hash_verified": false,
+      "local_files": [
+        "showcase.mp4",
+        "showcase-poster.webp",
+        "card-poster.webp"
+      ],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "rpx-overview.webp",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/rpx-overview.webp",
+      "sha256": "df9a9a494f4bcb19181dcf0d1531550efd4be35e44fc31f6089f2a1edeff33ac",
+      "upstream_hash_verified": true,
+      "local_files": ["overview.webp", "overview-full.webp"],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "rpx-finding-light.webp",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/rpx-finding-light.webp",
+      "sha256": "f29545d3c02f69ae2b73d8c577243786accc8c225b63c05e4fd8c43035804f00",
+      "upstream_hash_verified": true,
+      "local_files": ["findings.webp"],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "clutter.jpg",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/clutter.jpg",
+      "sha256": "46f0643ef81d196f583019e4869b19716e763cfa5da8cc77c56de002a303b78f",
+      "upstream_hash_verified": true,
+      "local_files": ["clutter.webp"],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "interaction.jpg",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/interaction.jpg",
+      "sha256": "855790195e9c9f384d4883092191b99b9eecfee2159203ddd175cbb013c767bd",
+      "upstream_hash_verified": true,
+      "local_files": ["interaction.webp"],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "clean.jpg",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/clean.jpg",
+      "sha256": "c91e9cdb23fc4011b871bee93492f09bb58a6797ce17e6b7618dbe6bf1ca5a5c",
+      "upstream_hash_verified": true,
+      "local_files": ["clean.webp"],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "ego.jpg",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/ego.jpg",
+      "sha256": "9c6dc455bc054df4c4cfcf2efe65367e619dd47bfc8064e7db31938c9ed0a21e",
+      "upstream_hash_verified": true,
+      "local_files": ["ego.webp"],
+      "changes": "Resized/compressed for web; no semantic edits; full overview also retained unchanged"
+    },
+    {
+      "source_file": "toolkit-overview.svg",
+      "url": "https://irvlutd.github.io/RPX/toolkit-docs/assets/toolkit-overview.svg",
+      "sha256": "fc52cf58b3889f8b823e0d8f21c7925819050f01662549bbeea5a264ddfc3c3c",
+      "upstream_hash_verified": true,
+      "local_files": ["toolkit-overview.svg"],
+      "changes": "Copied unchanged"
+    }
+  ]
+}

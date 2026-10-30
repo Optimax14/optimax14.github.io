@@ -3,9 +3,8 @@ import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "path";
 import { defineConfig } from "vite";
-import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
-const plugins = [react(), tailwindcss(), vitePluginManusRuntime()];
+const plugins = [react(), tailwindcss()];
 
 function computeBase() {
   // 1) Honor explicit override
@@ -16,7 +15,8 @@ function computeBase() {
   if (repo) {
     const [owner, name] = repo.split("/");
     if (owner && name) {
-      const isUserSite = name.toLowerCase() === `${owner.toLowerCase()}.github.io`;
+      const isUserSite =
+        name.toLowerCase() === `${owner.toLowerCase()}.github.io`;
       return isUserSite ? "/" : `/${name}/`;
     }
   }

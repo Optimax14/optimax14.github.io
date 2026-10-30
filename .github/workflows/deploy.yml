@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -34,11 +34,17 @@ jobs:
             npm install
           fi
 
+      - name: Typecheck
+        run: npm run check
+
       - name: Build
         env:
           # Derive base from repository name for project pages (owner/repo)
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: npm run build
+
+      - name: Validate content and Pages output
+        run: npm test
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

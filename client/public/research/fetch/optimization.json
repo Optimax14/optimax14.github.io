@@ -1,0 +1,7 @@
+{
+  "source": "Original Fetch URDF visual meshes, existing portfolio assets",
+  "geometry": "Original geometry and normals preserved; no simplification",
+  "texture": "512px WebP, quality 90",
+  "compression": "Draco, position 14 bits, normal 10 bits",
+  "bytes": 790680
+}

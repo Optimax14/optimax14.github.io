@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2563eb" />
-      <stop offset="100%" stop-color="#8b5cf6" />
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="12" fill="url(#grad)" />
-  <path
-    d="M20 46l12-28 12 28h-4.8l-2.7-7.2H27.5L24.8 46H20zm10.2-11.2h7.6L33.9 25h-.2l-3.5 9.8z"
-    fill="#f8fafc"
-  />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="#255a53"/><text x="10" y="44" font-family="sans-serif" font-weight="700" font-size="35" fill="#f8f8f4">IK</text><circle cx="53" cy="44" r="3" fill="#e6a77b"/></svg>

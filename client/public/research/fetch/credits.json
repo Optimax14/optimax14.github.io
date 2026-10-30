@@ -1,0 +1,12 @@
+{
+  "geometry": "Converted from the Fetch URDF and visual meshes already shipped in this portfolio. Original mesh geometry, normals and named joints are retained. Textures are resized to 512px WebP; geometry uses Draco quantization and compression.",
+  "animation": "Rest pose and wave keyframes restored from the original portfolio FetchHeroViewer.tsx. Joint axes and limits extracted from assets/fetch/fetch.urdf.",
+  "lighting": {
+    "source": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/hdri/studio_small_03_1k.hdr",
+    "original": "studio_small_03",
+    "adaptation": "Downsampled from 1024×512 to 256×128 in linear radiance for lighting only; never used as the page background.",
+    "originalSource": "https://polyhaven.com/a/studio_small_03"
+  },
+  "renderer": "Three.js (MIT); see draco/THREE-LICENSE.txt. Draco decoder copyright Google, Apache 2.0; see draco/DRACO-LICENSE.txt.",
+  "poster": "A static rendering of this exact model, original resting pose, and studio lighting; no AI-generated geometry or image."
+}
